@@ -4,6 +4,26 @@
 
 A Kiro Power that enforces structured analysis, planning, approval, and review for all development tasks. No vibe coding. Strong focus on security, maintainability, and persistent context retention.
 
+## What Makes D.E.R.E.K Different?
+
+Unlike typical AI coding assistants that jump straight into code generation, D.E.R.E.K enforces a disciplined workflow that prevents common pitfalls:
+
+### The Problem with "Vibe Coding"
+- 🚫 AI generates code based on vague requirements
+- 🚫 No validation that the solution matches actual needs
+- 🚫 Context lost between sessions
+- 🚫 Security and quality issues discovered too late
+- 🚫 Repeated mistakes because learnings aren't captured
+
+### The D.E.R.E.K Solution
+- ✅ **Approval gates** prevent wasted work on misunderstood requirements
+- ✅ **Persistent memory** maintains context across sessions
+- ✅ **Security-first** approach with built-in review processes
+- ✅ **Knowledge accumulation** so you don't repeat mistakes
+- ✅ **Structured planning** with clear requirements → design → implementation flow
+
+Think of it as "working memory on disk" - your project context persists and evolves, not just in the AI's ephemeral context window.
+
 ## Overview
 
 D.E.R.E.K transforms your development workflow by:
