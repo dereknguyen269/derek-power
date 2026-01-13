@@ -13,11 +13,11 @@ The Skill Manager enables you to extend D.E.R.E.K's capabilities by installing s
 
 **Key Features:**
 - 🔍 **Discover** skills from registries or GitHub
-- 📦 **Install** skills with one command
+- 📦 **Install** skills with one command (Kiro format: `.kiro/steering/` + `.shared/`)
 - 🔄 **Update** skills automatically
 - 🔎 **Search** skill databases
 - 🌐 **Cross-platform** - works with skills from Claude, Cursor, Windsurf, etc.
-- 🤖 **Intelligent** - auto-detects format and reads README for setup
+- 🤖 **Intelligent** - auto-detects format and installs to correct Kiro paths
 
 ## Quick Start
 
@@ -29,11 +29,10 @@ install skill https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
 
 The Skill Manager will:
 1. Download the repository
-2. Read the README to understand usage
-3. Auto-detect the skill format
-4. Convert to Kiro format if needed
-5. Install all files
-6. Show you how to use it
+2. Extract skill name (remove `-skill` suffix)
+3. Install steering file to `.kiro/steering/<skill-name>.md`
+4. Install shared data to `.shared/<skill-name>/`
+5. Show you how to use it
 
 ### List Available Skills
 
@@ -45,6 +44,23 @@ list skills
 
 ```
 search skills ui design
+```
+
+## Kiro Installation Structure
+
+Skills are installed to match Kiro's expected format:
+
+```
+.kiro/
+└── steering/
+    └── ui-ux-pro-max.md          # Steering file (commands, instructions)
+
+.shared/
+└── ui-ux-pro-max/                # Shared database (searchable data)
+    ├── ui_styles.json
+    ├── color_palettes.json
+    ├── font_pairings.json
+    └── ...
 ```
 
 ## Commands Reference
@@ -59,45 +75,11 @@ search skills ui design
 
 ## Python Implementation
 
-The Skill Manager uses a modular architecture - Python code is in separate modules in `scripts/skill_manager/`.
-
-**Modules:**
-- `config.py` - Configuration and constants
-- `utils.py` - Utility functions (logging, download, checksum, etc.)
-- `registry.py` - Registry management (list, search, fetch)
-- `installer.py` - Installation functions (GitHub, format detection, workspace-safe extraction)
-- `updater.py` - Update functions (check, update)
-- `validator.py` - Validation functions (manifest, security)
-- `search.py` - Search functions (skill database search)
-
-### Workspace-Safe Installation
-
-The Skill Manager installs skills directly into the workspace without using temporary directories:
-
-```
-.kiro/
-├── skills/                          # Installed skills directory
-│   ├── ui-ux-pro-max/              # Skill name
-│   │   ├── steering/               # Steering files
-│   │   ├── data/                   # Skill data
-│   │   ├── README.md               # Skill documentation
-│   │   └── manifest.json           # Skill metadata
-│   └── [other-skills]/
-```
-
-**Key Features:**
-- ✅ No temporary directory usage
-- ✅ Direct workspace installation
-- ✅ Atomic operations (all-or-nothing)
-- ✅ Rollback on failure
-- ✅ Manifest validation before installation
-
 ```python
 #!/usr/bin/env python3
 """
-Skill Manager - Module Loader
-Loads skill manager modules from local scripts/ or GitHub
-Workspace-safe installation without temporary directories
+Skill Manager - Kiro Format Installer
+Installs skills to .kiro/steering/ and .shared/ directories
 """
 
 import sys
@@ -107,53 +89,18 @@ import json
 import shutil
 from typing import Dict, List, Optional
 
-# GitHub configuration
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/dereknguyen269/derek-power/main/scripts/skill_manager"
-
 # Workspace configuration
 WORKSPACE_ROOT = Path.cwd()
-SKILLS_DIR = WORKSPACE_ROOT / ".kiro" / "skills"
-SKILLS_DIR.mkdir(parents=True, exist_ok=True)
-
-# Determine scripts directory
-possible_paths = [
-    Path("/Users/quan/Products/power/scripts"),  # Absolute path
-    Path(__file__).parent.parent / "scripts",     # Relative to steering file
-    Path.cwd() / "scripts",                       # Relative to current directory
-    Path.home() / "Products/power/scripts",       # User's home directory
-]
-
-SCRIPTS_DIR = None
-for path in possible_paths:
-    if (path / "skill_manager" / "__init__.py").exists():
-        SCRIPTS_DIR = path
-        break
-
-def load_module_from_github(module_name: str):
-    """Load a module from GitHub if local not available"""
-    url = f"{GITHUB_RAW_BASE}/{module_name}.py"
-    print(f"📥 Loading {module_name} from GitHub...")
-    
-    try:
-        with urllib.request.urlopen(url, timeout=10) as response:
-            code = response.read().decode('utf-8')
-        
-        # Create module and execute code
-        module = type(sys)(f'skill_manager_{module_name}')
-        exec(code, module.__dict__)
-        sys.modules[f'skill_manager.{module_name}'] = module
-        
-        return module
-    except Exception as e:
-        raise ImportError(f"Failed to load {module_name} from GitHub: {e}")
 
 class SkillInstaller:
-    """Workspace-safe skill installer without temporary directories"""
+    """Kiro-format skill installer"""
     
     @staticmethod
     def install_from_github(repo_url: str) -> Dict:
         """
-        Install skill directly from GitHub repository
+        Install skill from GitHub to Kiro format:
+        - .kiro/steering/<skill-name>.md
+        - .shared/<skill-name>/
         
         Args:
             repo_url: GitHub repository URL
@@ -162,55 +109,64 @@ class SkillInstaller:
             Installation result with status and message
         """
         try:
-            # Extract skill name from URL
+            # Extract skill name from URL (remove -skill suffix if present)
             skill_name = repo_url.rstrip('/').split('/')[-1]
-            skill_path = SKILLS_DIR / skill_name
+            if skill_name.endswith('-skill'):
+                skill_name = skill_name[:-6]  # Remove '-skill' suffix
             
-            # Create skill directory
-            skill_path.mkdir(parents=True, exist_ok=True)
+            # Kiro paths
+            steering_file = WORKSPACE_ROOT / ".kiro" / "steering" / f"{skill_name}.md"
+            shared_dir = WORKSPACE_ROOT / ".shared" / skill_name
             
-            # Download and extract files directly to workspace
-            print(f"� Installing {skill_name} to {skill_path}...")
+            print(f"📦 Installing {skill_name} for Kiro...")
+            print(f"📁 Steering: {steering_file}")
+            print(f"📁 Shared: {shared_dir}")
             
-            # Download manifest first to validate
-            manifest_url = f"{repo_url.replace('github.com', 'raw.githubusercontent.com')}/main/manifest.json"
-            manifest = SkillInstaller._download_json(manifest_url)
+            # Create directories
+            steering_file.parent.mkdir(parents=True, exist_ok=True)
+            shared_dir.mkdir(parents=True, exist_ok=True)
             
-            if not manifest:
+            # Convert GitHub URL to raw content URL
+            raw_base = repo_url.replace('github.com', 'raw.githubusercontent.com') + '/main'
+            
+            # Download steering file from .kiro/steering/ in repo
+            steering_url = f"{raw_base}/.kiro/steering/{skill_name}.md"
+            print(f"\n📥 Downloading steering file...")
+            
+            try:
+                with urllib.request.urlopen(steering_url, timeout=10) as response:
+                    steering_content = response.read().decode('utf-8')
+                    steering_file.write_text(steering_content)
+                    print(f"✅ {steering_file.name}")
+            except Exception as e:
                 return {
                     "success": False,
-                    "message": f"❌ No manifest.json found in {skill_name}"
+                    "message": f"❌ Failed to download steering file: {e}\nURL: {steering_url}"
                 }
             
-            # Validate manifest
-            if not SkillInstaller._validate_manifest(manifest):
-                return {
-                    "success": False,
-                    "message": f"❌ Invalid manifest in {skill_name}"
-                }
-            
-            # Save manifest
-            (skill_path / "manifest.json").write_text(json.dumps(manifest, indent=2))
-            
-            # Download key files
-            files_to_download = [
-                "README.md",
-                "steering/",
-                "data/"
-            ]
-            
-            for file_path in files_to_download:
-                SkillInstaller._download_file_or_dir(
-                    repo_url, 
-                    file_path, 
-                    skill_path
-                )
+            # Download shared directory contents recursively using GitHub API
+            print(f"\n📥 Downloading shared files...")
+            api_base = repo_url.replace('github.com', 'api.github.com/repos')
+            SkillInstaller._download_directory(
+                api_base,
+                f".shared/{skill_name}",
+                shared_dir
+            )
             
             return {
                 "success": True,
-                "message": f"✅ Successfully installed {skill_name}",
-                "path": str(skill_path),
-                "manifest": manifest
+                "message": f"""✅ Successfully installed {skill_name} for Kiro
+
+📁 Files installed:
+   • {steering_file}
+   • {shared_dir}/
+
+🎯 Usage:
+   Type '/' in Kiro chat to see available commands, then select '{skill_name}'
+   Or just ask naturally: "Build a landing page for my SaaS product"
+""",
+                "steering_file": str(steering_file),
+                "shared_dir": str(shared_dir)
             }
             
         except Exception as e:
@@ -220,128 +176,120 @@ class SkillInstaller:
             }
     
     @staticmethod
-    def _download_json(url: str) -> Optional[Dict]:
-        """Download and parse JSON file"""
+    def _download_directory(api_base: str, path: str, dest_dir: Path):
+        """Recursively download directory contents from GitHub"""
+        api_url = f"{api_base}/contents/{path}"
+        
         try:
-            with urllib.request.urlopen(url, timeout=10) as response:
-                return json.loads(response.read().decode('utf-8'))
-        except:
-            return None
+            with urllib.request.urlopen(api_url, timeout=10) as response:
+                items = json.loads(response.read().decode('utf-8'))
+                
+                for item in items:
+                    item_name = item['name']
+                    item_path = dest_dir / item_name
+                    
+                    if item['type'] == 'file':
+                        # Download file
+                        with urllib.request.urlopen(item['download_url'], timeout=10) as file_response:
+                            item_path.write_bytes(file_response.read())
+                        print(f"  ✅ {item['path']}")
+                    
+                    elif item['type'] == 'dir':
+                        # Create directory and recurse
+                        item_path.mkdir(parents=True, exist_ok=True)
+                        SkillInstaller._download_directory(
+                            api_base,
+                            item['path'],
+                            item_path
+                        )
+        except Exception as e:
+            print(f"  ⚠️  Warning: Could not download {path}: {e}")
     
     @staticmethod
-    def _validate_manifest(manifest: Dict) -> bool:
-        """Validate skill manifest"""
-        required_fields = ["name", "version", "description"]
-        return all(field in manifest for field in required_fields)
+    def uninstall_skill(skill_name: str) -> Dict:
+        """Uninstall a skill by removing its files"""
+        steering_file = WORKSPACE_ROOT / ".kiro" / "steering" / f"{skill_name}.md"
+        shared_dir = WORKSPACE_ROOT / ".shared" / skill_name
+        
+        removed = []
+        
+        if steering_file.exists():
+            steering_file.unlink()
+            removed.append(str(steering_file))
+        
+        if shared_dir.exists():
+            shutil.rmtree(shared_dir)
+            removed.append(str(shared_dir))
+        
+        if removed:
+            return {
+                "success": True,
+                "message": f"✅ Uninstalled {skill_name}\n" + "\n".join(f"   • {f}" for f in removed)
+            }
+        else:
+            return {
+                "success": False,
+                "message": f"❌ Skill {skill_name} not found"
+            }
     
     @staticmethod
-    def _download_file_or_dir(repo_url: str, file_path: str, dest_dir: Path):
-        """Download file or directory from GitHub"""
-        # Implementation would handle recursive directory downloads
-        pass
+    def list_installed_skills() -> List[Dict]:
+        """List all installed skills"""
+        steering_dir = WORKSPACE_ROOT / ".kiro" / "steering"
+        shared_dir = WORKSPACE_ROOT / ".shared"
+        
+        skills = []
+        
+        if steering_dir.exists():
+            for steering_file in steering_dir.glob("*.md"):
+                skill_name = steering_file.stem
+                skill_shared = shared_dir / skill_name
+                
+                skills.append({
+                    "name": skill_name,
+                    "steering_file": str(steering_file),
+                    "shared_dir": str(skill_shared) if skill_shared.exists() else None,
+                    "has_data": skill_shared.exists()
+                })
+        
+        return skills
 
-# Try local first, fallback to GitHub
-if SCRIPTS_DIR is not None:
-    # Local modules available
-    if str(SCRIPTS_DIR) not in sys.path:
-        sys.path.insert(0, str(SCRIPTS_DIR))
-    
-    try:
-        from skill_manager import (
-            list_skills,
-            search_skills,
-            get_skill_info,
-            install_skill_from_github,
-            uninstall_skill,
-            check_updates,
-            update_skill,
-            update_all_skills,
-            search_skill_database,
-        )
-        
-        print("✅ Skill Manager loaded successfully (local)")
-        print(f"📁 Modules loaded from: {SCRIPTS_DIR / 'skill_manager'}")
-        print(f"📁 Skills directory: {SKILLS_DIR}")
-        
-    except ImportError as e:
-        print(f"⚠️  Local import failed: {e}")
-        print("📥 Falling back to GitHub...")
-        SCRIPTS_DIR = None  # Force GitHub fallback
+# Export functions
+install_skill_from_github = SkillInstaller.install_from_github
+uninstall_skill = SkillInstaller.uninstall_skill
+list_installed_skills = SkillInstaller.list_installed_skills
 
-if SCRIPTS_DIR is None:
-    # Load from GitHub
-    print("📥 Loading Skill Manager modules from GitHub...")
-    print(f"🌐 Repository: {GITHUB_RAW_BASE}")
-    print(f"📁 Skills directory: {SKILLS_DIR}")
-    
-    try:
-        # Load core modules from GitHub
-        config = load_module_from_github('config')
-        utils = load_module_from_github('utils')
-        registry = load_module_from_github('registry')
-        
-        # Export functions
-        list_skills = registry.list_skills
-        search_skills = registry.search_skills
-        get_skill_info = registry.get_skill_info
-        
-        # Use workspace-safe installer
-        install_skill_from_github = SkillInstaller.install_from_github
-        
-        # Placeholder for functions not yet implemented
-        def uninstall_skill(name):
-            skill_path = SKILLS_DIR / name
-            if skill_path.exists():
-                shutil.rmtree(skill_path)
-                return {"success": True, "message": f"✅ Uninstalled {name}"}
-            return {"success": False, "message": f"❌ Skill {name} not found"}
-        
-        def check_updates():
-            return []
-        
-        def update_skill(name):
-            return {"success": False, "message": "Update not yet implemented"}
-        
-        def update_all_skills():
-            return []
-        
-        def search_skill_database(skill_name, query):
-            return []
-        
-        print("✅ Skill Manager loaded successfully (GitHub)")
-        
-    except ImportError as e:
-        print(f"❌ Failed to load Skill Manager from GitHub: {e}")
-        print("\nPlease ensure:")
-        print("1. Local modules exist at scripts/skill_manager/")
-        print("2. OR GitHub repository is accessible")
-        sys.exit(1)
+# Placeholder functions for future implementation
+def search_skills(query: str) -> List[Dict]:
+    """Search for skills in registry"""
+    return []
 
-# Module is now ready to use
-# Functions available: list_skills, search_skills, install_skill_from_github, etc.
+def check_updates() -> List[Dict]:
+    """Check for skill updates"""
+    return []
+
+def update_skill(name: str) -> Dict:
+    """Update a skill"""
+    return {"success": False, "message": "Update not yet implemented"}
+
+print("✅ Skill Manager loaded successfully")
+print(f"📁 Workspace: {WORKSPACE_ROOT}")
 ```
 
 ### Usage Examples
 
 ```python
-# List all skills
-skills = list_skills()
-for skill in skills:
-    print(f"{skill['name']}: {skill['description']}")
-
-# Search for skills
-results = search_skills("ui design")
-
-# Install from GitHub (workspace-safe)
+# Install from GitHub (Kiro format)
 result = install_skill_from_github("https://github.com/nextlevelbuilder/ui-ux-pro-max-skill")
 print(result['message'])
-if result['success']:
-    print(f"📁 Installed to: {result['path']}")
 
-# Check for updates
-updates = check_updates()
-for update in updates:
-    print(f"{update['name']}: {update['current_version']} → {update['latest_version']}")
+# List installed skills
+skills = list_installed_skills()
+for skill in skills:
+    print(f"• {skill['name']}")
+    print(f"  Steering: {skill['steering_file']}")
+    if skill['has_data']:
+        print(f"  Data: {skill['shared_dir']}")
 
 # Uninstall a skill
 result = uninstall_skill("ui-ux-pro-max")
@@ -350,49 +298,49 @@ print(result['message'])
 
 ## Troubleshooting
 
-### Issue: "Cannot access /tmp/ directory (workspace restriction)"
+### Issue: "Failed to download steering file"
 
-**Problem:** The skill installer was trying to use temporary directories which are restricted in the workspace.
+**Problem:** The repository doesn't have the file at `.kiro/steering/<skill-name>.md`
 
-**Solution:** The updated Skill Manager now:
-- ✅ Installs directly to `.kiro/skills/` in the workspace
-- ✅ No temporary directory usage
-- ✅ Atomic operations (all-or-nothing)
-- ✅ Automatic rollback on failure
+**Solution:** 
+1. Check if the repository has Kiro format support
+2. Look for the steering file in the repository structure
+3. Contact the skill author to add Kiro support
 
-**What to do:**
-1. Update to the latest skill-manager.md
-2. Try installing again: `install skill <github-url>`
-3. Skills will be installed to `.kiro/skills/<skill-name>/`
+### Issue: "Could not download shared files"
 
-### Issue: "Cannot clone repository"
+**Problem:** The repository doesn't have shared data at `.shared/<skill-name>/`
 
-**Possible causes:**
-- GitHub repository is private (needs authentication)
-- Repository URL is incorrect
-- Network connectivity issue
+**Solution:**
+1. Some skills may not have shared data (steering-only)
+2. Check if the repository has `.shared/` directory
+3. You can manually copy the files if needed
 
-**Solutions:**
-1. Verify the repository URL is public
-2. Check GitHub repository exists: `https://github.com/user/repo`
-3. Ensure network connectivity to GitHub
+### Issue: "Skill not working after installation"
 
-### Issue: "Invalid manifest.json"
+**Checklist:**
+1. ✅ Steering file exists at `.kiro/steering/<skill-name>.md`
+2. ✅ Shared data exists at `.shared/<skill-name>/` (if required)
+3. ✅ Python 3.x is installed (for search scripts)
+4. ✅ Try restarting Kiro to reload steering files
 
-**Problem:** The skill's manifest.json is missing or malformed.
+### Manual Installation
 
-**Required manifest fields:**
-```json
-{
-  "name": "skill-name",
-  "version": "1.0.0",
-  "description": "Skill description",
-  "author": "Author name",
-  "keywords": ["keyword1", "keyword2"]
-}
+If automatic installation fails, you can manually copy files:
+
+```bash
+# Clone the repository
+git clone https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+
+# Copy steering file
+cp ui-ux-pro-max-skill/.kiro/steering/ui-ux-pro-max.md .kiro/steering/
+
+# Copy shared data
+cp -r ui-ux-pro-max-skill/.shared/ui-ux-pro-max .shared/
+
+# Clean up
+rm -rf ui-ux-pro-max-skill
 ```
-
-**Solution:** Contact the skill author to fix the manifest.json
 
 ---
 
