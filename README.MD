@@ -339,14 +339,44 @@ Reference PROJECT.md for context, update KNOWLEDGE.md with learnings
 
 ## Installation
 
-This is a Kiro Power. To use it:
+### Option 1: Install from GitHub (Recommended)
 
-1. Place this power in your Kiro powers directory
-2. Activate it when needed by mentioning keywords like:
-   - "init", "initialize project"
-   - "create spec", "spec planning"
-   - "approve requirements", "approve design"
-   - "analyze task", "review code"
+1. Clone the repository:
+```bash
+git clone https://github.com/dereknguyen269/derek-power.git
+```
+
+2. Copy the `derek-power` folder to your Kiro powers directory:
+```bash
+# macOS/Linux
+cp -r derek-power/derek-power ~/.kiro/powers/
+
+# Or manually copy to your Kiro workspace .kiro/powers/ directory
+```
+
+3. Restart Kiro or reload powers from the command palette
+
+4. Verify installation by saying to Kiro:
+```
+"init"
+```
+
+### Option 2: Manual Installation
+
+1. Download the power from: https://github.com/dereknguyen269/derek-power/tree/main/derek-power
+2. Place the `derek-power` folder in your Kiro powers directory:
+   - User-level: `~/.kiro/powers/derek-power/`
+   - Workspace-level: `<workspace>/.kiro/powers/derek-power/`
+3. Restart Kiro or reload powers
+
+### Activation
+
+D.E.R.E.K activates automatically when you use keywords like:
+- "init", "initialize project"
+- "create spec", "spec planning"
+- "approve requirements", "approve design"
+- "analyze task", "review code"
+- "share memory", "show spec status"
 
 ## Version
 
