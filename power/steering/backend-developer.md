@@ -1,1 +1,0 @@
-../shared/steerings/universal/backend-developer.md

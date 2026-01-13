@@ -1,1 +1,0 @@
-../shared/steerings/core/performance-optimizer.md

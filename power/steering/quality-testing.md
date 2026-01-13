@@ -1,1 +1,0 @@
-../../shared/steerings/quality-testing.md

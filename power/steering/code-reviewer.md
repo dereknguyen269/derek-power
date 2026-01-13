@@ -1,1 +1,0 @@
-../shared/steerings/core/code-reviewer.md

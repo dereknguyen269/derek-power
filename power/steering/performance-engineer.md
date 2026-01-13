@@ -1,1 +1,0 @@
-../shared/steerings/infrastructure/performance-engineer.md

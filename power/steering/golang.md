@@ -1,1 +1,0 @@
-../shared/steerings/specialized/golang.md

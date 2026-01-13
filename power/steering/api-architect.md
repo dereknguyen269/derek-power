@@ -1,1 +1,0 @@
-../shared/steerings/universal/api-architect.md

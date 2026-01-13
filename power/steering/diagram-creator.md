@@ -1,1 +1,0 @@
-../shared/steerings/universal/diagram-creator.md

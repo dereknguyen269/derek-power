@@ -1,1 +1,0 @@
-../shared/steerings/security/security-auditor.md

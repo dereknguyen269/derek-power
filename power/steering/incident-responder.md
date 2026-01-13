@@ -1,1 +1,0 @@
-../shared/steerings/infrastructure/incident-responder.md

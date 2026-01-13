@@ -1,1 +1,0 @@
-../shared/steerings/orchestrators/project-analyst.md
