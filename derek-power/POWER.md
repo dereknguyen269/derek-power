@@ -1,6 +1,6 @@
 ---
 name: "derek"
-version: 0.1.1
+version: 0.1.2
 displayName: "D.E.R.E.K"
 description: |
   Design, Evaluate, Review, Execute, Knowledge.
@@ -305,6 +305,45 @@ Cross-stack agents when no specialist exists. See `steering/universal.md` for fu
 3. Core agent (e.g., code-reviewer.md)
 ```
 
+## Skill Manager System
+
+Extend D.E.R.E.K's capabilities by installing specialized "skills" - packages of steering files and domain-specific intelligence.
+
+### Quick Commands
+
+```
+list skills                                          # List all available skills
+search skills <keyword>                              # Search for skills
+install skill <github-url>                           # Install from GitHub
+update skill <name>                                  # Update a skill
+uninstall skill <name>                               # Uninstall a skill
+```
+
+### Example
+
+```
+install skill https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+```
+
+The Skill Manager will:
+1. Download the repository
+2. Read the README to understand usage
+3. Auto-detect the skill format
+4. Convert to Kiro format if needed
+5. Install all files
+6. Show you how to use it
+
+### Features
+
+- 🔍 **Discover** skills from registries or GitHub
+- 📦 **Install** skills with one command
+- 🔄 **Update** skills automatically
+- 🔎 **Search** skill databases
+- 🌐 **Cross-platform** - works with skills from Claude, Cursor, Windsurf, etc.
+- 🤖 **Intelligent** - auto-detects format and reads README for setup
+
+---
+
 ## Activation Rules
 
 Activate this power when a team member mentions:
@@ -313,7 +352,8 @@ Activate this power when a team member mentions:
 - "analyze task", "design plan", "review code", "security audit"
 - "create spec", "spec planning", "requirements", "approve design"
 - "share memory", "serve memory", "memory sharing"
-- Keywords related to code review, planning, or optimization
+- "install skill", "list skills", "search skills", "update skill"
+- Keywords related to code review, planning, optimization, or skill management
 
 ## Quick Reference
 
