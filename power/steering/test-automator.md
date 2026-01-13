@@ -1,0 +1,1 @@
+../shared/steerings/quality-testing/test-automator.md

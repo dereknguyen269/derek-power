@@ -1,0 +1,1 @@
+../shared/steerings/core/code-archaeologist.md

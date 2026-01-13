@@ -1,0 +1,1 @@
+../shared/steerings/infrastructure/cloud-architect.md
