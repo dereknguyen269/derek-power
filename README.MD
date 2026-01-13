@@ -1,5 +1,6 @@
-# D.E.R.E.K Power
+![D.E.R.E.K Power](images/logo.jpg)
 
+# D.E.R.E.K Power
 **D**esign · **E**valuate · **R**eview · **E**xecute · **K**nowledge
 
 A Kiro Power that enforces structured analysis, planning, approval, and review for all development tasks. No vibe coding. Strong focus on security, maintainability, and persistent context retention.
