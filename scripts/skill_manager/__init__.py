@@ -1,24 +1,19 @@
 """
-Skill Manager - Modular Python implementation
-Manages D.E.R.E.K skills installation, updates, and discovery
+Skill Manager for D.E.R.E.K Power
+Handles installation, discovery, and management of skills
 """
 
-__version__ = "1.0.0"
-
-from .registry import list_skills, search_skills, get_skill_info, fetch_registry
 from .installer import install_skill_from_github, uninstall_skill
+from .registry import list_skills, search_skills, get_skill_info
 from .updater import check_updates, update_skill, update_all_skills
-from .search import search_skill_database
 
 __all__ = [
-    'list_skills',
-    'search_skills', 
-    'get_skill_info',
-    'fetch_registry',
     'install_skill_from_github',
     'uninstall_skill',
+    'list_skills',
+    'search_skills',
+    'get_skill_info',
     'check_updates',
     'update_skill',
     'update_all_skills',
-    'search_skill_database',
 ]

@@ -1,159 +1,115 @@
 """
-Registry management for Skill Manager
-Handles fetching, caching, and querying skill registries
+Skill Registry - Lists and searches installed skills
 """
 
 import json
-import urllib.request
-import urllib.error
+from pathlib import Path
 from typing import List, Dict, Optional
-from datetime import datetime
 
-from .config import REGISTRY_URL, CACHE_PATH, CACHE_TTL_HOURS
-from .utils import log, load_installed_skills
+# Workspace configuration
+WORKSPACE_ROOT = Path.cwd()
+SKILLS_DIR = WORKSPACE_ROOT / ".kiro" / "skills"
 
 
-def fetch_registry(url: str = REGISTRY_URL, force_refresh: bool = False) -> Dict:
+def list_skills() -> List[Dict]:
     """
-    Fetch and cache skill registry
+    List all installed skills
+    
+    Returns:
+        List of skill information dictionaries
+    """
+    skills = []
+    
+    if not SKILLS_DIR.exists():
+        return skills
+    
+    for skill_dir in SKILLS_DIR.iterdir():
+        if skill_dir.is_dir():
+            skill_info = _get_skill_metadata(skill_dir)
+            if skill_info:
+                skills.append(skill_info)
+    
+    return sorted(skills, key=lambda x: x['name'])
+
+
+def search_skills(query: str) -> List[Dict]:
+    """
+    Search installed skills by name or description
     
     Args:
-        url: Registry URL to fetch from
-        force_refresh: Force refresh even if cache is valid
+        query: Search query
         
     Returns:
-        Registry data dictionary
+        List of matching skills
     """
-    # Check cache first (unless force refresh)
-    if not force_refresh and CACHE_PATH.exists():
-        try:
-            cache_data = json.loads(CACHE_PATH.read_text())
-            # Check if cache is less than TTL hours old
-            last_updated = datetime.fromisoformat(cache_data.get('last_updated', '2000-01-01'))
-            age_hours = (datetime.now() - last_updated).total_seconds() / 3600
-            
-            if age_hours < CACHE_TTL_HOURS:
-                log("Using cached registry data")
-                return cache_data
-        except (json.JSONDecodeError, ValueError):
-            log("Cache corrupted, fetching fresh data", "WARNING")
+    all_skills = list_skills()
+    query_lower = query.lower()
     
-    # Fetch from URL
-    try:
-        log(f"Fetching registry from {url}")
-        with urllib.request.urlopen(url, timeout=10) as response:
-            data = json.loads(response.read().decode())
-            
-        # Add timestamp and cache
-        data['last_updated'] = datetime.now().isoformat()
-        CACHE_PATH.write_text(json.dumps(data, indent=2))
-        log("Registry cached successfully")
-        
-        return data
-        
-    except urllib.error.URLError as e:
-        log(f"Failed to fetch registry: {e}", "ERROR")
-        
-        # Fallback to cache if available
-        if CACHE_PATH.exists():
-            log("Falling back to cached registry", "WARNING")
-            return json.loads(CACHE_PATH.read_text())
-        
-        raise Exception(f"Failed to fetch registry and no cache available: {e}")
-
-
-def list_skills(category: Optional[str] = None, installed_only: bool = False) -> List[Dict]:
-    """
-    List all available skills
+    results = []
+    for skill in all_skills:
+        if (query_lower in skill['name'].lower() or 
+            query_lower in skill.get('description', '').lower() or
+            any(query_lower in kw.lower() for kw in skill.get('keywords', []))):
+            results.append(skill)
     
-    Args:
-        category: Filter by category (e.g., 'UI/UX', 'Security')
-        installed_only: Only show installed skills
-        
-    Returns:
-        List of skill dictionaries with metadata
-    """
-    try:
-        registry = fetch_registry()
-        skills = registry.get('skills', [])
-    except Exception as e:
-        log(f"Failed to list skills: {e}", "ERROR")
-        skills = []
-    
-    # Filter by category
-    if category:
-        skills = [s for s in skills if s.get('category') == category]
-    
-    # Add installation status
-    installed = load_installed_skills()
-    for skill in skills:
-        skill_name = skill['name']
-        skill['installed'] = skill_name in installed
-        if skill['installed']:
-            skill['installed_version'] = installed[skill_name].get('version', 'unknown')
-    
-    # Filter to installed only if requested
-    if installed_only:
-        skills = [s for s in skills if s['installed']]
-    
-    return skills
-
-
-def search_skills(keyword: str) -> List[Dict]:
-    """
-    Search skills by keyword in name, description, or tags
-    
-    Args:
-        keyword: Search term
-        
-    Returns:
-        List of matching skill dictionaries
-    """
-    skills = list_skills()
-    keyword_lower = keyword.lower()
-    
-    matching_skills = []
-    for skill in skills:
-        # Search in name
-        if keyword_lower in skill.get('name', '').lower():
-            matching_skills.append(skill)
-            continue
-        
-        # Search in description
-        if keyword_lower in skill.get('description', '').lower():
-            matching_skills.append(skill)
-            continue
-        
-        # Search in tags
-        tags = skill.get('tags', [])
-        if any(keyword_lower in tag.lower() for tag in tags):
-            matching_skills.append(skill)
-            continue
-    
-    return matching_skills
+    return results
 
 
 def get_skill_info(name: str) -> Optional[Dict]:
     """
-    Get detailed information for a specific skill
+    Get detailed information about a skill
     
     Args:
         name: Skill name
         
     Returns:
-        Skill dictionary or None if not found
+        Skill information or None if not found
     """
-    skills = list_skills()
-    skill = next((s for s in skills if s['name'] == name), None)
+    skill_path = SKILLS_DIR / name
+    if skill_path.exists() and skill_path.is_dir():
+        return _get_skill_metadata(skill_path)
+    return None
+
+
+def _get_skill_metadata(skill_dir: Path) -> Optional[Dict]:
+    """
+    Extract metadata from a skill directory
     
-    if not skill:
-        # Check if it's installed but not in registry
-        installed = load_installed_skills()
-        if name in installed:
-            return {
-                'name': name,
-                'installed': True,
-                **installed[name]
+    Args:
+        skill_dir: Path to skill directory
+        
+    Returns:
+        Skill metadata dictionary
+    """
+    try:
+        manifest_path = skill_dir / "manifest.json"
+        
+        if manifest_path.exists():
+            with open(manifest_path, 'r') as f:
+                manifest = json.load(f)
+        else:
+            # Create default manifest if not found
+            manifest = {
+                "name": skill_dir.name,
+                "version": "1.0.0",
+                "description": "Installed skill"
             }
-    
-    return skill
+        
+        # Count files
+        steering_count = len(list((skill_dir / "steering").glob("*.md"))) if (skill_dir / "steering").exists() else 0
+        data_count = len(list((skill_dir / "data").glob("*"))) if (skill_dir / "data").exists() else 0
+        
+        return {
+            "name": manifest.get("name", skill_dir.name),
+            "version": manifest.get("version", "1.0.0"),
+            "description": manifest.get("description", ""),
+            "author": manifest.get("author", "Unknown"),
+            "keywords": manifest.get("keywords", []),
+            "path": str(skill_dir),
+            "steering_files": steering_count,
+            "data_files": data_count,
+            "installed": True
+        }
+    except Exception as e:
+        print(f"⚠️  Error reading skill metadata from {skill_dir}: {str(e)}")
+        return None
