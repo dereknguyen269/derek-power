@@ -6,10 +6,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Registry URL
-# For production, use GitHub raw URL:
-# REGISTRY_URL = "https://raw.githubusercontent.com/derek-power/skill-registry/main/registry.json"
-# For local testing:
-REGISTRY_URL = "file:///Users/quan/Products/power/registry.json"
+REGISTRY_URL = "https://raw.githubusercontent.com/dereknguyen269/derek-power/refs/heads/main/registry.json"
 
 # Directory paths
 KIRO_DIR = Path.home() / ".kiro"
