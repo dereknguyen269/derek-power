@@ -1,6 +1,6 @@
 ---
 name: "derek"
-version: 0.1.0
+version: 0.1.1
 displayName: "D.E.R.E.K"
 description: |
   Design, Evaluate, Review, Execute, Knowledge.
@@ -28,11 +28,11 @@ When initialized, this power creates a persistent memory system in the user's wo
 
 | File | Purpose | When to Read/Update |
 |------|---------|---------------------|
-| `PROJECT.md` | Project overview, tech stack, architecture | Read at task start; update when project changes |
-| `PROGRESS.md` | Current task tracking and status | Read/update every phase |
-| `DECISIONS.md` | Key decisions with rationale | Update after significant decisions |
-| `KNOWLEDGE.md` | Finalized learnings and patterns | Update after feature completion |
-| `SCRATCHPAD.md` | Temporary working notes | Use during sessions; clear at end |
+| `PROJECT.md` | Project overview, tech stack, architecture | **Read on session start**; update ONLY when project structure/stack changes |
+| `PROGRESS.md` | Current task tracking and status | **Read on session start**; update ONLY when task status changes |
+| `DECISIONS.md` | Key decisions with rationale | **Read on session start**; update ONLY after new significant decisions |
+| `KNOWLEDGE.md` | Finalized learnings and patterns | **Read on session start**; update ONLY after feature completion |
+| `SCRATCHPAD.md` | Temporary working notes | **Read on session start**; update during active work; clear when task completes |
 
 **To initialize**: Use `derek-init.md` or say "init" to create the memory system.
 
@@ -170,7 +170,10 @@ steering/
 
 ## When to Load Steering Files
 
-**IMPORTANT**: Before starting any task, check if `.kiro/resources/` exists. If it does, read `PROJECT.md` and `PROGRESS.md` to understand current context.
+**IMPORTANT**: Before starting any task, check if `.kiro/resources/` exists. If it does:
+- **READ ONLY** `PROJECT.md` and `PROGRESS.md` to understand current context
+- **DO NOT EDIT** `PROJECT.md` on session start unless explicitly requested
+- Only update `PROJECT.md` when project structure, tech stack, or architecture actually changes
 
 ### Workflow Steering Files (Root Level)
 
@@ -316,13 +319,35 @@ Activate this power when a team member mentions:
 
 ### Memory System Commands
 ```
-init                    # Initialize project memory
-reinit                  # Refresh PROJECT.md only
+init                    # Initialize project memory (first time only)
+reinit                  # Refresh PROJECT.md (only when explicitly requested)
 create spec [name]      # Start folder spec planning
 approve requirements    # Progress to design phase
 approve design          # Progress to implementation
 complete spec           # Transfer notes to KNOWLEDGE.md
 share memory            # Generate shareable HTML
+```
+
+### Session Start Behavior
+```
+✅ DO on session start:
+- Check if .kiro/resources/ exists
+- READ all memory files (PROJECT.md, PROGRESS.md, DECISIONS.md, KNOWLEDGE.md, SCRATCHPAD.md)
+- Continue from last known state
+- Understand current context without modifying
+
+❌ DON'T on session start:
+- Edit any memory files automatically
+- Reinitialize existing memory
+- Overwrite existing context
+- Update files "just because" a session started
+
+Only update memory files when:
+- PROJECT.md: User requests "reinit" OR tech stack/architecture actually changes
+- PROGRESS.md: Task status actually changes (started, blocked, completed)
+- DECISIONS.md: New significant decision is made
+- KNOWLEDGE.md: Feature/task is completed and learnings are finalized
+- SCRATCHPAD.md: Active work in progress OR clearing after task completion
 ```
 
 ### D.E.R.E.K Workflow

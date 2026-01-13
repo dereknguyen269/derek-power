@@ -19,6 +19,7 @@ Enable sharing of D.E.R.E.K Memory System (`.kiro/resources/` and `.kiro/feature
 - "create shareable report", "team access link", "stakeholder view"
 - "serve memory", "start memory server", "memory html"
 - "share derek", "derek report", "export derek"
+- "share feature [name]", "export feature [name]", "feature report [name]"
 
 ## What Gets Shared
 
@@ -116,7 +117,7 @@ When activated, create these files in `.kiro/views/`:
 #!/usr/bin/env python3
 """
 Project Memory HTML Generator
-Converts .kiro/resources/ files into shareable web interface
+Converts .kiro/resources/ and .kiro/features/ files into shareable web interface
 """
 
 import os
@@ -125,9 +126,10 @@ import datetime
 from pathlib import Path
 
 class MemoryGenerator:
-    def __init__(self, resources_path=".kiro/resources", features_path=".kiro/features"):
+    def __init__(self, resources_path=".kiro/resources", features_path=".kiro/features", feature_filter=None):
         self.resources_path = Path(resources_path)
         self.features_path = Path(features_path)
+        self.feature_filter = feature_filter  # Optional: filter to specific feature
         self.views_path = Path(".kiro/views")
         self.views_path.mkdir(parents=True, exist_ok=True)
         
@@ -152,11 +154,11 @@ class MemoryGenerator:
         """Load all memory files from global and feature memory"""
         files = {}
         
-        # Load global memory files (exclude SCRATCHPAD.md)
-        if self.resources_path.exists():
+        # Load global memory files (exclude SCRATCHPAD.md) - only if not filtering by feature
+        if not self.feature_filter and self.resources_path.exists():
             for file_path in self.resources_path.glob("*.md"):
                 if file_path.name == "SCRATCHPAD.md":
-                    continue  # Skip temporary session notes
+                    continue
                 try:
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
@@ -175,6 +177,11 @@ class MemoryGenerator:
             for feature_dir in self.features_path.iterdir():
                 if feature_dir.is_dir():
                     feature_name = feature_dir.name
+                    
+                    # Skip if filtering and this isn't the target feature
+                    if self.feature_filter and feature_name != self.feature_filter:
+                        continue
+                    
                     for file_path in feature_dir.glob("*.md"):
                         try:
                             with open(file_path, 'r', encoding='utf-8') as f:
@@ -193,197 +200,11 @@ class MemoryGenerator:
         
         return files
     
-    def markdown_to_html(self, content):
-        """Simple markdown to HTML conversion"""
-        html = content
-        html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
-        html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
-        html = re.sub(r'^# (.+)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
-        html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html)
-        html = re.sub(r'\*(.+?)\*', r'<em>\1</em>', html)
-        html = re.sub(r'```(\w+)?\n(.*?)\n```', r'<pre><code class="language-\1">\2</code></pre>', html, flags=re.DOTALL)
-        html = re.sub(r'`(.+?)`', r'<code>\1</code>', html)
-        html = re.sub(r'\[(.+?)\]\((.+?)\)', r'<a href="\2">\1</a>', html)
-        html = html.replace('\n', '<br>\n')
-        return html
-    
-    def get_html_template(self):
-        """Enhanced HTML template with D.E.R.E.K branding"""
-        # Use triple braces for CSS to avoid conflicts with format()
-        css_styles = """
-        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6; color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }}
-        .container {{
-            max-width: 1200px; margin: 0 auto; padding: 20px;
-            background: white; min-height: 100vh;
-            box-shadow: 0 0 50px rgba(0,0,0,0.1);
-        }}
-        .header {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; padding: 30px; margin: -20px -20px 30px -20px;
-            border-radius: 0 0 20px 20px;
-        }}
-        .derek-badge {{
-            display: inline-block; background: rgba(255,255,255,0.2);
-            padding: 5px 15px; border-radius: 20px; font-size: 0.9em;
-            margin-bottom: 10px; backdrop-filter: blur(10px);
-        }}
-        .header h1 {{ font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }}
-        .derek-acronym {{ font-size: 0.5em; opacity: 0.9; display: block; margin-top: 5px; }}
-        .metadata {{ opacity: 0.9; font-size: 0.95em; margin-bottom: 20px; }}
-        .search-box {{
-            width: 100%; padding: 15px; border: none; border-radius: 25px;
-            font-size: 16px; background: rgba(255,255,255,0.2);
-            color: white; backdrop-filter: blur(10px);
-        }}
-        .search-box::placeholder {{ color: rgba(255,255,255,0.7); }}
-        .search-box:focus {{ outline: none; background: rgba(255,255,255,0.3); }}
-        .nav-tabs {{
-            display: flex; background: #f8f9fa; border-radius: 15px;
-            padding: 5px; margin-bottom: 30px; overflow-x: auto;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }}
-        .nav-tab {{
-            flex: 1; padding: 15px 20px; cursor: pointer; border-radius: 10px;
-            transition: all 0.3s ease; text-align: center; font-weight: 500;
-            white-space: nowrap; min-width: 120px;
-        }}
-        .nav-tab:hover {{
-            background: rgba(102, 126, 234, 0.1); transform: translateY(-2px);
-        }}
-        .nav-tab.active {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transform: translateY(-2px);
-        }}
-        .content-panel {{ display: none; animation: fadeIn 0.5s ease-in; }}
-        .content-panel.active {{ display: block; }}
-        @keyframes fadeIn {{ from {{ opacity: 0; transform: translateY(20px); }} to {{ opacity: 1; transform: translateY(0); }} }}
-        .file-content {{
-            background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 30px; border-radius: 20px; border-left: 5px solid #667eea;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden;
-        }}
-        .file-content::before {{
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
-            background-size: 200% 100%; animation: shimmer 3s ease-in-out infinite;
-        }}
-        @keyframes shimmer {{ 0%, 100% {{ background-position: 200% 0; }} 50% {{ background-position: -200% 0; }} }}
-        .feature-section {{
-            margin-top: 30px; padding: 20px; background: #f8f9fa;
-            border-radius: 15px; border: 2px solid #e9ecef;
-        }}
-        .feature-header {{
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e9ecef;
-        }}
-        .feature-badge {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.85em;
-        }}
-        h2 {{ color: #495057; border-bottom: 3px solid #e9ecef; padding-bottom: 10px; position: relative; }}
-        h2::after {{
-            content: ''; position: absolute; bottom: -3px; left: 0; width: 50px; height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }}
-        pre {{
-            background: #2d3748; color: #e2e8f0; padding: 25px; border-radius: 15px;
-            overflow-x: auto; margin: 20px 0; box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
-        }}
-        code {{
-            background: rgba(102, 126, 234, 0.1); padding: 3px 8px; border-radius: 6px;
-            font-family: 'Monaco', 'Menlo', monospace; font-size: 0.9em;
-        }}
-        pre code {{ background: none; padding: 0; }}
-        a {{ color: #667eea; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }}
-        a:hover {{ color: #764ba2; text-decoration: underline; }}
-        .highlight {{
-            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-            padding: 3px 6px; border-radius: 6px; font-weight: 500;
-        }}
-        @media (max-width: 768px) {{
-            .container {{ padding: 10px; }}
-            .header {{ padding: 20px; margin: -10px -10px 20px -10px; }}
-            .header h1 {{ font-size: 2em; }}
-            .nav-tabs {{ flex-wrap: wrap; }}
-            .nav-tab {{ padding: 12px 15px; min-width: 100px; }}
-            .file-content {{ padding: 20px; }}
-        }}
-        """
-        
-        return f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D.E.R.E.K Memory - {{PROJECT_NAME}}</title>
-    <style>{css_styles}</style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div class="derek-badge">D.E.R.E.K Memory System</div>
-            <h1>📋 {{PROJECT_NAME}}
-                <span class="derek-acronym">Design · Evaluate · Review · Execute · Knowledge</span>
-            </h1>
-            <div class="metadata">📅 {{SHARE_DATE}} • ⏰ Expires {{EXPIRY_DATE}} • 🔒 Secure View</div>
-            <input type="text" class="search-box" placeholder="🔍 Search D.E.R.E.K memory..." id="searchBox">
-        </div>
-        <div class="nav-tabs">
-            <div class="nav-tab active" data-tab="overview">📊 Overview</div>
-            <div class="nav-tab" data-tab="progress">🚀 Progress</div>
-            <div class="nav-tab" data-tab="decisions">⚖️ Decisions</div>
-            <div class="nav-tab" data-tab="knowledge">🧠 Knowledge</div>
-            <div class="nav-tab" data-tab="features">📁 Features</div>
-            <div class="nav-tab" data-tab="all">📄 All Files</div>
-        </div>
-        <div id="overview" class="content-panel active">
-            <div class="file-content">{{PROJECT_CONTENT}}</div>
-        </div>
-        <div id="progress" class="content-panel">
-            <div class="file-content">{{PROGRESS_CONTENT}}</div>
-        </div>
-        <div id="decisions" class="content-panel">
-            <div class="file-content">{{DECISIONS_CONTENT}}</div>
-        </div>
-        <div id="knowledge" class="content-panel">
-            <div class="file-content">{{KNOWLEDGE_CONTENT}}</div>
-        </div>
-        <div id="features" class="content-panel">
-            <div class="file-content">{{FEATURES_CONTENT}}</div>
-        </div>
-        <div id="all" class="content-panel">
-            <div class="file-content">{{ALL_FILES_CONTENT}}</div>
-        </div>
-    </div>
-    <script>
-        document.querySelectorAll('.nav-tab').forEach(tab => {{
-            tab.addEventListener('click', () => {{
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(tab.dataset.tab).classList.add('active');
-            }});
-        }});
-        document.getElementById('searchBox').addEventListener('input', (e) => {{
-            const searchTerm = e.target.value.toLowerCase();
-            document.querySelectorAll('.file-content').forEach(content => {{
-                const text = content.textContent.toLowerCase();
-                content.style.display = text.includes(searchTerm) || searchTerm === '' ? 'block' : 'none';
-            }});
-        }});
-    </script>
-</body>
-</html>'''
-    
-    def generate_html(self, files, options={}):
-        """Generate complete HTML page with D.E.R.E.K branding"""
+    def generate_html(self, files, options=None):
+        """Generate complete HTML page"""
+        if options is None:
+            options = {}
+            
         project_name = Path.cwd().name
         if 'PROJECT.md' in files:
             content = files['PROJECT.md']['content']
@@ -392,93 +213,151 @@ class MemoryGenerator:
                 project_name = title_match.group(1).strip()
         
         share_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M UTC')
-        expiry_date = 'Never' if options.get('expires') == 'never' else '7 days'
         
-        # Global memory sections
-        sections = {
-            'project': files.get('PROJECT.md', {}).get('content', 'No project overview available.'),
-            'progress': files.get('PROGRESS.md', {}).get('content', 'No progress information available.'),
-            'decisions': files.get('DECISIONS.md', {}).get('content', 'No decisions recorded.'),
-            'knowledge': files.get('KNOWLEDGE.md', {}).get('content', 'No knowledge accumulated.'),
-        }
-        
-        for key in sections:
-            sections[key] = self.markdown_to_html(sections[key])
-        
-        # Feature memory sections
+        # Feature memory sections with tabs
         features_html = ""
         feature_files = {k: v for k, v in files.items() if v.get('type') == 'feature'}
         features = {}
         for key, file_data in feature_files.items():
             feature_name = file_data.get('feature_name', 'unknown')
             if feature_name not in features:
-                features[feature_name] = []
-            features[feature_name].append((key, file_data))
+                features[feature_name] = {}
+            filename = key.split('/')[-1].replace('.md', '')
+            features[feature_name][filename] = file_data
         
         if features:
-            for feature_name, feature_items in features.items():
-                features_html += f'''
-                <div class="feature-section">
-                    <div class="feature-header">
-                        <span class="feature-badge">📁 Feature</span>
-                        <h3>{feature_name}</h3>
-                    </div>
-                '''
-                for key, file_data in feature_items:
-                    filename = key.split('/')[-1]
-                    icon = {'requirements.md': '📋', 'design.md': '🎨', 'tasks.md': '✅', 'notes.md': '📝'}.get(filename, '📄')
-                    features_html += f'''
-                    <div style="margin: 15px 0; padding: 15px; background: white; border-radius: 10px;">
-                        <h4>{icon} {filename}</h4>
-                        <div style="font-size: 0.85em; color: #6c757d; margin-bottom: 10px;">
-                            Modified: {file_data['last_modified'].strftime('%Y-%m-%d %H:%M')}
-                        </div>
-                        <div>{self.markdown_to_html(file_data['content'])}</div>
-                    </div>
-                    '''
+            for feature_name, feature_docs in features.items():
+                features_html += f'<div class="feature-section"><div class="feature-header"><span class="feature-badge">Feature</span><h3>{feature_name}</h3></div>'
+                
+                # Create tabs
+                features_html += '<div class="tabs">'
+                tab_order = ['requirements', 'design', 'tasks', 'notes']
+                available_tabs = [t for t in tab_order if t in feature_docs]
+                
+                # Tab buttons
+                features_html += '<div class="tab-buttons">'
+                for i, tab_name in enumerate(available_tabs):
+                    active_class = 'active' if i == 0 else ''
+                    display_name = tab_name.replace('_', ' ').title()
+                    features_html += f'<button class="tab-button {active_class}" data-tab="{feature_name}-{tab_name}">{display_name}</button>'
                 features_html += '</div>'
+                
+                # Tab content
+                features_html += '<div class="tab-content-wrapper">'
+                for i, tab_name in enumerate(available_tabs):
+                    active_class = 'active' if i == 0 else ''
+                    file_data = feature_docs[tab_name]
+                    # Escape for HTML attributes only, not for content
+                    import html
+                    content_escaped = html.escape(file_data["content"])
+                    features_html += f'<div class="tab-content {active_class}" id="{feature_name}-{tab_name}"><div class="file-meta">Last modified: {file_data["last_modified"].strftime("%Y-%m-%d %H:%M")}</div><div class="markdown-content" data-markdown="{content_escaped}"></div></div>'
+                features_html += '</div>'
+                
+                features_html += '</div></div>'
         else:
-            features_html = '<p>No feature folders found. Use "create feature &lt;name&gt;" to start feature planning.</p>'
+            features_html = '<p>No feature files found.</p>'
         
-        # All files section
-        all_files_html = "<h2>Global Memory</h2>"
-        global_files = {k: v for k, v in files.items() if v.get('type') == 'global'}
-        for filename, file_data in global_files.items():
-            all_files_html += f'''
-            <div style="margin-bottom: 30px; border: 1px solid #e9ecef; border-radius: 8px; overflow: hidden;">
-                <h3 style="background: #667eea; color: white; padding: 15px; margin: 0;">📄 {filename}</h3>
-                <div style="background: #e9ecef; padding: 10px 15px; font-size: 0.9em; color: #6c757d;">
-                    Modified: {file_data['last_modified'].strftime('%Y-%m-%d %H:%M')} • Size: {file_data['size']} bytes
-                </div>
-                <div style="padding: 20px;">{self.markdown_to_html(file_data['content'])}</div>
-            </div>
-            '''
-        
-        if feature_files:
-            all_files_html += "<h2>Feature Memory</h2>"
-            for key, file_data in feature_files.items():
-                all_files_html += f'''
-                <div style="margin-bottom: 30px; border: 1px solid #e9ecef; border-radius: 8px; overflow: hidden;">
-                    <h3 style="background: #764ba2; color: white; padding: 15px; margin: 0;">📁 {key}</h3>
-                    <div style="background: #e9ecef; padding: 10px 15px; font-size: 0.9em; color: #6c757d;">
-                        Modified: {file_data['last_modified'].strftime('%Y-%m-%d %H:%M')} • Size: {file_data['size']} bytes
-                    </div>
-                    <div style="padding: 20px;">{self.markdown_to_html(file_data['content'])}</div>
-                </div>
-                '''
-        
-        template = self.get_html_template()
-        html = template.format(
-            PROJECT_NAME=project_name,
-            SHARE_DATE=share_date,
-            EXPIRY_DATE=expiry_date,
-            PROJECT_CONTENT=sections['project'],
-            PROGRESS_CONTENT=sections['progress'],
-            DECISIONS_CONTENT=sections['decisions'],
-            KNOWLEDGE_CONTENT=sections['knowledge'],
-            FEATURES_CONTENT=features_html,
-            ALL_FILES_CONTENT=all_files_html
-        )
+        # Build HTML with clean design and markdown-it
+        html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{project_name} - D.E.R.E.K Memory</title>
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.0.0/dist/markdown-it.min.js"></script>
+<style>
+* {{margin:0;padding:0;box-sizing:border-box}}
+body {{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;line-height:1.6;color:#1a1a1a;background:#fafafa;font-size:15px}}
+.container {{max-width:1200px;margin:0 auto;padding:40px 20px}}
+.header {{margin-bottom:40px;text-align:center}}
+.header h1 {{font-size:32px;font-weight:600;color:#1a1a1a;margin-bottom:8px}}
+.header-meta {{font-size:13px;color:#666}}
+.feature-section {{margin-top:30px;padding:24px;background:#fff;border:1px solid #e5e5e5;border-radius:8px}}
+.feature-header {{margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #e5e5e5}}
+.feature-header h3 {{font-size:20px;font-weight:600;color:#1a1a1a;display:inline-block}}
+.feature-badge {{display:inline-block;background:#f0f0f0;color:#666;padding:4px 10px;border-radius:4px;font-size:12px;font-weight:500;margin-right:8px}}
+.tabs {{margin-top:20px}}
+.tab-buttons {{display:flex;gap:8px;border-bottom:2px solid #e5e5e5;margin-bottom:20px}}
+.tab-button {{background:none;border:none;padding:12px 20px;font-size:14px;font-weight:500;color:#666;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s}}
+.tab-button:hover {{color:#1a1a1a;background:#fafafa}}
+.tab-button.active {{color:#1a1a1a;border-bottom-color:#1a1a1a}}
+.tab-content-wrapper {{position:relative}}
+.tab-content {{display:none;padding:20px;background:#fafafa;border-radius:6px}}
+.tab-content.active {{display:block}}
+.file-meta {{font-size:13px;color:#666;margin-bottom:16px;padding:8px;background:#fff;border-radius:4px}}
+.markdown-content h1 {{font-size:28px;font-weight:600;color:#1a1a1a;margin:32px 0 16px;line-height:1.3}}
+.markdown-content h2 {{font-size:22px;font-weight:600;color:#1a1a1a;margin:28px 0 12px;line-height:1.3}}
+.markdown-content h3 {{font-size:18px;font-weight:600;color:#1a1a1a;margin:24px 0 10px;line-height:1.3}}
+.markdown-content h4 {{font-size:16px;font-weight:600;color:#1a1a1a;margin:20px 0 8px}}
+.markdown-content p {{margin:12px 0}}
+.markdown-content pre {{background:#f5f5f5;border:1px solid #e5e5e5;padding:16px;border-radius:6px;overflow-x:auto;margin:16px 0;font-size:13px;line-height:1.5}}
+.markdown-content code {{background:#f5f5f5;padding:2px 6px;border-radius:3px;font-family:'SF Mono',Monaco,Menlo,monospace;font-size:13px;color:#1a1a1a}}
+.markdown-content pre code {{background:none;padding:0;display:block}}
+.markdown-content a {{color:#0066cc;text-decoration:none}}
+.markdown-content a:hover {{text-decoration:underline}}
+.markdown-content strong {{font-weight:600;color:#1a1a1a}}
+.markdown-content ul,.markdown-content ol {{margin:12px 0;padding-left:24px}}
+.markdown-content li {{margin:6px 0}}
+.markdown-content table {{width:100%;border-collapse:collapse;margin:16px 0}}
+.markdown-content th,.markdown-content td {{padding:10px;text-align:left;border-bottom:1px solid #e5e5e5}}
+.markdown-content th {{font-weight:600;background:#fafafa}}
+.markdown-content blockquote {{border-left:3px solid #e5e5e5;padding-left:16px;margin:16px 0;color:#666}}
+.markdown-content hr {{border:none;border-top:1px solid #e5e5e5;margin:24px 0}}
+.markdown-content img {{max-width:100%;height:auto;margin:16px 0}}
+.markdown-content input[type="checkbox"] {{margin-right:6px}}
+@media (max-width:768px) {{.container{{padding:20px}}}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>{project_name}</h1>
+<div class="header-meta">Generated {share_date}</div>
+</div>
+{features_html}
+</div>
+<script>
+var md = window.markdownit({{
+  html: true,
+  linkify: true,
+  typographer: true,
+  breaks: true
+}});
+
+document.addEventListener('DOMContentLoaded', function() {{
+  // Render markdown content from data-markdown attribute
+  document.querySelectorAll('.markdown-content[data-markdown]').forEach(function(el) {{
+    var markdown = el.getAttribute('data-markdown');
+    // Decode HTML entities
+    var textarea = document.createElement('textarea');
+    textarea.innerHTML = markdown;
+    markdown = textarea.value;
+    el.innerHTML = md.render(markdown);
+  }});
+  
+  // Tab switching
+  document.querySelectorAll('.tab-button').forEach(function(button) {{
+    button.addEventListener('click', function() {{
+      var tabId = this.getAttribute('data-tab');
+      var tabGroup = this.closest('.tabs');
+      
+      // Remove active class from all buttons and content in this group
+      tabGroup.querySelectorAll('.tab-button').forEach(function(btn) {{
+        btn.classList.remove('active');
+      }});
+      tabGroup.querySelectorAll('.tab-content').forEach(function(content) {{
+        content.classList.remove('active');
+      }});
+      
+      // Add active class to clicked button and corresponding content
+      this.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }});
+  }});
+}});
+</script>
+</body>
+</html>'''
         
         return html
     
@@ -495,122 +374,55 @@ class MemoryGenerator:
         return str(output_file.absolute())
 
 def main():
-    generator = MemoryGenerator()
+    import sys
+    
+    # Parse command line arguments
+    feature_filter = None
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '--feature':
+            if len(sys.argv) > 2:
+                feature_filter = sys.argv[2]
+            else:
+                print("❌ Error: --feature requires a feature name")
+                print("Usage: python3 memory-generator.py [--feature FEATURE_NAME]")
+                return 1
+    
+    generator = MemoryGenerator(feature_filter=feature_filter)
     files = generator.load_memory_files()
     
     if not files:
-        print("❌ No D.E.R.E.K memory files found")
-        print("💡 Run 'init' command first to create D.E.R.E.K memory system")
+        if feature_filter:
+            print(f"❌ No files found for feature '{feature_filter}'")
+            print(f"💡 Check that .kiro/features/{feature_filter}/ exists")
+        else:
+            print("❌ No D.E.R.E.K memory files found")
+            print("💡 Run 'init' command first to create D.E.R.E.K memory system")
         return 1
     
-    # Count global vs feature files
-    global_count = len([f for f in files.values() if f.get('type') == 'global'])
     feature_count = len([f for f in files.values() if f.get('type') == 'feature'])
     features = set(f.get('feature_name') for f in files.values() if f.get('type') == 'feature')
     
     html = generator.generate_html(files)
-    output_path = generator.save_html(html)
+    
+    # Use feature name in filename if filtering
+    if feature_filter:
+        timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        filename = f"derek-feature-{feature_filter}-{timestamp}.html"
+        output_path = generator.save_html(html, filename)
+    else:
+        output_path = generator.save_html(html)
     
     print(f"✅ D.E.R.E.K Memory HTML Generated")
+    if feature_filter:
+        print(f"🎯 Feature: {feature_filter}")
     print(f"📁 File: {output_path}")
-    print(f"📊 Content:")
-    print(f"   • Global Memory: {global_count} files")
-    if feature_count > 0:
-        print(f"   • Feature Memory: {feature_count} files ({len(features)} features)")
-    print(f"🚀 Use memory-server.py to serve the HTML")
+    print(f"📊 Content: {feature_count} files ({len(features)} features)")
+    print(f"🚀 Open in browser: file://{output_path}")
     
     return 0
 
 if __name__ == '__main__':
     exit(main())
-```
-
-### Memory Server Script
-
-```python
-#!/usr/bin/env python3
-"""
-Simple HTTP server for serving project memory HTML
-"""
-
-import http.server
-import socketserver
-import webbrowser
-import os
-import socket
-from pathlib import Path
-
-def find_latest_html():
-    """Find the most recent HTML file"""
-    views_path = Path('.kiro/views')
-    if not views_path.exists():
-        return None
-    
-    html_files = list(views_path.glob('*.html'))
-    if not html_files:
-        return None
-    
-    return max(html_files, key=os.path.getctime)
-
-def serve_memory(port=8080, open_browser=True):
-    """Serve the project memory HTML file"""
-    html_file = find_latest_html()
-    if not html_file:
-        print("❌ No HTML files found in .kiro/views/")
-        print("💡 Run memory-generator.py first")
-        return 1
-    
-    print(f"📁 Serving: {html_file.name}")
-    print(f"🌐 Server: http://localhost:{port}")
-    
-    class MemoryHandler(http.server.SimpleHTTPRequestHandler):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, directory=str(Path('.kiro/views')), **kwargs)
-        
-        def do_GET(self):
-            if self.path == '/' or self.path == '/index.html':
-                self.path = f'/{html_file.name}'
-            return super().do_GET()
-        
-        def log_message(self, format, *args):
-            print(f"📊 {self.address_string()} - {format % args}")
-    
-    try:
-        with socketserver.TCPServer(("", port), MemoryHandler) as httpd:
-            print(f"✅ Server started at http://localhost:{port}")
-            
-            if open_browser:
-                webbrowser.open(f'http://localhost:{port}')
-                print("🌐 Opened in browser")
-            
-            # Get local IP for network sharing
-            try:
-                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                s.connect(("8.8.8.8", 80))
-                local_ip = s.getsockname()[0]
-                s.close()
-                print(f"📱 Network: http://{local_ip}:{port}")
-            except:
-                pass
-            
-            print("⏹️  Press Ctrl+C to stop")
-            httpd.serve_forever()
-            
-    except KeyboardInterrupt:
-        print("\n🛑 Server stopped")
-        return 0
-    except OSError as e:
-        if "Address already in use" in str(e):
-            print(f"❌ Port {port} is already in use")
-            print(f"💡 Try: python3 memory-server.py {port + 1}")
-        else:
-            print(f"❌ Server error: {e}")
-        return 1
-
-if __name__ == '__main__':
-    import sys
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
-    exit(serve_memory(port))
 ```
 
 ### Quick Serve Shell Script
@@ -682,10 +494,30 @@ bash .kiro/views/serve.sh
 
 ## Usage Examples
 
-### Quick Share
+### Quick Share (All Memory)
 ```bash
 # Generate and serve in one command
 bash .kiro/views/serve.sh
+```
+
+### Share Specific Feature Only
+```bash
+# Generate HTML for a single feature
+python3 .kiro/views/memory-generator.py --feature driver-position-rate-limiting
+
+# Start server to share
+python3 .kiro/views/memory-server.py
+```
+
+### Share Multiple Features
+```bash
+# Generate separate HTML for each feature
+python3 .kiro/views/memory-generator.py --feature authentication
+python3 .kiro/views/memory-generator.py --feature payment-integration
+
+# All generated files will be in .kiro/views/
+# Start server to access any of them
+python3 .kiro/views/memory-server.py
 ```
 
 ### Custom Port
@@ -702,6 +534,11 @@ python3 .kiro/views/memory-server.py 8081
 1. Generate HTML: `python3 .kiro/views/memory-generator.py`
 2. Upload the generated HTML file to any web hosting service
 3. Share the public URL with stakeholders
+
+### Feature-Specific Client Updates
+1. Generate feature HTML: `python3 .kiro/views/memory-generator.py --feature new-api-endpoint`
+2. Send the HTML file directly to client or upload to hosting
+3. Client sees only that feature's requirements, design, tasks, and notes
 
 ## Security Features
 
@@ -762,6 +599,7 @@ This system works seamlessly with:
 
 ## Benefits
 
+### Full Project Sharing
 - **Stakeholder Communication**: Professional D.E.R.E.K project overviews
 - **Team Collaboration**: Easy context sharing with feature progress
 - **Client Updates**: Clean, branded project status with feature tracking
@@ -770,9 +608,19 @@ This system works seamlessly with:
 - **Feature Visibility**: Share feature requirements, design, and progress
 - **Compliance**: Powers validation friendly (no binary files in power)
 
+### Feature-Specific Sharing
+- **Focused Communication**: Share only relevant feature details with specific stakeholders
+- **Client Confidentiality**: Exclude other features and global project details
+- **Contractor Scope**: Provide contractors with only their assigned feature context
+- **Feature Reviews**: Send feature-specific reports for approval or feedback
+- **Reduced Noise**: Recipients see only what they need, not entire project
+- **Selective Disclosure**: Control what information is shared with external parties
+- **Lightweight Files**: Smaller HTML files for faster loading and easier distribution
+
 ## Output Format
 
-When sharing is complete, provide:
+### Full Project Memory Share
+When sharing complete project memory:
 ```
 ✅ D.E.R.E.K Memory Shared Successfully
 
@@ -792,6 +640,31 @@ When sharing is complete, provide:
 ⚠️  Security Note:
    • Sensitive information has been automatically redacted
    • SCRATCHPAD.md excluded (temporary session notes)
+   • Files are stored locally in .kiro/views/
+```
+
+### Feature-Specific Share
+When sharing a single feature:
+```
+✅ D.E.R.E.K Feature Memory Shared Successfully
+
+📋 Share Details:
+   🎯 Feature: driver-position-rate-limiting
+   📁 File: .kiro/views/derek-feature-driver-position-rate-limiting-20240107-141136.html
+   🌐 Local URL: http://localhost:8080
+   📱 Network URL: http://192.168.1.100:8080
+   📊 Content: 
+      • Feature Memory: 4 files (requirements.md, design.md, tasks.md, notes.md)
+      • Global Memory: Excluded (feature-only view)
+
+🔗 Quick Actions:
+   • Share network URL with feature stakeholders
+   • Upload HTML file for client review
+   • Email file directly to specific team members
+
+⚠️  Security Note:
+   • Sensitive information has been automatically redacted
+   • Only this feature's files are included
    • Files are stored locally in .kiro/views/
 ```
 
