@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Summary Command",
+  "description": "Summarizes chat histories in the current session then opens a new session with summary context when the user types /summary command",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Please summarize the key points, decisions, and context from our current chat session. After providing the summary, help me start a new session while preserving this context so we can continue our work with a fresh conversation history."
+  }
+}

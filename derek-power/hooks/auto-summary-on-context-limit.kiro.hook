@@ -1,0 +1,11 @@
+{
+  "why": "To automatically summarize chat history and start a new session when context usage reaches 80%",
+  "id": "auto-summary-on-context-limit",
+  "name": "Auto Summary on Context Limit",
+  "description": "Automatically summarizes chat histories in the current session then opens a new session with summary context when current session has usage context near 80%",
+  "eventType": "promptSubmit",
+  "filePatterns": "",
+  "hookAction": "askAgent",
+  "outputPrompt": "Check if the current session context usage is near or above 80%. If so, please: 1) Summarize the key points, decisions, and context from our current chat session, 2) Note any powers that are currently active in this session, 3) Help me start a new session while preserving this context and ensuring the same powers are activated in the new session so we can continue our work with a fresh conversation history.",
+  "command": ""
+}
