@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Clear Chat History",
+  "description": "Clears all chat history in the current session when the user types /clear. After clearing, new messages will not include previous conversation history.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Clear all chat history from this session. From this point forward, treat this as a fresh conversation with no memory of previous messages."
+  }
+}

@@ -86,11 +86,59 @@ Initialize a comprehensive project overview and working memory system. This crea
 
 ## Initialization Workflow
 
-### Step 1: Create Directory Structure
+### Step 0: Detect Existing Memory System
+
+**CRITICAL: Always check first before creating anything!**
+
+Before initialization, check if the memory system already exists:
 
 ```bash
-mkdir -p .kiro/resources
-mkdir -p .kiro/views
+# Check for existing directories
+test -d .kiro/resources && echo "✓ resources exists"
+test -d .kiro/features && echo "✓ features exists"
+test -d .kiro/views && echo "✓ views exists"
+
+# Check for existing memory files
+test -f .kiro/resources/PROJECT.md && echo "✓ PROJECT.md exists"
+test -f .kiro/resources/PROGRESS.md && echo "✓ PROGRESS.md exists"
+test -f .kiro/resources/DECISIONS.md && echo "✓ DECISIONS.md exists"
+test -f .kiro/resources/KNOWLEDGE.md && echo "✓ KNOWLEDGE.md exists"
+test -f .kiro/resources/SCRATCHPAD.md && echo "✓ SCRATCHPAD.md exists"
+```
+
+**Decision Logic:**
+
+| Scenario | Action | Command |
+|----------|--------|---------|
+| No `.kiro/resources/` directory | Full initialization | `init` |
+| Directories exist, no files | Create memory files | `init` |
+| All files exist | Skip initialization, load memory | Read existing files |
+| Some files missing | Create missing files only | Partial init |
+| User says "reinit" | Regenerate PROJECT.md only | `reinit` |
+
+**If memory system already exists:**
+- ✅ Skip directory creation (already exist)
+- ✅ Skip file creation (already exist)
+- ✅ Read existing files to understand current state
+- ✅ Report: "Memory system already initialized. Reading existing context..."
+- ❌ DO NOT overwrite existing files
+- ❌ DO NOT run mkdir commands
+
+**If memory system partially exists:**
+- ✅ Create only missing directories
+- ✅ Create only missing files
+- ✅ Preserve all existing content
+- ✅ Report what was created vs what was found
+
+### Step 1: Create Directory Structure (Only if Missing)
+
+**Only run if directories don't exist!**
+
+```bash
+# Create only if missing
+test -d .kiro/resources || mkdir -p .kiro/resources
+test -d .kiro/features || mkdir -p .kiro/features
+test -d .kiro/views || mkdir -p .kiro/views
 ```
 
 ### Step 2: Deep Project Analysis
@@ -158,657 +206,53 @@ Perform comprehensive analysis before generating files:
 
 ### Step 3: Generate PROJECT.md
 
-Create comprehensive project overview:
+Create comprehensive project overview with these sections:
 
-```markdown
-# Project Overview
+**Required Sections:**
+- 🎯 Quick Summary (name, description, domain, status)
+- 🏗️ Technology Stack (core tech, dependencies, infrastructure)
+- 📐 Architecture (pattern, directory structure, key components)
+- 🚀 Entry Points (application entry, configuration)
+- 💻 Development Commands (setup, testing, quality)
+- 📏 Code Conventions (naming, organization, patterns)
+- 🔗 External Integrations
+- ⚠️ Important Notes (gotchas, performance, security)
 
-## 🎯 Quick Summary
-
-**Project Name**: [Name from package/config]
-**Description**: [What this project does in 2-3 sentences]
-**Domain**: [Business domain - e-commerce, logistics, fintech, etc.]
-**Status**: [Active development / Maintenance / Legacy]
-
-## 🏗️ Technology Stack
-
-### Core Technologies
-| Layer | Technology | Version | Purpose |
-|-------|------------|---------|---------|
-| Language | Ruby | 2.5.3 | Primary language |
-| Framework | Rails | 4.2.x | Web framework |
-| Database | PostgreSQL | 12.x | Primary data store |
-| Cache | Redis | 6.x | Caching & sessions |
-| Search | Elasticsearch | 7.x | Full-text search |
-
-### Key Dependencies
-| Gem/Package | Version | Purpose |
-|-------------|---------|---------|
-| devise | x.x | Authentication |
-| sidekiq | x.x | Background jobs |
-| grape | x.x | REST API framework |
-| paperclip | x.x | File uploads |
-
-### Infrastructure
-- **Containerization**: Docker
-- **Orchestration**: Kubernetes
-- **Cloud Provider**: AWS
-- **CI/CD**: Bitbucket Pipelines
-
-## 📐 Architecture Overview
-
-### Pattern
-[MVC with Service Objects / Microservices / Monolith / etc.]
-
-### High-Level Diagram
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Load Balancer                         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-              ┌───────────────┼───────────────┐
-              ▼               ▼               ▼
-        ┌──────────┐   ┌──────────┐   ┌──────────┐
-        │   Web    │   │   API    │   │  Admin   │
-        │  Server  │   │  Server  │   │  Panel   │
-        └────┬─────┘   └────┬─────┘   └────┬─────┘
-              │               │               │
-              └───────────────┼───────────────┘
-                              ▼
-                    ┌──────────────────┐
-                    │   Application    │
-                    │     Layer        │
-                    └────────┬─────────┘
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        ▼                     ▼                     ▼
-  ┌──────────┐         ┌──────────┐         ┌──────────┐
-  │PostgreSQL│         │  Redis   │         │Elasticsearch│
-  └──────────┘         └──────────┘         └──────────┘
-```
-
-### Directory Structure
-```
-app/
-├── api/                    # Grape API endpoints
-│   ├── v3/                # API version 3
-│   ├── v4/                # API version 4 (current)
-│   └── entities/          # Response serializers
-├── models/                 # ActiveRecord models
-│   └── concerns/          # Shared model behaviors
-├── services/              # Business logic
-│   ├── bookings/          # Booking domain services
-│   ├── payments/          # Payment domain services
-│   └── notifications/     # Notification services
-├── jobs/                  # Sidekiq background jobs
-├── consumers/             # Kafka message consumers
-├── controllers/           # Rails controllers
-│   ├── admin/             # Admin panel
-│   └── business/          # Business portal
-└── mailers/               # Email templates
-```
-
-## 🔑 Key Components
-
-### Domain Models
-| Model | Purpose | Key Relationships |
-|-------|---------|-------------------|
-| `User` | User accounts | has_many :bookings |
-| `Booking` | Delivery orders | belongs_to :user, :driver |
-| `Driver` | Delivery drivers | has_many :bookings |
-| `Vehicle` | Driver vehicles | belongs_to :driver |
-
-### Service Objects
-| Service | Purpose | Location |
-|---------|---------|----------|
-| `BookingCreator` | Create new bookings | `app/services/bookings/` |
-| `PriceCalculator` | Calculate delivery prices | `app/services/pricing/` |
-| `DriverMatcher` | Match drivers to bookings | `app/services/matching/` |
-
-### API Endpoints
-| Endpoint | Version | Purpose |
-|----------|---------|---------|
-| `/api/v4/bookings` | v4 | Booking management |
-| `/api/v4/drivers` | v4 | Driver operations |
-| `/api/v4/vehicles` | v4 | Vehicle management |
-
-### Background Jobs
-| Job | Queue | Purpose |
-|-----|-------|---------|
-| `NotificationJob` | default | Send notifications |
-| `MatchingJob` | critical | Driver matching |
-| `ReportJob` | low | Generate reports |
-
-## 🚀 Entry Points
-
-### Application Entry
-| Entry Point | Path | Purpose |
-|-------------|------|---------|
-| Rails App | `config/application.rb` | Main application config |
-| Routes | `config/routes.rb` | URL routing |
-| API Mount | `config/routes.rb` → `API::Root` | API entry point |
-
-### Configuration
-| Config | Path | Purpose |
-|--------|------|---------|
-| Database | `config/database.yml` | DB connection |
-| Environment | `.env`, `.env.development` | Environment variables |
-| Sidekiq | `config/sidekiq.yml` | Background job config |
-| Redis | `config/initializers/redis.rb` | Redis connection |
-
-## 💻 Development Commands
-
-### Setup
-```bash
-# Install Ruby dependencies
-bundle install
-
-# Install Node dependencies
-npm install
-
-# Setup database
-rake db:create db:migrate db:seed
-
-# Start development server
-rails server
-
-# Start background workers
-bundle exec sidekiq -C config/sidekiq.yml
-```
-
-### Testing
-```bash
-# Run all tests
-bundle exec rspec
-
-# Run specific test
-bundle exec rspec spec/models/booking_spec.rb
-
-# Run with coverage
-COVERAGE=true bundle exec rspec
-```
-
-### Code Quality
-```bash
-# Ruby linting
-bundle exec rubocop -a
-
-# Security scan
-bundle exec brakeman
-
-# Code smell detection
-bundle exec reek
-```
-
-## 📏 Code Conventions
-
-### Naming Conventions
-| Type | Convention | Example |
-|------|------------|---------|
-| Models | Singular, PascalCase | `Booking`, `UserProfile` |
-| Controllers | Plural, PascalCase | `BookingsController` |
-| Services | Action + Object | `BookingCreator`, `PriceCalculator` |
-| Jobs | Noun + Job | `NotificationJob`, `CleanupJob` |
-
-### File Organization
-- **Model concerns**: `app/models/concerns/<model_name>/`
-- **Service objects**: `app/services/<domain>/`
-- **API versions**: `app/api/v<version>/`
-
-### Code Patterns
-```ruby
-# Service Object Pattern
-class MyService < ApplicationService
-  def call
-    # Business logic here
-    # Return result or raise error
-  end
-end
-
-# Usage
-MyService.call(params)
-```
-
-## 🔗 External Integrations
-
-| Service | Purpose | Config Location |
-|---------|---------|-----------------|
-| AWS S3 | File storage | `config/initializers/paperclip.rb` |
-| Twilio | SMS/Voice | `config/initializers/twilio.rb` |
-| Firebase | Push notifications | `config/initializers/firebase.rb` |
-| Stripe | Payments | `config/initializers/stripe.rb` |
-
-## ⚠️ Important Notes
-
-### Known Gotchas
-1. **Rails 4.2 Syntax**: Use `ActiveRecord::Base`, not `ApplicationRecord`
-2. **Strong Params**: Define in controllers, not models
-3. **Grape API**: Use `params` directly, not `permitted_params`
-4. **PostGIS**: Use `st_distance` for location queries
-5. **Multi-locale**: Support en, vi, th, id, tl
-
-### Performance Considerations
-- Use `includes` to avoid N+1 queries
-- Cache expensive computations in Redis
-- Use background jobs for slow operations
-
-### Security Considerations
-- Never log sensitive data (passwords, tokens)
-- Always validate user input
-- Use parameterized queries
-
----
-*Generated: [date]*
-*Last Updated: [date]*
-```
+**Format:** Use tables for structured data, code blocks for examples, bullet points for lists. Keep concise but comprehensive.
 
 ---
 
 ### Step 4: Generate PROGRESS.md
 
-```markdown
-# Task Progress
+**Sections:** Current Focus (task, phase, status, dates) · Goal · Phases (5-phase table) · Key Questions · Blockers · Errors · Completed Tasks · Next Steps · Session Log
 
-## 📍 Current Focus
-
-**Task**: [None - awaiting task assignment]
-**Phase**: Initialization Complete
-**Status**: 🟢 Ready for tasks
-**Started**: [date]
-**Last Updated**: [date]
-
-## 🎯 Goal
-
-[To be defined when task is assigned]
-
-## 📋 Phases
-
-| Phase | Status | Description |
-|-------|--------|-------------|
-| 1. Analysis | ⏳ Pending | Understand requirements |
-| 2. Planning | ⏳ Pending | Design solution |
-| 3. Implementation | ⏳ Pending | Write code |
-| 4. Testing | ⏳ Pending | Verify solution |
-| 5. Review | ⏳ Pending | Quality check |
-
-## ❓ Key Questions
-
-[To be populated during analysis]
-
-## 🚧 Blockers
-
-| Blocker | Impact | Resolution |
-|---------|--------|------------|
-| None | - | - |
-
-## ❌ Errors Encountered
-
-| Error | Context | Solution |
-|-------|---------|----------|
-| None | - | - |
-
-## ✅ Completed Tasks
-
-- [x] Project initialization - [date]
-
-## 📌 Next Steps
-
-1. [ ] Review PROJECT.md for accuracy
-2. [ ] Assign first task
-3. [ ] Begin analysis phase
-
-## 📊 Session Log
-
-### [date] - Initialization
-- Created project memory system
-- Analyzed project structure
-- Generated PROJECT.md
-
----
-*Last Updated: [date]*
-```
+**Initial State:** Task "None - awaiting assignment", Phase "Initialization Complete", Status 🟢 Ready
 
 ---
 
 ### Step 5: Generate DECISIONS.md
 
-```markdown
-# Decision Log
+**Sections:** Purpose · Decision Index (table) · Decisions (detailed entries with template)
 
-## Purpose
+**Template Fields:** Decision · Context · Alternatives Considered · Rationale · Impact · Reversible
 
-Track key decisions made during development with rationale and context. This ensures consistency and helps future developers understand why choices were made.
-
-## Decision Index
-
-| Date | Decision | Impact | Reversible |
-|------|----------|--------|------------|
-| [date] | Project Initialization | Foundation | No |
-
----
-
-## Decisions
-
-### [date] - Project Initialization
-
-**Decision**: Initialized project memory system with 5 core files
-
-**Context**: 
-- Starting work on this project
-- Need persistent context across sessions
-- Want structured approach to development
-
-**Alternatives Considered**:
-1. No memory system - rely on conversation context
-2. Single file approach - all in one document
-3. Full memory system - separate concerns into files
-
-**Rationale**: 
-- Separate files allow focused updates
-- Reduces context loading time
-- Enables selective sharing
-- Compatible with manus-plaining workflow
-
-**Impact**: 
-- All future work uses this memory system
-- Decisions are tracked and searchable
-- Knowledge accumulates over time
-
-**Reversible**: No (foundational decision)
-
----
-
-## Decision Template
-
-```markdown
-### [date] - [Decision Title]
-
-**Decision**: [What was decided]
-
-**Context**: 
-- [Why this decision was needed]
-- [Current situation]
-- [Constraints]
-
-**Alternatives Considered**:
-1. [Option 1] - [Pros/Cons]
-2. [Option 2] - [Pros/Cons]
-3. [Option 3] - [Pros/Cons]
-
-**Rationale**: 
-- [Why this option was chosen]
-- [Key factors in decision]
-
-**Impact**: 
-- [What this affects]
-- [Dependencies]
-- [Future implications]
-
-**Reversible**: [Yes/No/Partially] - [Explanation]
-```
-
----
-*Last Updated: [date]*
-```
+**Initial Entry:** "Project Initialization" decision with memory system rationale
 
 ---
 
 ### Step 6: Generate KNOWLEDGE.md
 
-```markdown
-# Project Knowledge Base
+**Sections:** Purpose · Quick Reference (commands, queries) · Architecture Patterns (code examples) · Gotchas & Pitfalls (tables) · Useful Snippets (debugging, performance, testing) · Lessons Learned · External Resources
 
-## Purpose
-
-Accumulate learnings, patterns, and insights discovered during development. This prevents repeating mistakes and captures institutional knowledge.
-
-## 📚 Quick Reference
-
-### Common Commands
-```bash
-# Start development
-rails server
-bundle exec sidekiq -C config/sidekiq.yml
-
-# Run tests
-bundle exec rspec
-
-# Database operations
-rake db:migrate
-rake db:rollback STEP=1
-
-# Console access
-rails console
-rails dbconsole
-```
-
-### Useful Queries
-```ruby
-# Find booking with associations
-Booking.includes(:user, :driver, :locations).find(id)
-
-# Active drivers in area
-Driver.active.within_radius(lat, lng, 5.km)
-
-# Recent bookings
-Booking.where('created_at > ?', 1.day.ago).order(created_at: :desc)
-```
-
----
-
-## 🏗️ Architecture Patterns
-
-### Service Object Pattern
-```ruby
-# Location: app/services/
-class BookingCreator < ApplicationService
-  def initialize(user:, params:)
-    @user = user
-    @params = params
-  end
-
-  def call
-    booking = @user.bookings.build(@params)
-    
-    if booking.save
-      notify_drivers(booking)
-      booking
-    else
-      raise ServiceError, booking.errors.full_messages
-    end
-  end
-
-  private
-
-  def notify_drivers(booking)
-    NotificationJob.perform_async(booking.id)
-  end
-end
-
-# Usage
-BookingCreator.call(user: current_user, params: booking_params)
-```
-
-### API Entity Pattern
-```ruby
-# Location: app/api/entities/
-module Entities
-  class Booking < Grape::Entity
-    expose :id
-    expose :status
-    expose :created_at
-    expose :user, using: Entities::User
-    expose :locations, using: Entities::Location
-  end
-end
-```
-
-### Model Concern Pattern
-```ruby
-# Location: app/models/concerns/bookings/
-module Bookings::Validations
-  extend ActiveSupport::Concern
-
-  included do
-    validates :pickup_location, presence: true
-    validates :dropoff_location, presence: true
-    validate :valid_locations
-  end
-
-  private
-
-  def valid_locations
-    # Custom validation logic
-  end
-end
-```
-
----
-
-## ⚠️ Gotchas & Pitfalls
-
-### Rails 4.2 Specific
-| Issue | Wrong | Correct |
-|-------|-------|---------|
-| Base class | `ApplicationRecord` | `ActiveRecord::Base` |
-| Strong params | In model | In controller |
-| Enum syntax | `enum status: [:pending]` | `enum status: { pending: 0 }` |
-
-### Database
-| Issue | Problem | Solution |
-|-------|---------|----------|
-| N+1 queries | Lazy loading | Use `includes(:association)` |
-| Large result sets | Memory issues | Use `find_each` or `in_batches` |
-| Slow queries | Missing indexes | Add database indexes |
-
-### API
-| Issue | Problem | Solution |
-|-------|---------|----------|
-| Grape params | Using `permitted_params` | Use `params` directly |
-| Authentication | Missing auth check | Add `before` filter |
-| Versioning | Breaking changes | Create new API version |
-
----
-
-## 🔧 Useful Snippets
-
-### Debugging
-```ruby
-# Log SQL queries
-ActiveRecord::Base.logger = Logger.new(STDOUT)
-
-# Inspect object
-pp object.attributes
-
-# Trace method calls
-set_trace_func proc { |event, file, line, id, binding, classname|
-  printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
-}
-```
-
-### Performance
-```ruby
-# Benchmark code
-require 'benchmark'
-Benchmark.measure { expensive_operation }
-
-# Memory profiling
-require 'memory_profiler'
-MemoryProfiler.report { code_to_profile }.pretty_print
-```
-
-### Testing
-```ruby
-# Factory usage
-let(:booking) { create(:booking, :with_driver) }
-
-# Stub external service
-allow(TwilioService).to receive(:send_sms).and_return(true)
-
-# Time travel
-travel_to(1.day.from_now) { expect(booking).to be_expired }
-```
-
----
-
-## 📖 Lessons Learned
-
-| Date | Lesson | Context |
-|------|--------|---------|
-| [date] | Always check for N+1 queries | Performance issue in production |
-
----
-
-## 🔗 External Resources
-
-| Resource | URL | Purpose |
-|----------|-----|---------|
-| Rails Guides | https://guides.rubyonrails.org | Framework documentation |
-| Grape Wiki | https://github.com/ruby-grape/grape/wiki | API framework docs |
-| Project Wiki | [internal URL] | Team documentation |
-
----
-*Last Updated: [date]*
-```
+**Populate with:** Project-specific commands, common patterns, known issues, helpful snippets
 
 ---
 
 ### Step 7: Generate SCRATCHPAD.md
 
-```markdown
-# Scratchpad
+**Sections:** Purpose · Current Session (started, focus, status) · Working Notes · Questions to Investigate · Temporary Context · Quick TODO · Session Cleanup Checklist
 
-## Purpose
-
-Temporary working notes, thoughts, and context for current session. This file is cleared at session end - move important content to appropriate files.
-
----
-
-## 📅 Current Session
-
-**Started**: [date/time]
-**Focus**: Project initialization
-**Status**: Active
-
----
-
-## 📝 Working Notes
-
-[Space for temporary notes during work]
-
----
-
-## ❓ Questions to Investigate
-
-- [ ] [Question 1]
-- [ ] [Question 2]
-
----
-
-## 🔍 Temporary Context
-
-[Space for context that doesn't need permanent storage]
-
----
-
-## 📋 Quick TODO
-
-- [ ] [Task 1]
-- [ ] [Task 2]
-
----
-
-## 🗑️ Session Cleanup Checklist
-
-Before ending session:
-- [ ] Move important notes to KNOWLEDGE.md
-- [ ] Update PROGRESS.md with status
-- [ ] Log any decisions in DECISIONS.md
-- [ ] Clear this scratchpad
-
----
-*This file is for temporary notes. Move important content to appropriate files before session end.*
-```
+**Initial State:** Focus "Project initialization", Status "Active"
 
 ---
 
@@ -816,195 +260,81 @@ Before ending session:
 
 When running `init`, complete these steps:
 
-- [ ] Create `.kiro/resources/` directory
-- [ ] Create `.kiro/features/` directory
-- [ ] Create `.kiro/views/` directory
+- [ ] **FIRST: Check if memory system already exists**
+- [ ] If all files exist → Skip init, read existing files, report "Already initialized"
+- [ ] If partially exists → Note what exists, create only missing pieces
+- [ ] Create `.kiro/resources/` directory (only if missing)
+- [ ] Create `.kiro/features/` directory (only if missing)
+- [ ] Create `.kiro/views/` directory (only if missing)
 - [ ] Scan project structure thoroughly
 - [ ] Detect technology stack with versions
 - [ ] Map architecture patterns
 - [ ] Identify key components and relationships
-- [ ] Generate `PROJECT.md` with comprehensive overview
-- [ ] Initialize `PROGRESS.md` for task tracking
-- [ ] Initialize `DECISIONS.md` with first decision
-- [ ] Initialize `KNOWLEDGE.md` with patterns
-- [ ] Initialize `SCRATCHPAD.md` for working notes
+- [ ] Generate `PROJECT.md` (only if missing or reinit)
+- [ ] Initialize `PROGRESS.md` (only if missing)
+- [ ] Initialize `DECISIONS.md` (only if missing)
+- [ ] Initialize `KNOWLEDGE.md` (only if missing)
+- [ ] Initialize `SCRATCHPAD.md` (only if missing)
 - [ ] Verify all files are accurate
 - [ ] Report initialization summary with D.E.R.E.K branding
 
 ---
 
-## Example Init Output
+## Example Init Outputs
 
+### New Project
 ```
 ✅ D.E.R.E.K Memory System Initialized
-
-📁 Created .kiro/resources/
-   ├── PROJECT.md    - 🏗️ Project DNA (comprehensive overview)
-   ├── PROGRESS.md   - 📊 Task Tracker (ready for tasks)
-   ├── DECISIONS.md  - ⚖️ Decision Log (1 decision logged)
-   ├── KNOWLEDGE.md  - 🧠 Knowledge Base (patterns documented)
-   └── SCRATCHPAD.md - 📝 Working Notes (empty)
-
-� Created .kiro/features/ (ready for feature planning)
-
-�📊 Project Analysis:
-   • Name: Deliveree Backend
-   • Stack: Ruby 2.5.3 / Rails 4.2.x / PostgreSQL / Redis
-   • Architecture: Monolithic MVC with Service Objects
-   • API: Grape REST API (v3, v4)
-   • Background: Sidekiq + Kafka consumers
-   • Key Models: User, Booking, Driver, Vehicle
-   • Test Framework: RSpec
-
-🔑 Key Findings:
-   • 4 API versions detected (v1-v4, v4 is current)
-   • 15+ service objects in app/services/
-   • Multi-country support (en, vi, th, id, tl)
-   • PostGIS for geolocation queries
-
-⚠️ Important Notes:
-   • Rails 4.2 syntax (no ApplicationRecord)
-   • Strong params in controllers only
-   • Use st_distance for location queries
-
-🚀 D.E.R.E.K Ready!
-   • For simple tasks: Update PROGRESS.md directly
-   • For complex features: Say "create feature <name>"
-   • For analysis: Load analysis.md steering file
-
-What would you like to work on?
+📁 Created .kiro/resources/ (PROJECT, PROGRESS, DECISIONS, KNOWLEDGE, SCRATCHPAD)
+📁 Created .kiro/features/
+📊 Project Analysis: [name, stack, architecture, key findings]
+🚀 Ready! Use "create feature <name>" for complex work or update PROGRESS.md for simple tasks
 ```
 
----
+### Already Initialized
+```
+✅ D.E.R.E.K Memory System Already Exists
+📁 Found .kiro/resources/ (all files exist, last updated: X days ago)
+� Found .kiro/features/ (Xd specs: Y in progress, Z complete)
+📊 Loading context from PROGRESS.md and SCRATCHPAD.md...
+💡 Tip: Use "reinit" to refresh PROJECT.md
+🚀 Ready! Current task: [task name] ([phase])
+```
 
-## Reinit Command
+### Partial Init
+```
+⚠️ D.E.R.E.K Memory System Partially Initialized
+📁 Found .kiro/resources/ (some files missing)
+📁 Created missing: DECISIONS.md, KNOWLEDGE.md
+🚀 Ready! Memory system now complete, existing files preserved
+```
 
-When user says "reinit":
-
-### What Gets Updated
-- ✅ `PROJECT.md` - Regenerated with fresh analysis
-- 🧹 `SCRATCHPAD.md` - Cleared
-
-### What Gets Preserved
-- 📌 `PROGRESS.md` - Current task context intact
-- 📌 `DECISIONS.md` - All decisions retained
-- 📌 `KNOWLEDGE.md` - All learnings retained
-
-### Example Reinit Output
-
+### Reinit
 ```
 🔄 D.E.R.E.K Memory Refreshed
-
-📁 Updated .kiro/resources/
-   ├── PROJECT.md    - ✅ Regenerated
-   ├── PROGRESS.md   - 📌 Preserved (current task intact)
-   ├── DECISIONS.md  - 📌 Preserved (12 decisions)
-   ├── KNOWLEDGE.md  - 📌 Preserved (8 patterns)
-   └── SCRATCHPAD.md - 🧹 Cleared
-
-� Preserved .kiro/features/
-   ├── authentication/  - 📌 Preserved (in progress)
-   └── payment-integration/ - 📌 Preserved (complete)
-
-📊 Changes Detected:
-   • New gem: stripe (payments integration)
-   • New directory: app/services/payments/
-   • New model: PaymentTransaction
-   • Updated: sidekiq 6.0 → 7.0
-
-📝 PROJECT.md updated with latest project state.
+📁 Updated: PROJECT.md (regenerated with fresh analysis)
+� Preserved: PROGRESS, DECISIONS, KNOWLEDGE (all intact)
+📁 Cleared: SCRATCHPAD.md
+📊 Changes Detected: [new dependencies, directories, models]
 ```
 
 ---
 
 ## Post-Initialization Workflow
 
-### Daily Workflow (D.E.R.E.K Loop)
+**Daily Workflow:** Start Session (read PROGRESS/PROJECT/features) → During Work (update SCRATCHPAD/PROGRESS/notes) → After Decisions (log to DECISIONS) → When Learning (update notes/KNOWLEDGE) → End Session (update PROGRESS, clear SCRATCHPAD)
+
+**Quick vs Feature Planning:** Bug fixes/config → PROGRESS.md | New features/multi-file/auth → features/<name>/
+
+**Steering Integration:** analysis.md (reads PROJECT, writes SCRATCHPAD) · planning.md (reads PROJECT, creates features/, writes PROGRESS) · review.md (reads all, writes KNOWLEDGE) · context.md (uses PROGRESS/KNOWLEDGE)
+
+**Feature Planning Flow:**
 ```
-1. Start Session
-   └── Read PROGRESS.md → Current status
-   └── Read PROJECT.md → Refresh context
-   └── Check features/*/ → Active feature status
-
-2. During Work
-   └── Update SCRATCHPAD.md → Working notes
-   └── Update PROGRESS.md → Phase changes
-   └── Update features/*/notes.md → Feature-specific findings
-
-3. After Decisions
-   └── Update DECISIONS.md → Log with rationale
-
-4. When Learning
-   └── Update features/*/notes.md → Temporary (during feature)
-   └── Update KNOWLEDGE.md → Finalized (after feature complete)
-
-5. End Session
-   └── Update PROGRESS.md → Final status
-   └── Clear SCRATCHPAD.md → Move important notes
-```
-
-### Quick Planning vs Feature Planning
-
-| Scenario | Use | Location |
-|----------|-----|----------|
-| Bug fix | Quick Planning | PROGRESS.md |
-| Config change | Quick Planning | PROGRESS.md |
-| New feature | Feature Planning | features/<name>/ |
-| Multi-file change | Feature Planning | features/<name>/ |
-| Auth/Security work | Feature Planning | features/<name>/ |
-
-### Integration with D.E.R.E.K Steering Files
-
-| Steering File | Phase | Uses Memory Files |
-|---------------|-------|-------------------|
-| `analysis.md` | **E**valuate | Reads PROJECT.md, writes to SCRATCHPAD.md |
-| `planning.md` | **D**esign | Reads PROJECT.md, creates features/*/, writes to PROGRESS.md |
-| `review.md` | **R**eview | Reads all, writes to KNOWLEDGE.md |
-| `context.md` | All | Uses PROGRESS.md, KNOWLEDGE.md for context retention |
-
-### Feature Planning Integration
-
-When creating a new feature, the memory system expands:
-
-```
-init (creates global memory)
-  │
-  ▼
-"create feature authentication"
-  │
-  ▼
-.kiro/features/authentication/
-├── requirements.md  ◄── DESIGN phase
-├── design.md        ◄── DESIGN phase (after approval)
-├── tasks.md         ◄── EXECUTE phase (after approval)
-└── notes.md         ◄── EXECUTE phase (temporary knowledge)
-                           │
-                           ▼ (on completion)
-                     KNOWLEDGE.md (finalized learnings)
+init → "create feature X" → features/X/ (requirements → design → tasks → notes) → KNOWLEDGE.md
 ```
 
 ---
 
 ## Remember
 
-**Initialization is the foundation for D.E.R.E.K workflow.**
-
-A well-initialized project memory:
-- ✅ Provides instant context for any session
-- ✅ Prevents repeated discovery of same information
-- ✅ Enables consistent decision-making
-- ✅ Accumulates knowledge over time
-- ✅ Supports effective handoffs between sessions
-- ✅ Can be shared with team via memory-sharing system
-- ✅ Integrates with feature planning workflow
-
-**D.E.R.E.K Memory Flow:**
-```
-PROJECT.md ──► Context for all work
-PROGRESS.md ──► Links to active features
-features/*/notes.md ──► Temporary knowledge during implementation
-KNOWLEDGE.md ◄── Finalized learnings after feature completion
-DECISIONS.md ◄── Key decisions with rationale
-```
-
-**Always `init` before starting significant work on an unfamiliar project.**
+**Init checks first, creates only missing pieces. Reinit only regenerates PROJECT.md. Memory system enables context retention, consistent decisions, knowledge accumulation, and team sharing.**

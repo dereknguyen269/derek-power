@@ -36,6 +36,12 @@ When initialized, this power creates a persistent memory system in the user's wo
 
 **To initialize**: Use `derek-init.md` or say "init" to create the memory system.
 
+**IMPORTANT - Detection Logic:**
+- If memory system already exists → Skip initialization, read existing files
+- If partially exists → Create only missing files, preserve existing content
+- If "reinit" command → Only regenerate PROJECT.md, preserve all other files
+- Never overwrite existing memory files during "init"
+
 ## Folder Spec Planning System
 
 For complex specifications, use dedicated folder specs under `.kiro/features/`:
@@ -65,295 +71,162 @@ For complex specifications, use dedicated folder specs under `.kiro/features/`:
                                                             KNOWLEDGE.md
 ```
 
+## Quick Implementation Modes
+
+D.E.R.E.K supports three implementation approaches based on task complexity:
+
+### 1. Full Spec Workflow (Complex Features)
+**Command**: `"implement with specs [description]"`
+
+**When to Use**:
+- Multi-file features requiring coordination
+- New systems or major refactors
+- Features with unclear requirements
+- Work spanning multiple sessions
+
+**Process**:
+1. Create requirements.md (get approval ⛔)
+2. Create design.md (get approval ⛔)
+3. Create tasks.md (implementation plan)
+4. Execute tasks incrementally
+5. Transfer learnings to KNOWLEDGE.md
+
+**Example**: `"implement with specs: user authentication system with JWT"`
+
+### 2. Quick Implementation (Simple Tasks)
+**Command**: `"quick implement [description]"`
+
+**When to Use**:
+- Single-file changes
+- Bug fixes
+- Simple feature additions
+- Clear, well-understood requirements
+
+**Process**:
+1. Brief analysis (no approval needed)
+2. Direct implementation
+3. Quick review
+4. Update PROGRESS.md
+
+**Example**: `"quick implement: add email validation to signup form"`
+
+### 3. Manual Spec Creation (Structured Planning)
+**Commands**: `"create spec [name]"` → `"approve requirements"` → `"approve design"`
+
+**When to Use**:
+- Want to review each phase separately
+- Collaborative planning with team
+- Learning the D.E.R.E.K workflow
+- Need to pause between phases
+
+**Process**:
+1. `create spec authentication` - Creates requirements.md
+2. Review and iterate on requirements
+3. `approve requirements` - Proceed to design
+4. Review and iterate on design
+5. `approve design` - Proceed to tasks
+6. Execute tasks manually
+
+### Decision Matrix
+
+| Task Type | Complexity | Files | Duration | Command |
+|-----------|------------|-------|----------|---------|
+| Bug fix | Low | 1 | < 1 hour | `quick implement` |
+| Simple feature | Low-Medium | 1-2 | < 2 hours | `quick implement` |
+| Feature with specs | Medium | 2-5 | 2-8 hours | `implement with specs` |
+| Complex system | High | 5+ | > 8 hours | `create spec` (manual) |
+| Refactor | Medium-High | 3-10 | 4-16 hours | `implement with specs` |
+
 ### Commands
+
+**Memory & Initialization**
 - `"init"` / `"reinit"` - Initialize or refresh project memory
+- `"share memory"` - Generate shareable HTML of project memory
+
+**Spec Planning (Structured Workflow)**
 - `"create spec [name]"` - Create new folder spec with requirements.md
 - `"approve requirements"` - Proceed to design phase
 - `"approve design"` - Proceed to tasks/implementation phase
 - `"complete spec"` - Transfer notes.md learnings to KNOWLEDGE.md
 
+**Quick Implementation (Fast Track)**
+- `"implement with specs [description]"` - Full spec workflow (requirements → design → tasks → code)
+- `"quick implement [description]"` - Skip specs, direct implementation with minimal planning
+
+**Skill Management**
+- `"install skill [github-url]"` - Install skill from GitHub
+- `"list skills"` - Show all available skills
+- `"search skills [keyword]"` - Search for skills
+- `"update skill [name]"` - Update installed skill
+- `"uninstall skill [name]"` - Remove skill
+
 ## Steering File Organization
 
-Steering files are organized into categories using dot notation for easy discovery:
+**70+ specialized agents organized by category**. Use dot notation (e.g., `core.code-reviewer.md`).
 
-```
-steering/
-├── analysis.md              # Task analysis framework
-├── planning.md              # Planning framework (quick & folder spec)
-├── review.md                # Post-implementation review
-├── context.md               # Context retention framework
-├── derek-init.md            # Project initialization
-├── memory-sharing.md        # Memory sharing system
-├── examples.md              # Planning workflow examples
-├── hooks-before-code.md     # Pre-code validation hook template
-├── hooks-after-code.md      # Post-code review hook template
-│
-├── core.md                          # Index: Core quality agents
-├── core.code-archaeologist.md       # Deep codebase exploration
-├── core.code-reviewer.md            # Security-aware code review
-├── core.debugger.md                 # Error resolution & debugging
-├── core.performance-optimizer.md    # Performance optimization
-│
-├── orchestrators.md                     # Index: Orchestration agents
-├── orchestrators.project-analyst.md     # Tech stack detection
-├── orchestrators.tech-lead-orchestrator.md # Task breakdown & delegation
-├── orchestrators.team-configurator.md   # AI team configuration
-│
-├── infrastructure.md                            # Index: Infrastructure & DevOps agents
-├── infrastructure.cloud-architect.md            # Infrastructure architecture
-├── infrastructure.deployment-engineer.md        # Pipeline automation
-├── infrastructure.devops-incident-responder.md  # Incident response
-├── infrastructure.incident-responder.md         # General incident management
-├── infrastructure.performance-engineer.md       # Infrastructure optimization
-│
-├── quality-testing.md                # Index: QA & Testing agents
-├── quality-testing.qa-expert.md      # Test strategy & QA process
-├── quality-testing.test-automator.md # Test implementation
-│
-├── security-auditor.md              # Comprehensive security audits
-│
-├── specialized.golang.md            # Index: Go specialists
-├── specialized.golang-pro.md        # Go 1.21+ expert
-│
-├── specialized.python.md                    # Index: Python specialists
-├── specialized.python.python-expert.md      # Core Python expert
-├── specialized.python.django-expert.md      # Django 5.0+ expert
-├── specialized.python.fastapi-expert.md     # FastAPI async APIs
-├── specialized.python.ml-data-expert.md     # ML & data science
-├── specialized.python.testing-expert.md     # pytest & TDD
-├── specialized.python.security-expert.md    # Python security
-├── specialized.python.performance-expert.md # Optimization
-├── specialized.python.devops-cicd-expert.md # CI/CD automation
-├── specialized.python.web-scraping-expert.md # Data extraction
-│
-├── specialized.rails.md                         # Index: Rails specialists
-├── specialized.rails-backend-expert.md          # Full-stack Rails
-├── specialized.rails-api-developer.md           # Rails API
-├── specialized.rails-activerecord-expert.md     # ORM optimization
-│
-├── specialized.react.md                     # Index: React specialists
-├── specialized.react-component-architect.md # Component design
-├── specialized.react-nextjs-expert.md       # Next.js expert
-│
-├── specialized.vue.md                     # Index: Vue specialists
-├── specialized.vue-component-architect.md # Vue 3 components
-├── specialized.vue-nuxt-expert.md         # Nuxt.js expert
-├── specialized.vue-state-manager.md       # Pinia/Vuex state
-│
-├── specialized.typescript.md        # Index: TypeScript specialists
-├── specialized.typescript-pro.md    # Advanced TypeScript
-│
-├── specialized..data-ai.md              # Index: Data & AI specialists
-├── specialized.ai-engineer.md           # LLM apps, RAG systems
-├── specialized.data-engineer.md         # ETL/ELT, pipelines
-├── specialized.data-scientist.md        # SQL, BigQuery, analytics
-├── specialized.database-optimizer.md    # Query optimization
-├── specialized.graphql-architect.md     # GraphQL API design
-├── specialized.ml-engineer.md           # MLOps, model deployment
-├── specialized.postgres-pro.md          # PostgreSQL expert
-├── specialized.prompt-engineer.md       # LLM prompting
-│
-├── specialized.documenter.md            # Index: Documentation specialists
-├── specialized.api-documenter.md        # OpenAPI, API docs
-├── specialized.documentation-expert.md  # Technical writing
-│
-├── universal.md                     # Index: Universal agents
-├── universal.api-architect.md       # API design & specifications
-├── universal.api-security-audit.md  # REST API security audits
-├── universal.backend-developer.md   # Polyglot backend implementation
-├── universal.frontend-developer.md  # Universal UI builder
-├── universal.full-stack-developer.md # Complete web app development
-├── universal.nextjs-pro.md          # SSR/SSG, App Router, performance
-├── universal.diagram-creator.md     # AWS-style diagrams
-└── universal.tailwind-css-expert.md # Utility-first styling
-```
+**Categories**: `core` (4) · `orchestrators` (4) · `infrastructure` (6) · `quality-testing` (3) · `security` (1) · `specialized` (40+) · `universal` (9)
+
+**View full list**: Check `steering/*.md` index files or see tables below.
 
 ## When to Load Steering Files
 
-**IMPORTANT**: Before starting any task, check if `.kiro/resources/` exists. If it does:
-- **READ ONLY** `PROJECT.md` and `PROGRESS.md` to understand current context
-- **DO NOT EDIT** `PROJECT.md` on session start unless explicitly requested
-- Only update `PROJECT.md` when project structure, tech stack, or architecture actually changes
+**Token-Optimized Session Start**:
+1. Read `PROGRESS.md` + `SCRATCHPAD.md` (90% of context)
+2. Read `PROJECT.md` only if unfamiliar with project
+3. Read `DECISIONS.md` / `KNOWLEDGE.md` only when needed
+4. Never auto-edit files on session start
 
-### Workflow Steering Files (Root Level)
+### Workflow Files
 
-| File | When to Load | Purpose |
-|------|--------------|---------|
-| `derek-init.md` | "init", "reinit", new project | Initialize memory system |
-| `analysis.md` | Starting any new task | Structure task analysis |
-| `planning.md` | After analysis approved | Create implementation plan |
-| `review.md` | After implementation | Validate quality & security |
-| `context.md` | Long-running tasks | Maintain context across sessions |
-| `memory-sharing.md` | "share memory", "serve memory" | Share project memory via web |
-| `examples.md` | Learning D.E.R.E.K workflow | Planning workflow examples |
-| `hooks-before-code.md` | Setting up Kiro hooks | Pre-code validation template |
-| `hooks-after-code.md` | Setting up Kiro hooks | Post-code review template |
+| File | Load When | Purpose |
+|------|-----------|---------|
+| `derek-init.md` | "init", new project | Initialize memory |
+| `analysis.md` | New task | Task analysis |
+| `planning.md` | After analysis | Implementation plan |
+| `review.md` | After code | Quality & security |
+| `context.md` | Long tasks | Context retention |
 
-### Core Agents
+### Agent Categories
 
-Quality assurance agents for any project. See `steering/core.md` for full index.
+| Category | Count | When to Use |
+|----------|-------|-------------|
+| **Core** | 4 | Code review, debugging, performance, archaeology |
+| **Orchestrators** | 4 | Project analysis, task breakdown, team config |
+| **Infrastructure** | 6 | Cloud, deployment, DevOps, incidents |
+| **Quality/Testing** | 3 | QA strategy, test automation |
+| **Security** | 1 | Security audits |
+| **Specialized** | 40+ | Go, Python, Rails, React, Vue, TS, Data/AI, Docs |
+| **Universal** | 9 | API, backend, frontend, full-stack (any language) |
 
-| Agent | When to Load | Purpose |
-|-------|--------------|---------|
-| `core.code-archaeologist.md` | Legacy code, onboarding, audits | Deep codebase exploration |
-| `core.code-reviewer.md` | After every feature/PR | Security-aware code review |
-| `core.debugger.md` | Errors, test failures | Error resolution & debugging |
-| `core.performance-optimizer.md` | Slowness, scaling issues | Performance optimization |
+**Selection Priority**: Specialized → Universal → Core
 
-### Orchestrator Agents
+### Quick Task Mapping
 
-Strategic agents for project analysis and coordination. See `steering/orchestrators.md` for full index.
-
-| Agent | When to Load | Purpose |
-|-------|--------------|---------|
-| `orchestrators.project-analyst.md` | New/unfamiliar codebase | Tech stack detection |
-| `orchestrators.tech-lead-orchestrator.md` | Multi-step tasks | Task breakdown & delegation |
-| `orchestrators.team-configurator.md` | New repo, stack changes | AI team configuration |
-
-### Infrastructure Agents
-
-DevOps and infrastructure specialists. See `steering/infrastructure.md` for full index.
-
-| Agent | When to Load | Purpose |
-|-------|--------------|---------|
-| `infrastructure.cloud-architect.md` | Cloud design, migrations | Infrastructure architecture |
-| `infrastructure.deployment-engineer.md` | CI/CD setup, deployments | Pipeline automation |
-| `infrastructure.devops-incident-responder.md` | Production outages | Incident response |
-| `infrastructure.incident-responder.md` | Security incidents, data issues | General incident management |
-| `infrastructure.performance-engineer.md` | Scaling, capacity planning | Infrastructure optimization |
-
-### Quality & Testing Agents
-
-QA and test automation specialists. See `steering/quality-testing.md` for full index.
-
-| Agent | When to Load | Purpose |
-|-------|--------------|---------|
-| `quality-testing.qa-expert.md` | Test planning, quality gates | Test strategy & QA process |
-| `quality-testing.test-automator.md` | Writing tests, CI integration | Test implementation |
-
-### Security Agents
-
-Security audit and compliance specialists.
-
-| Agent | When to Load | Purpose |
-|-------|--------------|---------|
-| `security-auditor.md` | Security reviews, compliance | Comprehensive security audits |
-
-### Specialized Agents
-
-Framework-specific experts. Check index files for available specialists.
-
-| Category | Index File | Available Agents |
-|----------|------------|------------------|
-| **Go** | `specialized.golang.md` | 1 agent: Go 1.21+ expert |
-| **Python** | `specialized.python.md` | 9 agents: Django, FastAPI, ML/Data, Testing, Security, Performance, DevOps, Web Scraping, Python Expert |
-| **Rails** | `specialized.rails.md` | 3 agents: Backend Expert, API Developer, ActiveRecord Expert |
-| **React** | `specialized.react.md` | 2 agents: Component Architect, Next.js Expert |
-| **Vue** | `specialized.vue.md` | 3 agents: Component Architect, Nuxt Expert, State Manager |
-| **TypeScript** | `specialized.typescript.md` | 1 agent: TypeScript Pro |
-| **Data & AI** | `specialized..data-ai.md` | 8 agents: AI Engineer, Data Engineer, Data Scientist, Database Optimizer, GraphQL Architect, ML Engineer, PostgreSQL Pro, Prompt Engineer |
-| **Documentation** | `specialized.documenter.md` | 2 agents: API Documenter, Documentation Expert |
-
-### Universal Agents
-
-Cross-stack agents when no specialist exists. See `steering/universal.md` for full index.
-
-| Agent | When to Load | Purpose |
-|-------|--------------|---------|
-| `api-architect.md` | New/revised API contracts | API design & specifications |
-| `api-security-audit.md` | Security reviews, compliance | REST API security audits |
-| `backend-developer.md` | Server-side code, any language | Polyglot backend implementation |
-| `frontend-developer.md` | UI code, any framework | Universal UI builder |
-| `full-stack-developer.md` | End-to-end applications | Complete web app development |
-| `nextjs-pro.md` | Next.js projects | SSR/SSG, App Router, performance |
-| `diagram-creator.md` | Architecture visualization | AWS-style diagrams |
-| `tailwind-css-expert.md` | Tailwind CSS work | Utility-first styling |
-
-## Loading Strategy
-
-### By Task Type
-
-| Task | Load These Files |
-|------|------------------|
-| **New Project** | `derek-init.md` → `project-analyst.md` |
-| **Simple Task** | `analysis.md` → `planning.md` → `review.md` |
-| **Complex Spec** | `analysis.md` → `planning.md` (folder spec mode) → `context.md` → `review.md` |
-| **Legacy Code** | `code-archaeologist.md` → `analysis.md` |
-| **Debugging** | `debugger.md` |
-| **Performance Issue** | `performance-optimizer.md` |
-| **Security Review** | `security-auditor.md` + `code-reviewer.md` |
-| **Multi-Step Task** | `tech-lead-orchestrator.md` |
-| **Production Incident** | `devops-incident-responder.md` |
-| **Test Planning** | `qa-expert.md` → `test-automator.md` |
-| **Cloud Architecture** | `cloud-architect.md` |
-
-### By D.E.R.E.K Phase
-
-| Phase | Primary Files | Support Files |
-|-------|---------------|---------------|
-| **D**esign | `planning.md` | `tech-lead-orchestrator.md`, `api-architect.md`, `cloud-architect.md` |
-| **E**valuate | `analysis.md` | `project-analyst.md`, `code-archaeologist.md`, `security-auditor.md` |
-| **R**eview | `review.md` | `code-reviewer.md`, `security-auditor.md`, `qa-expert.md` |
-| **E**xecute | `backend-developer.md` | Specialized agents (e.g., `golang-pro.md`), `test-automator.md` |
-| **K**nowledge | `context.md` | `memory-sharing.md`, `performance-optimizer.md` |
-
-### Agent Selection Priority
-
-```
-1. Specialized agent (e.g., golang-pro.md for Go projects)
-2. Universal agent (e.g., backend-developer.md)
-3. Core agent (e.g., code-reviewer.md)
-```
+| Task | Load |
+|------|------|
+| New project | `derek-init.md` → `project-analyst.md` |
+| Simple task | `analysis.md` → `planning.md` → `review.md` |
+| Complex spec | `planning.md` (folder spec) → `context.md` |
+| Debug | `debugger.md` |
+| Performance | `performance-optimizer.md` |
+| Security | `security-auditor.md` + `code-reviewer.md` |
+| Legacy code | `code-archaeologist.md` |
 
 ## Skill Manager System
 
-Extend D.E.R.E.K's capabilities by installing specialized "skills" - packages of steering files and domain-specific intelligence.
+Install specialized "skills" - packages of steering files and domain intelligence.
 
-### Quick Commands
+**Commands**: `install skill <url>` · `list skills` · `search skills <keyword>` · `update skill <name>` · `uninstall skill <name>`
 
-```
-list skills                                          # List all available skills
-search skills <keyword>                              # Search for skills
-install skill <github-url>                           # Install from GitHub
-update skill <name>                                  # Update a skill
-uninstall skill <name>                               # Uninstall a skill
-```
+**Example**: `install skill https://github.com/nextlevelbuilder/ui-ux-pro-max-skill`
 
-### Example
-
-```
-install skill https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
-```
-
-The Skill Manager will:
-1. Download the repository
-2. Read the README to understand usage
-3. Auto-detect the skill format
-4. Convert to Kiro format if needed
-5. Install all files
-6. Show you how to use it
-
-### Features
-
-- 🔍 **Discover** skills from registries or GitHub
-- 📦 **Install** skills with one command
-- 🔄 **Update** skills automatically
-- 🔎 **Search** skill databases
-- 🌐 **Cross-platform** - works with skills from Claude, Cursor, Windsurf, etc.
-- 🤖 **Intelligent** - auto-detects format and reads README for setup
+**Features**: Auto-detect format · Cross-platform (Claude, Cursor, Windsurf) · Intelligent README parsing
 
 ---
 
 ## Activation Rules
 
-Activate this power when a team member mentions:
-- "init", "initialize project", "project overview", "setup memory"
-- "reinit", "reinitialize", "refresh project", "update project overview"
-- "analyze task", "design plan", "review code", "security audit"
-- "create spec", "spec planning", "requirements", "approve design"
-- "share memory", "serve memory", "memory sharing"
-- "install skill", "list skills", "search skills", "update skill"
-- Keywords related to code review, planning, optimization, or skill management
+**Activate when user mentions**: init · reinit · create spec · approve (requirements/design) · implement with specs · quick implement · share memory · install skill · list skills · code review · planning · security audit · optimization
 
 ## Quick Reference
 
@@ -361,44 +234,66 @@ Activate this power when a team member mentions:
 ```
 init                    # Initialize project memory (first time only)
 reinit                  # Refresh PROJECT.md (only when explicitly requested)
+share memory            # Generate shareable HTML
+```
+
+### Spec Planning Commands (Structured Workflow)
+```
 create spec [name]      # Start folder spec planning
 approve requirements    # Progress to design phase
 approve design          # Progress to implementation
 complete spec           # Transfer notes to KNOWLEDGE.md
-share memory            # Generate shareable HTML
 ```
 
-### Session Start Behavior
+### Quick Implementation Commands (Fast Track)
 ```
-✅ DO on session start:
-- Check if .kiro/resources/ exists
-- READ all memory files (PROJECT.md, PROGRESS.md, DECISIONS.md, KNOWLEDGE.md, SCRATCHPAD.md)
-- Continue from last known state
-- Understand current context without modifying
+implement with specs [description]    # Full workflow: requirements → design → tasks → code
+quick implement [description]         # Skip specs, direct implementation (use for simple tasks)
+```
 
-❌ DON'T on session start:
-- Edit any memory files automatically
+### Skill Management Commands
+```
+install skill [github-url]   # Install skill from GitHub
+list skills                  # Show all available skills
+search skills [keyword]      # Search for skills
+update skill [name]          # Update installed skill
+uninstall skill [name]       # Remove skill
+```
+
+### Session Start Behavior (Token-Optimized)
+```
+✅ MINIMAL READS (in order):
+1. PROGRESS.md (current task - REQUIRED)
+2. SCRATCHPAD.md (last session - REQUIRED)
+3. PROJECT.md (only if unfamiliar OR user mentions changes)
+4. DECISIONS.md (only when decision context needed)
+5. KNOWLEDGE.md (only when pattern/learning needed)
+
+❌ DON'T:
+- Read all files automatically (wastes tokens)
+- Auto-edit any files on session start
 - Reinitialize existing memory
-- Overwrite existing context
-- Update files "just because" a session started
+- Update files without actual changes
 
-Only update memory files when:
-- PROJECT.md: User requests "reinit" OR tech stack/architecture actually changes
-- PROGRESS.md: Task status actually changes (started, blocked, completed)
-- DECISIONS.md: New significant decision is made
-- KNOWLEDGE.md: Feature/task is completed and learnings are finalized
-- SCRATCHPAD.md: Active work in progress OR clearing after task completion
+📊 Optimization:
+- PROGRESS.md + SCRATCHPAD.md = 90% context
+- PROJECT.md = Read once, cache understanding
+- Use selective line reading for large files
+
+Update files ONLY when:
+- PROJECT.md: User says "reinit" OR stack/architecture changes
+- PROGRESS.md: Task status changes (started/blocked/completed)
+- DECISIONS.md: New significant decision made
+- KNOWLEDGE.md: Feature completed, learnings finalized
+- SCRATCHPAD.md: Active work OR clearing after completion
 ```
 
 ### D.E.R.E.K Workflow
 ```
-┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐
-│  DESIGN  │──▶│ EVALUATE │──▶│  REVIEW  │──▶│ EXECUTE  │──▶│KNOWLEDGE │
-└──────────┘   └──────────┘   └──────────┘   └──────────┘   └──────────┘
-     │              │              │              │              │
-     ▼              ▼              ▼              ▼              ▼
-requirements   analysis.md    Approval      tasks.md      KNOWLEDGE.md
-design.md      planning.md    Gates         notes.md      (finalized)
+Design → Evaluate → Review → Execute → Knowledge
+  ↓         ↓          ↓         ↓         ↓
+requirements analysis  approval  tasks   KNOWLEDGE.md
+design.md  planning.md  gates   notes.md  (finalized)
 ```
 
-**Remember**: You can load multiple steering files when relevant. The framework is designed to be composable and context-aware.
+**Composable Framework**: Load multiple steering files as needed. Specialized → Universal → Core priority.
