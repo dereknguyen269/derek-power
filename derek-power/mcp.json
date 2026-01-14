@@ -1,4 +1,11 @@
 {
   "mcpServers": {
+    "derek-memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "derek-memory-mcp"
+      ]
+    }
   }
 }

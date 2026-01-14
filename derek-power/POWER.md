@@ -7,7 +7,7 @@ description: |
   Enforces structured analysis, planning, approval, and review
   for all tasks before code changes. No vibe coding. Strong focus
   on security issues, maintainability, and task context retention.
-  Includes persistent project memory system with web sharing capabilities.
+  Includes persistent project memory system with web sharing capabilities via derek-memory MCP.
 keywords: ["analysis", "planning", "review", "security", "task context", "code quality", "analyst", "optimizer", "commits reviewer", "init", "initialize", "share memory", "memory sharing", "project memory", "serve memory", "derek", "spec", "specification"]
 ---
 # D.E.R.E.K
@@ -141,7 +141,8 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 
 **Memory & Initialization**
 - `"init"` / `"reinit"` - Initialize or refresh project memory
-- `"share memory"` - Generate shareable HTML of project memory
+- `"share memory"` - Generate shareable HTML of project memory (requires MCP)
+- `"serve memory"` - Start local server to view shared memory
 
 **Spec Planning (Structured Workflow)**
 - `"create spec [name]"` - Create new folder spec with requirements.md
@@ -234,7 +235,8 @@ Install specialized "skills" - packages of steering files and domain intelligenc
 ```
 init                    # Initialize project memory (first time only)
 reinit                  # Refresh PROJECT.md (only when explicitly requested)
-share memory            # Generate shareable HTML
+share memory            # Generate shareable HTML (via MCP)
+serve memory            # Start local server to view HTML
 ```
 
 ### Spec Planning Commands (Structured Workflow)
