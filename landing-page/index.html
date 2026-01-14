@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="D.E.R.E.K Power - A development workflow tool that enforces structured analysis, planning, and reviews. No vibe coding.">
+    <title>D.E.R.E.K Power - Structured Development Workflow</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Poppins', 'sans-serif'],
+                        body: ['Open Sans', 'sans-serif']
+                    },
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#3B82F6',
+                        cta: '#F97316',
+                        dark: {
+                            bg: '#0A0E27',
+                            surface: '#121212',
+                            text: '#E2E8F0',
+                            muted: '#94A3B8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-dark-bg text-dark-text font-body antialiased">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 bg-dark-surface/80 backdrop-blur-lg border border-white/10 rounded-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="text-xl font-heading font-semibold">D.E.R.E.K Power</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-dark-muted hover:text-dark-text transition-colors duration-200">Features</a>
+                    <a href="#why-derek" class="text-dark-muted hover:text-dark-text transition-colors duration-200">Why D.E.R.E.K</a>
+                    <a href="#workflow" class="text-dark-muted hover:text-dark-text transition-colors duration-200">Workflow</a>
+                    <a href="https://github.com/dereknguyen269/derek-power" class="px-4 py-2 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 cursor-pointer">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="inline-block mb-6 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
+                <span class="text-primary text-sm font-medium">Design → Evaluate → Review → Execute → Knowledge</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-6 leading-tight">
+                No More <span class="text-primary">Vibe Coding</span>.<br/>
+                Just Structured Excellence.
+            </h1>
+            <p class="text-xl md:text-2xl text-dark-muted mb-8 max-w-3xl mx-auto leading-relaxed">
+                D.E.R.E.K Power enforces structured analysis, planning, approvals, and reviews for every task. 
+                Build secure, maintainable code with persistent context retention.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://github.com/dereknguyen269/derek-power" class="px-8 py-4 bg-cta hover:bg-cta/90 text-white rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer shadow-lg shadow-cta/20">
+                    Install D.E.R.E.K Power
+                </a>
+                <a href="#workflow" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-dark-text rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer">
+                    See How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why D.E.R.E.K Section -->
+    <section id="why-derek" class="py-20 px-4 sm:px-6 lg:px-8 bg-dark-surface/30">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-4">Why D.E.R.E.K is Different</h2>
+                <p class="text-xl text-dark-muted max-w-2xl mx-auto">
+                    Most AI assistants let you code on vibes. D.E.R.E.K demands discipline.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Typical AI Tools -->
+                <div class="bg-red-500/5 border border-red-500/20 rounded-2xl p-8 cursor-pointer hover:bg-red-500/10 transition-colors duration-200">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-6 h-6 text-red-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        <h3 class="text-2xl font-heading font-semibold text-red-400">Typical AI Tools</h3>
+                    </div>
+                    <ul class="space-y-3 text-dark-muted">
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-2">•</span>
+                            <span>Code first, think later</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-2">•</span>
+                            <span>No security review process</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-2">•</span>
+                            <span>Context lost between sessions</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-2">•</span>
+                            <span>No approval gates or reviews</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 mr-2">•</span>
+                            <span>Technical debt accumulates</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- D.E.R.E.K Power -->
+                <div class="bg-primary/5 border border-primary/20 rounded-2xl p-8 cursor-pointer hover:bg-primary/10 transition-colors duration-200">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-6 h-6 text-primary mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h3 class="text-2xl font-heading font-semibold text-primary">D.E.R.E.K Power</h3>
+                    </div>
+                    <ul class="space-y-3 text-dark-text">
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">✓</span>
+                            <span>Design & analyze before coding</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">✓</span>
+                            <span>Security audits built into workflow</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">✓</span>
+                            <span>Persistent project memory system</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">✓</span>
+                            <span>Mandatory review & approval gates</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-primary mr-2">✓</span>
+                            <span>Maintainability enforced by design</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-4">Core Features</h2>
+                <p class="text-xl text-dark-muted max-w-2xl mx-auto">
+                    Every feature designed to prevent technical debt and security vulnerabilities
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="bg-dark-surface/50 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/30 transition-all duration-200">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold mb-2">Structured Analysis</h3>
+                    <p class="text-dark-muted">Every task starts with comprehensive analysis. Understand requirements, risks, and architecture before writing code.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-dark-surface/50 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/30 transition-all duration-200">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold mb-2">Security First</h3>
+                    <p class="text-dark-muted">Built-in security audits, code reviews, and vulnerability scanning. OWASP compliance and secure coding enforced.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-dark-surface/50 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/30 transition-all duration-200">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold mb-2">Persistent Memory</h3>
+                    <p class="text-dark-muted">Project context retained across sessions. Share memory with team via web interface. Never lose important decisions.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-dark-surface/50 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/30 transition-all duration-200">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold mb-2">Approval Gates</h3>
+                    <p class="text-dark-muted">Mandatory review checkpoints before code changes. Evaluate, approve, then execute. No shortcuts.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-dark-surface/50 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/30 transition-all duration-200">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold mb-2">Code Quality</h3>
+                    <p class="text-dark-muted">Automated linting, testing, and quality checks. Maintainability metrics tracked. Technical debt prevented.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-dark-surface/50 border border-white/10 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/30 transition-all duration-200">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold mb-2">Team Workflows</h3>
+                    <p class="text-dark-muted">Specialized agents for different roles: architects, reviewers, security auditors, optimizers. Orchestrated collaboration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="py-20 px-4 sm:px-6 lg:px-8 bg-dark-surface/30">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-4">The D.E.R.E.K Workflow</h2>
+                <p class="text-xl text-dark-muted max-w-2xl mx-auto">
+                    Five mandatory phases. No shortcuts. Every task follows this proven process.
+                </p>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Phase 1: Design -->
+                <div class="bg-dark-surface/50 border border-primary/20 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 transition-colors duration-200">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                            <span class="text-primary font-heading font-bold text-xl">D</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-heading font-semibold mb-2 text-primary">Design</h3>
+                            <p class="text-dark-muted mb-3">Comprehensive analysis and planning before any code is written. Understand requirements, identify risks, design architecture, and create specifications.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Requirements Analysis</span>
+                                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Risk Assessment</span>
+                                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Architecture Design</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Evaluate -->
+                <div class="bg-dark-surface/50 border border-secondary/20 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 transition-colors duration-200">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mr-4">
+                            <span class="text-secondary font-heading font-bold text-xl">E</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-heading font-semibold mb-2 text-secondary">Evaluate</h3>
+                            <p class="text-dark-muted mb-3">Critical assessment of the proposed solution. Security implications, performance impact, maintainability concerns, and technical debt evaluation.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Security Review</span>
+                                <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Performance Analysis</span>
+                                <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Tech Debt Check</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3: Review -->
+                <div class="bg-dark-surface/50 border border-purple-500/20 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 transition-colors duration-200">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mr-4">
+                            <span class="text-purple-400 font-heading font-bold text-xl">R</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-heading font-semibold mb-2 text-purple-400">Review</h3>
+                            <p class="text-dark-muted mb-3">Mandatory approval gate. Code review, security audit, compliance check. Nothing proceeds without explicit approval from reviewers.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-sm rounded-full">Code Review</span>
+                                <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-sm rounded-full">Security Audit</span>
+                                <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-sm rounded-full">Approval Gate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4: Execute -->
+                <div class="bg-dark-surface/50 border border-green-500/20 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 transition-colors duration-200">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mr-4">
+                            <span class="text-green-400 font-heading font-bold text-xl">E</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-heading font-semibold mb-2 text-green-400">Execute</h3>
+                            <p class="text-dark-muted mb-3">Implementation phase with continuous monitoring. Write code, run tests, deploy changes. All actions logged and tracked for accountability.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-green-500/10 text-green-400 text-sm rounded-full">Implementation</span>
+                                <span class="px-3 py-1 bg-green-500/10 text-green-400 text-sm rounded-full">Testing</span>
+                                <span class="px-3 py-1 bg-green-500/10 text-green-400 text-sm rounded-full">Deployment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 5: Knowledge -->
+                <div class="bg-dark-surface/50 border border-yellow-500/20 rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 transition-colors duration-200">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mr-4">
+                            <span class="text-yellow-400 font-heading font-bold text-xl">K</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-heading font-semibold mb-2 text-yellow-400">Knowledge</h3>
+                            <p class="text-dark-muted mb-3">Persistent memory system captures decisions, patterns, and context. Share project knowledge with team. Never lose important information.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-yellow-500/10 text-yellow-400 text-sm rounded-full">Memory Retention</span>
+                                <span class="px-3 py-1 bg-yellow-500/10 text-yellow-400 text-sm rounded-full">Documentation</span>
+                                <span class="px-3 py-1 bg-yellow-500/10 text-yellow-400 text-sm rounded-full">Team Sharing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">
+                Ready to Stop Vibe Coding?
+            </h2>
+            <p class="text-xl text-dark-muted mb-8 max-w-2xl mx-auto">
+                Join developers who demand structure, security, and maintainability in every line of code.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://github.com/dereknguyen269/derek-power" class="px-8 py-4 bg-cta hover:bg-cta/90 text-white rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer shadow-lg shadow-cta/20">
+                    Get Started on GitHub
+                </a>
+                <a href="https://github.com/dereknguyen269/derek-power#readme" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-dark-text rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer">
+                    Read Documentation
+                </a>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/10">
+                <div>
+                    <div class="text-4xl font-heading font-bold text-primary mb-2">100%</div>
+                    <div class="text-dark-muted">Security Focused</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-heading font-bold text-primary mb-2">5</div>
+                    <div class="text-dark-muted">Workflow Phases</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-heading font-bold text-primary mb-2">0</div>
+                    <div class="text-dark-muted">Vibe Coding</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="text-xl font-heading font-semibold">D.E.R.E.K Power</span>
+                </div>
+                <div class="flex items-center space-x-6 text-dark-muted">
+                    <a href="https://github.com/dereknguyen269/derek-power" class="hover:text-dark-text transition-colors duration-200 cursor-pointer">GitHub</a>
+                    <a href="https://github.com/dereknguyen269/derek-power#readme" class="hover:text-dark-text transition-colors duration-200 cursor-pointer">Documentation</a>
+                    <a href="https://github.com/dereknguyen269/derek-power/issues" class="hover:text-dark-text transition-colors duration-200 cursor-pointer">Issues</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white/10 text-center text-dark-muted text-sm">
+                <p>Design → Evaluate → Review → Execute → Knowledge</p>
+                <p class="mt-2">Built for developers who refuse to compromise on quality.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

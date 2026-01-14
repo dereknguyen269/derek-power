@@ -1,0 +1,66 @@
+/* D.E.R.E.K Power Landing Page - Custom Styles */
+
+/* Smooth scrolling with reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0A0E27;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2563EB;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3B82F6;
+}
+
+/* Glow effect for dark mode */
+.text-primary {
+    text-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Focus visible for accessibility */
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid #2563EB;
+    outline-offset: 2px;
+}
+
+/* Smooth transitions */
+* {
+    transition-timing-function: ease-out;
+}
+
+/* Backdrop blur fallback */
+@supports not (backdrop-filter: blur(12px)) {
+    nav {
+        background: rgba(18, 18, 18, 0.95) !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    nav {
+        position: static !important;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+}
