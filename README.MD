@@ -47,6 +47,9 @@ Persistent markdown files in `.kiro/resources/` that maintain context across ses
 - **KNOWLEDGE.md** - Finalized learnings and patterns
 - **SCRATCHPAD.md** - Temporary working notes
 
+**Memory Sharing via MCP:**
+D.E.R.E.K includes the [derek-memory MCP server](https://github.com/dereknguyen269/derek-memory-mcp) that exposes your project memory as resources and provides tools to generate beautiful HTML documentation. Share specs with your team or view them in a browser with automatic sensitive data sanitization.
+
 ### 📋 Two Planning Modes
 
 #### Quick Planning
@@ -161,7 +164,8 @@ This creates `.kiro/features/authentication/` with:
 ### Memory System
 - `init` - Initialize project memory system
 - `reinit` - Refresh PROJECT.md only (preserves other files)
-- `share memory` - Generate shareable HTML view
+- `share memory` - Generate shareable HTML documentation
+- `serve memory` - Start HTTP server to view HTML in browser (http://localhost:8080)
 
 ### Folder Spec Planning
 - `create spec [name]` - Create new folder spec
@@ -367,6 +371,59 @@ This allows specs to:
 
 ## Best Practices
 
+### Working with Kiro Sessions
+
+#### When to Start a New Chat Session
+- ✅ **After completing a major feature or spec** - Clean slate for new work
+- ✅ **When switching to unrelated tasks** - Keep context focused
+- ✅ **When context feels cluttered** - Too many tangents or failed attempts
+- ✅ **After long debugging sessions** - Fresh perspective on new problems
+- ✅ **When hitting context limits** - Kiro will warn you, but be proactive
+
+#### When to Continue the Same Session
+- ✅ **Working on related tasks** - Building on previous context
+- ✅ **Iterating on the same feature** - Refinements and adjustments
+- ✅ **Following up on reviews** - Addressing feedback from previous work
+- ✅ **Within the same spec** - Requirements → Design → Implementation flow
+
+#### Managing Long Sessions with D.E.R.E.K
+
+**The Problem:** Long chat sessions can lose context, repeat mistakes, or become unfocused.
+
+**D.E.R.E.K's Solution:** Persistent memory means you can start fresh sessions without losing context!
+
+**Best Practices:**
+1. **Update memory files regularly** - Write to PROJECT.md, PROGRESS.md, KNOWLEDGE.md as you work
+2. **Complete specs properly** - Use `complete spec` to transfer learnings before starting new sessions
+3. **Log decisions immediately** - Add to DECISIONS.md when making architectural choices
+4. **Use SCRATCHPAD.md for temporary notes** - Brain dump during long sessions
+5. **Start new sessions confidently** - Your project memory persists across sessions
+
+**Example Workflow:**
+```
+Session 1: "init" → Analyze codebase → Update PROJECT.md
+Session 2: "create spec authentication" → Requirements → Approve
+Session 3: Continue spec → Design → Approve → Start implementation
+Session 4: Complete implementation → "complete spec" → Transfer to KNOWLEDGE.md
+Session 5: New feature, fresh session, but all context is in memory files!
+```
+
+#### Kiro Session Tips
+- � **Use descriptive first messages** - "Continue authentication spec" vs "help"
+- 🎯 **Stay focused per session** - One feature or problem at a time
+- 🔄 **Reference memory files** - Say "check PROJECT.md" to reload context
+- 🧹 **Clean up before ending** - Update PROGRESS.md with current status
+- ⚡ **Start fresh when stuck** - New session + memory files = fresh perspective
+
+#### D.E.R.E.K Hooks for Session Management
+
+D.E.R.E.K includes hooks in `derek-power/hooks/` to help manage sessions:
+- `auto-summary-on-context-limit.kiro.hook` - Auto-summarize when approaching limits
+- `summary-session-command.kiro.hook` - Generate session summaries on demand
+- `clear-chat-history.kiro.hook` - Clean slate while preserving memory
+
+These hooks ensure you never lose important context even when starting new sessions.
+
 ### 1. Always Initialize
 Run `init` before starting work on an unfamiliar project
 
@@ -384,6 +441,39 @@ Move valuable discoveries from `notes.md` to `KNOWLEDGE.md` after completion
 
 ### 6. Link to Global Memory
 Reference PROJECT.md for context, update KNOWLEDGE.md with learnings
+
+### 7. Use Memory Sharing for Collaboration
+D.E.R.E.K includes the [derek-memory MCP server](https://github.com/dereknguyen269/derek-memory-mcp) for sharing project specifications:
+
+**Generate HTML Documentation:**
+```
+"share memory"
+```
+
+This creates a beautiful HTML file with all your project specs, requirements, design docs, and tasks.
+
+**View in Browser:**
+```
+"serve memory"
+```
+
+Opens at `http://localhost:8080/` - perfect for:
+- 📤 Sharing specs with team members
+- 👀 Reviewing project progress in a clean UI
+- 📋 Presenting designs to stakeholders
+- 🔄 Onboarding new developers
+
+**What Gets Shared:**
+- PROJECT.md - Project overview and architecture
+- PROGRESS.md - Current task tracking
+- DECISIONS.md - Decision log with rationale
+- KNOWLEDGE.md - Accumulated learnings
+- All folder specs (requirements, design, tasks, notes)
+
+**Security Note:** The MCP server automatically sanitizes sensitive data (API keys, passwords, tokens) before generating HTML.
+
+**MCP Configuration:**
+The derek-memory MCP is already configured in `derek-power/mcp.json`. It auto-detects your `.kiro` folder and works across all your projects with a single configuration.
 
 ## Installation
 
