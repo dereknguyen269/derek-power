@@ -209,6 +209,54 @@ D.E.R.E.K includes comprehensive steering files organized by category:
 - `security-auditor.md` - Comprehensive security audits
 - Backend security coding practices built-in
 
+## D.E.R.E.K vs Kiro Native Specs
+
+### What's the Difference?
+
+**Kiro Native Specs** are built into Kiro and provide a structured way to build features with requirements, design, and implementation phases. They're great for formal feature development.
+
+**D.E.R.E.K** extends this concept with additional capabilities focused on persistent memory, security, and knowledge retention:
+
+| Feature | Kiro Native Specs | D.E.R.E.K |
+|---------|------------------|-----------|
+| **Requirements → Design → Implementation** | ✅ Yes | ✅ Yes |
+| **Approval Gates** | ✅ Yes | ✅ Yes |
+| **Persistent Project Memory** | ❌ No | ✅ Yes (PROJECT.md, KNOWLEDGE.md, etc.) |
+| **Cross-Session Context** | ⚠️ Limited | ✅ Strong (memory system) |
+| **Knowledge Accumulation** | ❌ No | ✅ Yes (learnings persist) |
+| **Security-First Workflow** | ⚠️ Basic | ✅ Built-in (security steering files) |
+| **Temporary Notes During Work** | ❌ No | ✅ Yes (notes.md → KNOWLEDGE.md) |
+| **Decision Logging** | ❌ No | ✅ Yes (DECISIONS.md) |
+| **Quick Planning Mode** | ❌ No | ✅ Yes (PROGRESS.md) |
+| **Specialized Agent Roles** | ❌ No | ✅ Yes (70+ steering files) |
+| **Memory Sharing** | ❌ No | ✅ Yes (HTML export) |
+
+### When to Use Each
+
+**Use Kiro Native Specs When:**
+- ✅ You want the standard Kiro workflow
+- ✅ Your project doesn't need persistent memory
+- ✅ You're working on isolated features
+- ✅ Context retention isn't critical
+
+**Use D.E.R.E.K When:**
+- ✅ You need context to persist across sessions
+- ✅ Security is a primary concern
+- ✅ You want to accumulate project knowledge over time
+- ✅ You need specialized agent roles (Python, Rails, React, etc.)
+- ✅ You want to track decisions and learnings
+- ✅ You're working on complex, multi-session projects
+- ✅ You need both quick planning and formal specs
+
+### Can They Work Together?
+
+Yes! D.E.R.E.K complements Kiro's native specs:
+- Use D.E.R.E.K's memory system (PROJECT.md, KNOWLEDGE.md) alongside native specs
+- Use D.E.R.E.K's security and specialized steering files with any workflow
+- Use D.E.R.E.K's quick planning for small tasks, native specs for formal features
+
+Think of D.E.R.E.K as "Kiro specs + persistent memory + security focus + knowledge retention"
+
 ## When to Use
 
 ### Use Folder Spec Planning For:
