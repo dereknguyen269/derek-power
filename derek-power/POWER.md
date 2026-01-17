@@ -153,6 +153,7 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 **Quick Implementation (Fast Track)**
 - `"implement with specs [description]"` - Full spec workflow (requirements → design → tasks → code)
 - `"quick implement [description]"` - Skip specs, direct implementation with minimal planning
+- `"chat [question]"` (or `/chat [question]`) - Ask D.E.R.E.K a focused question using current context
 
 **Skill Management**
 - `"install skill [github-url]"` - Install skill from GitHub
@@ -227,7 +228,7 @@ Install specialized "skills" - packages of steering files and domain intelligenc
 
 ## Activation Rules
 
-**Activate when user mentions**: init · reinit · create spec · approve (requirements/design) · implement with specs · quick implement · share memory · install skill · list skills · code review · planning · security audit · optimization
+**Activate when user mentions**: init · reinit · create spec · approve (requirements/design) · implement with specs · quick implement · chat · share memory · install skill · list skills · code review · planning · security audit · optimization
 
 ## Quick Reference
 
@@ -251,6 +252,7 @@ complete spec           # Transfer notes to KNOWLEDGE.md
 ```
 implement with specs [description]    # Full workflow: requirements → design → tasks → code
 quick implement [description]         # Skip specs, direct implementation (use for simple tasks)
+chat [question]                       # Ask a question using D.E.R.E.K with project context
 ```
 
 ### Skill Management Commands
