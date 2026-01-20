@@ -44,10 +44,10 @@ When initialized, this power creates a persistent memory system in the user's wo
 
 ## Folder Spec Planning System
 
-For complex specifications, use dedicated folder specs under `.kiro/features/`:
+For complex specifications, use dedicated folder specs under `.kiro/specs/`:
 
 ```
-.kiro/features/<spec-name>/
+.kiro/specs/<spec-name>/
 ├── requirements.md   # WHAT to build (needs approval)
 ├── design.md        # HOW to build (needs approval)
 ├── tasks.md         # Implementation tracking

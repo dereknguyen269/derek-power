@@ -10,7 +10,7 @@ inclusion: manual
 
 ## Purpose
 
-Enable sharing of D.E.R.E.K Memory System (`.kiro/resources/` and `.kiro/features/`) via secure, time-limited links with a clean web UI for stakeholders, team members, or external collaborators. This system generates the necessary tools dynamically in `.kiro/views/` to comply with power validation rules.
+Enable sharing of D.E.R.E.K Memory System (`.kiro/resources/` and `.kiro/specs/`) via secure, time-limited links with a clean web UI for stakeholders, team members, or external collaborators. This system generates the necessary tools dynamically in `.kiro/views/` to comply with power validation rules.
 
 ## Activation Keywords
 
@@ -34,7 +34,7 @@ Enable sharing of D.E.R.E.K Memory System (`.kiro/resources/` and `.kiro/feature
 │  │  ✅ Shared   │  │  ✅ Shared   │  │  ✅ Shared   │  │  ✅ Shared   │    │
 │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
 │                                                                              │
-│  Feature Memory (.kiro/features/*/)                                         │
+│  Feature Memory (.kiro/specs/*/)                                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
 │  │requirements  │  │  design.md   │  │  tasks.md    │  │  notes.md    │    │
 │  │  ✅ Shared   │  │  ✅ Shared   │  │  ✅ Shared   │  │  ✅ Shared   │    │
@@ -79,7 +79,7 @@ The derek-memory MCP provides the following tools:
 
 1. **`share_feature_memory`** - Generate beautiful HTML documentation
    - Reads `.kiro/resources/*.md` (global memory)
-   - Reads `.kiro/features/*/*.md` (feature memory)
+   - Reads `.kiro/specs/*/*.md` (feature memory)
    - Sanitizes sensitive information
    - Supports feature filtering
    - Creates beautiful D.E.R.E.K branded HTML
@@ -173,10 +173,10 @@ When user wants to share feature progress with client:
 
 This system works seamlessly with:
 - `derek-init.md` - Project initialization (creates `.kiro/resources/`)
-- `planning.md` - Feature planning (creates `.kiro/features/*/`)
+- `planning.md` - Feature planning (creates `.kiro/specs/*/`)
 - `context.md` - Context retention
 - All existing `.kiro/resources/` files (global memory)
-- All existing `.kiro/features/*/` files (feature memory)
+- All existing `.kiro/specs/*/` files (feature memory)
 
 ### D.E.R.E.K Memory Flow for Sharing
 
@@ -185,7 +185,7 @@ This system works seamlessly with:
 │                    D.E.R.E.K SHARING FLOW                        │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  .kiro/resources/          .kiro/features/*/                    │
+│  .kiro/resources/          .kiro/specs/*/                    │
 │  ┌──────────────┐          ┌──────────────┐                     │
 │  │ PROJECT.md   │          │requirements  │                     │
 │  │ PROGRESS.md  │          │ design.md    │                     │

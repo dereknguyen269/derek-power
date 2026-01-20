@@ -41,7 +41,7 @@ Maintain comprehensive task context across multiple interactions, sessions, and 
 │  │  (context)   │  │  (tracking)  │  │  (decisions) │  │  (finalized) │    │
 │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
 │                                                                              │
-│  .kiro/features/<name>/ (Feature Memory)                                    │
+│  .kiro/specs/<name>/ (Feature Memory)                                    │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
 │  │requirements  │  │  design.md   │  │  tasks.md    │  │  notes.md    │    │
 │  │    .md       │  │              │  │              │  │  (temporary) │    │
@@ -79,13 +79,13 @@ Maintain comprehensive task context across multiple interactions, sessions, and 
 └── SCRATCHPAD.md   # Temporary working notes
 ```
 
-#### Feature Memory (.kiro/features/<name>/)
+#### Feature Memory (.kiro/specs/<name>/)
 - **Create**: Use "create feature <name>" command
 - **Approval gates**: Requirements → Design → Implementation
 - **Temporary knowledge**: `notes.md` captures learnings during implementation
 
 ```
-.kiro/features/<feature-name>/
+.kiro/specs/<feature-name>/
 ├── requirements.md  # What to build (needs approval)
 ├── design.md       # How to build (needs approval)
 ├── tasks.md        # Implementation tracking
@@ -114,7 +114,7 @@ Maintain comprehensive task context across multiple interactions, sessions, and 
 2. Run "init" if starting fresh project work
 3. Read PROJECT.md for project context
 4. Check PROGRESS.md for current status
-5. Check .kiro/features/ for active features
+5. Check .kiro/specs/ for active features
 
 **During Quick Task:**
 1. Update PROGRESS.md with task and phases
@@ -498,11 +498,11 @@ When resuming work in a new session:
 | KNOWLEDGE.md | Finalized learnings | After feature completion |
 | SCRATCHPAD.md | Temporary session notes | During session |
 
-### 2. D.E.R.E.K Feature Memory (.kiro/features/)
+### 2. D.E.R.E.K Feature Memory (.kiro/specs/)
 - **Use for**: Feature-specific planning and temporary knowledge
 - **Store**: Requirements, design, tasks, in-progress learnings
 - **Generate**: Use "create feature <name>" command
-- **Location**: `.kiro/features/<feature-name>/` directory
+- **Location**: `.kiro/specs/<feature-name>/` directory
 
 | File | Purpose | Lifecycle |
 |------|---------|-----------|
@@ -696,7 +696,7 @@ When resuming work in a new session:
 - [ ] Check if `.kiro/resources/` exists (run "init" if not)
 - [ ] Read PROJECT.md for project context
 - [ ] Read PROGRESS.md for current status
-- [ ] Check `.kiro/features/` for active features
+- [ ] Check `.kiro/specs/` for active features
 - [ ] Query Context7 for relevant past context (if available)
 - [ ] Review project documentation and steering files
 - [ ] Document initial constraints and assumptions
@@ -806,7 +806,7 @@ If any of these occur, STOP and restore context:
 
 **Use the D.E.R.E.K memory system** for structured, persistent context:
 - Global memory in `.kiro/resources/` for project-wide context
-- Feature memory in `.kiro/features/*/` for feature-specific context
+- Feature memory in `.kiro/specs/*/` for feature-specific context
 - `notes.md` for temporary knowledge during implementation
 - `KNOWLEDGE.md` for finalized, reusable patterns
 

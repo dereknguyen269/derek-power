@@ -15,7 +15,7 @@ This steering file supports two planning modes:
 | Mode | Use When | Location |
 |------|----------|----------|
 | **Quick Planning** | Simple tasks, bug fixes, small changes | `.kiro/resources/PROGRESS.md` |
-| **Folder Spec Planning** | Complex specs, new modules, multi-phase work | `.kiro/features/<spec-name>/` |
+| **Folder Spec Planning** | Complex specs, new modules, multi-phase work | `.kiro/specs/<spec-name>/` |
 
 ---
 
@@ -43,7 +43,7 @@ This steering file supports two planning modes:
 | `KNOWLEDGE.md` | Patterns/learnings | Updated from completed specs |
 | `SCRATCHPAD.md` | Session notes | Working area during spec work |
 
-**Folder specs** (`.kiro/features/<name>/`): Self-contained with requirements, design, tasks, notes (temporary → KNOWLEDGE.md)
+**Folder specs** (`.kiro/specs/<name>/`): Self-contained with requirements, design, tasks, notes (temporary → KNOWLEDGE.md)
 
 ---
 
@@ -51,7 +51,7 @@ This steering file supports two planning modes:
 
 **Simple Tasks:** Update PROGRESS.md → Work phases → Log decisions in DECISIONS.md
 
-**Complex Specs:** Create `.kiro/features/<name>/` → requirements.md (⛔ approval) → design.md (⛔ approval) → tasks.md → implement → transfer notes.md to KNOWLEDGE.md
+**Complex Specs:** Create `.kiro/specs/<name>/` → requirements.md (⛔ approval) → design.md (⛔ approval) → tasks.md → implement → transfer notes.md to KNOWLEDGE.md
 
 ---
 
@@ -78,7 +78,7 @@ This steering file supports two planning modes:
 ## Folder Spec Structure
 
 ```
-.kiro/features/<spec-name>/
+.kiro/specs/<spec-name>/
 ├── requirements.md   # WHAT (needs ⛔ approval)
 ├── design.md        # HOW (needs ⛔ approval)
 ├── tasks.md         # Implementation tracking
@@ -99,7 +99,7 @@ This steering file supports two planning modes:
 
 **Required Sections:** Overview (status, approver) · Problem Statement · Goals/Non-Goals · User Stories (As/Want/So that + Acceptance Criteria) · Functional Requirements (description, priority, dependencies) · Non-Functional Requirements (performance, security, scalability) · Constraints · Assumptions · Dependencies · Out of Scope · Open Questions · References
 
-**Approval Request:** "⏳ Requirements created. Review `.kiro/features/<name>/requirements.md`. To proceed: 'approve requirements' or 'requirements approved'"
+**Approval Request:** "⏳ Requirements created. Review `.kiro/specs/<name>/requirements.md`. To proceed: 'approve requirements' or 'requirements approved'"
 
 ---
 
@@ -109,7 +109,7 @@ This steering file supports two planning modes:
 
 **Required Sections:** Overview (links requirements) · Architecture (high-level, component diagram) · Technical Approach (stack, patterns) · Data Model (schemas, migrations, relationships) · API Design (endpoints table, request/response examples) · Security Design (auth, authorization, data protection) · Error Handling (codes, responses) · Testing Strategy (unit, integration, E2E) · Performance (load, optimization) · Deployment (feature flags, rollout, rollback) · Risks & Mitigations · Design Decisions (decision, alternatives, rationale) · Open Questions · References
 
-**Approval Request:** "⏳ Design created. Review `.kiro/features/<name>/design.md`. To proceed: 'approve design' or 'design approved'"
+**Approval Request:** "⏳ Design created. Review `.kiro/specs/<name>/design.md`. To proceed: 'approve design' or 'design approved'"
 
 ---
 
@@ -137,9 +137,9 @@ Review notes.md → Transfer learnings to KNOWLEDGE.md → Log decisions in DECI
 
 ## Creating a New Folder Spec
 
-1. `mkdir -p .kiro/features/<spec-name>`
-2. Generate requirements.md → Request approval: "⏳ Review `.kiro/features/<name>/requirements.md`. To proceed: 'approve requirements'"
-3. After approval → Generate design.md → Request approval: "⏳ Review `.kiro/features/<name>/design.md`. To proceed: 'approve design'"
+1. `mkdir -p .kiro/specs/<spec-name>`
+2. Generate requirements.md → Request approval: "⏳ Review `.kiro/specs/<name>/requirements.md`. To proceed: 'approve requirements'"
+3. After approval → Generate design.md → Request approval: "⏳ Review `.kiro/specs/<name>/design.md`. To proceed: 'approve design'"
 4. After approval → Generate tasks.md with phased breakdown
 5. Implement → Update task status → Capture in notes.md
 
@@ -147,11 +147,11 @@ Review notes.md → Transfer learnings to KNOWLEDGE.md → Log decisions in DECI
 
 ## Linking to Project Memory
 
-**PROGRESS.md:** Link to active spec: "Task: Implementing X Spec · Spec: `.kiro/features/X/` · Phase: TASK-003 · Status: 🔄"
+**PROGRESS.md:** Link to active spec: "Task: Implementing X Spec · Spec: `.kiro/specs/X/` · Phase: TASK-003 · Status: 🔄"
 
 **KNOWLEDGE.md:** Transfer learnings after completion: "## Learnings from X Implementation · Patterns Used · Gotchas Discovered"
 
-**DECISIONS.md:** Log decisions: "### [Date] - X Decision (Y Spec) · Decision · Context · Rationale · Spec Reference: `.kiro/features/Y/design.md#section`"
+**DECISIONS.md:** Log decisions: "### [Date] - X Decision (Y Spec) · Decision · Context · Rationale · Spec Reference: `.kiro/specs/Y/design.md#section`"
 
 **File References:** Use `#[[file:path]]` to link: `#[[file:.kiro/resources/PROJECT.md]]` · `#[[file:app/api/base.rb]]` · `#[[file:docs/spec.yaml]]`
 

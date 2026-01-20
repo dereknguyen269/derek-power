@@ -60,7 +60,7 @@ For simple tasks, bug fixes, and small changes:
 
 #### Folder Spec Planning
 For complex specifications requiring multiple files/components:
-- Uses `.kiro/features/<spec-name>/` folders
+- Uses `.kiro/specs/<spec-name>/` folders
 - Structured requirements → design → tasks workflow
 - Approval gates at each phase
 - Temporary knowledge capture during implementation
@@ -98,7 +98,7 @@ This creates the project memory system and analyzes your codebase.
 "create spec authentication"
 ```
 
-This creates `.kiro/features/authentication/` with:
+This creates `.kiro/specs/authentication/` with:
 - `requirements.md` - What to build
 - `design.md` - How to build (after requirements approved)
 - `tasks.md` - Implementation tracking (after design approved)

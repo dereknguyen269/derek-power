@@ -62,7 +62,7 @@ description: Examples of D.E.R.E.K planning workflow in action. Reference for un
 
 ### Feature Folder Structure
 ```
-.kiro/features/dark-mode/
+.kiro/specs/dark-mode/
 ├── requirements.md   # WHAT: Dark mode toggle in settings
 ├── design.md        # HOW: CSS variables, localStorage
 ├── tasks.md         # Implementation steps

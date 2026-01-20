@@ -10,7 +10,7 @@ Work with structured folder-based specifications for complex development work.
 
 ## Overview
 
-This workflow uses **folder specs** - structured specification folders under `.kiro/features/` that contain requirements, design documents, and implementation tracking.
+This workflow uses **folder specs** - structured specification folders under `.kiro/specs/` that contain requirements, design documents, and implementation tracking.
 
 ## When to Use Folder Specs
 
@@ -33,7 +33,7 @@ Skip folder specs for:
 
 ## Folder Spec Structure
 
-Each specification gets its own folder under `.kiro/features/`:
+Each specification gets its own folder under `.kiro/specs/`:
 
 ```
 .kiro/
@@ -92,7 +92,7 @@ Each specification gets its own folder under `.kiro/features/`:
 ┌─────────────────────────────────────────────────────────────────┐
 │  PHASE 1: REQUIREMENTS                                           │
 │  ┌─────────────────────────────────────────────────────────────┐ │
-│  │ Create .kiro/features/<name>/requirements.md                │ │
+│  │ Create .kiro/specs/<name>/requirements.md                │ │
 │  │ • Problem statement    • User stories                       │ │
 │  │ • Functional reqs      • Non-functional reqs                │ │
 │  └─────────────────────────────────────────────────────────────┘ │
@@ -115,7 +115,7 @@ Each specification gets its own folder under `.kiro/features/`:
 ┌─────────────────────────────────────────────────────────────────┐
 │  PHASE 2: DESIGN                                                 │
 │  ┌─────────────────────────────────────────────────────────────┐ │
-│  │ Create .kiro/features/<name>/design.md                      │ │
+│  │ Create .kiro/specs/<name>/design.md                      │ │
 │  │ • Architecture          • Data model                        │ │
 │  │ • API design            • Security design                   │ │
 │  └─────────────────────────────────────────────────────────────┘ │
@@ -138,7 +138,7 @@ Each specification gets its own folder under `.kiro/features/`:
 ┌─────────────────────────────────────────────────────────────────┐
 │  PHASE 3: TASKS                                                  │
 │  ┌─────────────────────────────────────────────────────────────┐ │
-│  │ Create .kiro/features/<name>/tasks.md                       │ │
+│  │ Create .kiro/specs/<name>/tasks.md                       │ │
 │  │ • Task breakdown        • Dependencies                      │ │
 │  │ • Estimates             • Acceptance criteria               │ │
 │  └─────────────────────────────────────────────────────────────┘ │
@@ -765,7 +765,7 @@ Before completing spec, review and transfer:
 
 ### Step 1: Create Spec Folder
 ```bash
-mkdir -p .kiro/features/<spec-name>
+mkdir -p .kiro/specs/<spec-name>
 ```
 
 ### Step 2: Generate Requirements
@@ -775,7 +775,7 @@ Create `requirements.md` using the template above.
 ```
 ⏳ Requirements document created for [Spec Name]
 
-Please review `.kiro/features/<spec-name>/requirements.md`
+Please review `.kiro/specs/<spec-name>/requirements.md`
 
 To proceed to design phase, respond with:
 - "approve requirements" or "requirements approved"
@@ -790,7 +790,7 @@ Create `design.md` using the template above.
 ```
 ⏳ Design document created for [Spec Name]
 
-Please review `.kiro/features/<spec-name>/design.md`
+Please review `.kiro/specs/<spec-name>/design.md`
 
 To proceed to implementation, respond with:
 - "approve design" or "design approved"
@@ -814,7 +814,7 @@ When working on a spec, update the global progress file:
 ```markdown
 ## Current Focus
 **Task**: Implementing Authentication Spec
-**Spec**: `.kiro/features/authentication/`
+**Spec**: `.kiro/specs/authentication/`
 **Phase**: Implementation - TASK-003
 **Status**: 🔄 In Progress
 ```
@@ -848,7 +848,7 @@ Log significant decisions made during spec work:
 - Short access tokens limit exposure if compromised
 - Refresh rotation prevents token reuse attacks
 
-**Spec Reference**: `.kiro/features/authentication/design.md#security-design`
+**Spec Reference**: `.kiro/specs/authentication/design.md#security-design`
 ```
 
 ---

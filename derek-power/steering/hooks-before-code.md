@@ -49,7 +49,7 @@ Before generating any code, verify:
 - [ ] `PROGRESS.md` updated with current task
 
 ### 2. Design Phase Complete (for features)
-- [ ] Feature folder exists: `.kiro/features/<name>/`
+- [ ] Feature folder exists: `.kiro/specs/<name>/`
 - [ ] `requirements.md` created and **approved**
 - [ ] `design.md` created and **approved**
 

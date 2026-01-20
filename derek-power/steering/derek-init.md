@@ -95,7 +95,7 @@ Before initialization, check if the memory system already exists:
 ```bash
 # Check for existing directories
 test -d .kiro/resources && echo "✓ resources exists"
-test -d .kiro/features && echo "✓ features exists"
+test -d .kiro/specs && echo "✓ features exists"
 test -d .kiro/views && echo "✓ views exists"
 
 # Check for existing memory files
@@ -137,7 +137,7 @@ test -f .kiro/resources/SCRATCHPAD.md && echo "✓ SCRATCHPAD.md exists"
 ```bash
 # Create only if missing
 test -d .kiro/resources || mkdir -p .kiro/resources
-test -d .kiro/features || mkdir -p .kiro/features
+test -d .kiro/specs || mkdir -p .kiro/specs
 test -d .kiro/views || mkdir -p .kiro/views
 ```
 
@@ -264,7 +264,7 @@ When running `init`, complete these steps:
 - [ ] If all files exist → Skip init, read existing files, report "Already initialized"
 - [ ] If partially exists → Note what exists, create only missing pieces
 - [ ] Create `.kiro/resources/` directory (only if missing)
-- [ ] Create `.kiro/features/` directory (only if missing)
+- [ ] Create `.kiro/specs/` directory (only if missing)
 - [ ] Create `.kiro/views/` directory (only if missing)
 - [ ] Scan project structure thoroughly
 - [ ] Detect technology stack with versions
@@ -286,7 +286,7 @@ When running `init`, complete these steps:
 ```
 ✅ D.E.R.E.K Memory System Initialized
 📁 Created .kiro/resources/ (PROJECT, PROGRESS, DECISIONS, KNOWLEDGE, SCRATCHPAD)
-📁 Created .kiro/features/
+📁 Created .kiro/specs/
 📊 Project Analysis: [name, stack, architecture, key findings]
 🚀 Ready! Use "create feature <name>" for complex work or update PROGRESS.md for simple tasks
 ```
@@ -295,7 +295,7 @@ When running `init`, complete these steps:
 ```
 ✅ D.E.R.E.K Memory System Already Exists
 📁 Found .kiro/resources/ (all files exist, last updated: X days ago)
-� Found .kiro/features/ (Xd specs: Y in progress, Z complete)
+� Found .kiro/specs/ (Xd specs: Y in progress, Z complete)
 📊 Loading context from PROGRESS.md and SCRATCHPAD.md...
 💡 Tip: Use "reinit" to refresh PROJECT.md
 🚀 Ready! Current task: [task name] ([phase])
