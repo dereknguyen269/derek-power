@@ -1,5 +1,6 @@
 ---
-inclusion: always
+inclusion: fileMatch
+fileMatchPattern: "*.ts"
 name: specialized-typescript
 description: TypeScript specialist agent for type-safe, scalable applications. Use for TypeScript projects requiring advanced type system expertise.
 ---

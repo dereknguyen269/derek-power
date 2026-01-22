@@ -1,5 +1,6 @@
 ---
-inclusion: manual
+inclusion: fileMatch
+fileMatchPattern: "*.py"
 name: specialized-python
 description: Python specialist agents for web development, data science, DevOps, and backend systems. Use for Python projects requiring framework-specific expertise.
 ---

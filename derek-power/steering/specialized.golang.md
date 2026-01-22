@@ -1,5 +1,6 @@
 ---
-inclusion: manual
+inclusion: fileMatch
+fileMatchPattern: "*.go"
 name: specialized-golang
 description: Go/Golang specialist agents for high-performance, concurrent system development. Use for Go 1.21+ projects requiring advanced concurrency, microservices, or cloud-native patterns.
 ---

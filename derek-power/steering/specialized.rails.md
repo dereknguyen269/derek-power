@@ -1,5 +1,6 @@
 ---
-inclusion: manual
+inclusion: fileMatch
+fileMatchPattern: "*.rb"
 name: specialized-rails
 description: Ruby on Rails specialist agents for full-stack web development, API development, and database optimization. Use for Rails projects requiring framework-specific expertise.
 ---
