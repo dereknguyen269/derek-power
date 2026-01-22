@@ -1,0 +1,11 @@
+{
+  "why": "To capture important context, decisions, and learnings after code changes are completed and offer to save them to the D.E.R.E.K memory system",
+  "id": "post-code-context-capture",
+  "name": "Post-Code Context Capture",
+  "description": "After code changes are completed, prompts for feedback and offers to save important context (decisions, gotchas, patterns) to DECISIONS.md, KNOWLEDGE.md, or active spec notes.md",
+  "eventType": "agentStop",
+  "filePatterns": "",
+  "hookAction": "askAgent",
+  "outputPrompt": "Code changes completed! Let's capture important context:\n\n1. **Quick Feedback**: Was the solution helpful? Any issues or improvements needed?\n\n2. **Context Capture** (if D.E.R.E.K memory system exists at .kiro/resources/):\n   - Any important **decisions** made? (save to DECISIONS.md)\n   - Any **patterns or learnings** discovered? (save to KNOWLEDGE.md)\n   - Any **gotchas or pitfalls** to remember? (save to KNOWLEDGE.md)\n   - Working on a spec? (save to .kiro/specs/<name>/notes.md)\n\n3. **Update Progress**: Should we update PROGRESS.md with current status?\n\nRespond with:\n- 'yes' or describe what to save - I'll update the appropriate files\n- 'no' or 'skip' - We'll continue without saving\n- Just continue with your next request\n\nNote: This is optional - only save if there's valuable context worth preserving!",
+  "command": ""
+}

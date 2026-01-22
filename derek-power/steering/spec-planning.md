@@ -12,6 +12,8 @@ Work with structured folder-based specifications for complex development work.
 
 This workflow uses **folder specs** - structured specification folders under `.kiro/specs/` that contain requirements, design documents, and implementation tracking.
 
+**Note**: This file provides detailed templates and examples. For a concise overview, see `planning.md`.
+
 ## When to Use Folder Specs
 
 Use folder specs for:
@@ -44,7 +46,7 @@ Each specification gets its own folder under `.kiro/specs/`:
 │   ├── KNOWLEDGE.md
 │   └── SCRATCHPAD.md
 │
-└── features/                     # Specification Folders
+└── specs/                        # Specification Folders
     ├── authentication/           # Example: Auth spec
     │   ├── requirements.md       # What to build
     │   ├── design.md            # How to build

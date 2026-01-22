@@ -1,11 +1,11 @@
 {
-  "why": "To automatically summarize chat history and start a new session when context usage reaches 80%",
+  "why": "To automatically summarize chat history and preserve context to D.E.R.E.K memory system when context usage reaches 80%",
   "id": "auto-summary-on-context-limit",
   "name": "Auto Summary on Context Limit",
-  "description": "Automatically summarizes chat histories in the current session then opens a new session with summary context when current session has usage context near 80%",
+  "description": "Automatically summarizes chat histories and saves important context to D.E.R.E.K memory files (PROGRESS.md, SCRATCHPAD.md, DECISIONS.md) when current session reaches 80% context usage, then helps start a new session with preserved context",
   "eventType": "promptSubmit",
   "filePatterns": "",
   "hookAction": "askAgent",
-  "outputPrompt": "Check if the current session context usage is near or above 80%. If so, please: 1) Summarize the key points, decisions, and context from our current chat session, 2) Note any powers that are currently active in this session, 3) Help me start a new session while preserving this context and ensuring the same powers are activated in the new session so we can continue our work with a fresh conversation history.",
+  "outputPrompt": "🔔 Context usage is near or above 80%. Let's preserve context and start fresh:\n\n**1. Save Current Context** (if .kiro/resources/ exists):\n   - Update PROGRESS.md with current task status and phase\n   - Save session notes to SCRATCHPAD.md\n   - Log any decisions made to DECISIONS.md\n   - Note any learnings to KNOWLEDGE.md\n\n**2. Session Summary**:\n   - Key points and decisions from this session\n   - Active powers in use\n   - Current task and next steps\n   - Any blockers or open questions\n\n**3. New Session Prep**:\n   - Prepare context summary for new session\n   - List powers to activate\n   - Note files/specs currently working on\n\nAfter saving, I'll help you start a new session with preserved context so we can continue with a fresh conversation history.\n\nShall I proceed with context preservation and session transition?",
   "command": ""
 }

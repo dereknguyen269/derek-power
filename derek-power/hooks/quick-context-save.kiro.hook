@@ -1,0 +1,11 @@
+{
+  "why": "To provide a quick, non-intrusive prompt after code changes to optionally save important context to D.E.R.E.K memory",
+  "id": "quick-context-save",
+  "name": "Quick Context Save",
+  "description": "After code changes, briefly asks if any important context should be saved to the memory system (DECISIONS.md, KNOWLEDGE.md, or spec notes.md)",
+  "eventType": "agentStop",
+  "filePatterns": "",
+  "hookAction": "askAgent",
+  "outputPrompt": "💡 Quick check: Any important context from this work to save?\n\n- Decision made? → DECISIONS.md\n- Pattern/learning? → KNOWLEDGE.md  \n- Gotcha discovered? → KNOWLEDGE.md\n- Spec work? → notes.md\n\nSay 'save [what]' or just continue with your next request.",
+  "command": ""
+}

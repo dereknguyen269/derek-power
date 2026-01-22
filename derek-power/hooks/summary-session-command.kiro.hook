@@ -1,13 +1,13 @@
 {
   "enabled": true,
-  "name": "Summary Command",
-  "description": "Summarizes chat histories in the current session then opens a new session with summary context when the user types /summary command",
-  "version": "1",
+  "name": "D.E.R.E.K Session Summary",
+  "description": "Saves current context to D.E.R.E.K memory system, summarizes the session, and helps transition to a new session with preserved context. Triggered by user command.",
+  "version": "2",
   "when": {
     "type": "userTriggered"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Please summarize the key points, decisions, and context from our current chat session. After providing the summary, help me start a new session while preserving this context so we can continue our work with a fresh conversation history."
+    "prompt": "📋 D.E.R.E.K Session Summary & Transition\n\n**Step 1: Save Current Context** (if .kiro/resources/ exists):\n   - Update PROGRESS.md with current task status, phase, and next steps\n   - Save session notes and working context to SCRATCHPAD.md\n   - Log any decisions made during this session to DECISIONS.md\n   - Transfer any learnings or patterns discovered to KNOWLEDGE.md\n   - If working on a spec, update .kiro/specs/<name>/notes.md\n\n**Step 2: Generate Session Summary**:\n   - Key accomplishments and progress made\n   - Important decisions and their rationale\n   - Active powers and tools in use\n   - Current task and implementation phase\n   - Open questions or blockers\n   - Files/specs currently being worked on\n\n**Step 3: Prepare New Session Context**:\n   - Create concise context summary for new session\n   - List powers to activate in new session\n   - Note current working directory and files\n   - Highlight immediate next steps\n\n**Step 4: Session Transition**:\n   - Provide formatted summary for new session\n   - Suggest command to start new session with context\n   - Confirm all context has been preserved\n\nPlease proceed with context preservation and session summary."
   }
 }

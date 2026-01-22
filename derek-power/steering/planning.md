@@ -8,6 +8,8 @@ category: planning
 
 Work like Manus: Use persistent markdown files as your "working memory on disk."
 
+**Note**: This file provides a concise overview. For detailed templates and examples, see `spec-planning.md`.
+
 ## Two Planning Modes
 
 This steering file supports two planning modes:
@@ -61,6 +63,11 @@ This steering file supports two planning modes:
 
 **Workflow:** Update PROGRESS.md with goal/phases → Research → Save to KNOWLEDGE.md → Update PROGRESS.md → Create deliverable → Log decisions → Deliver
 
+**Steering Files to Use:**
+- `analysis.md` - Quick task analysis
+- Specialized agent (e.g., `specialized.python.md`, `specialized.react.md`, `universal.backend-developer.md`) - Domain-specific implementation
+- `review.md` - Post-implementation quality check
+
 **Before actions:** Read PROGRESS.md + PROJECT.md (if exists) | **After phases:** Mark [x] in PROGRESS.md
 
 ---
@@ -72,6 +79,14 @@ This steering file supports two planning modes:
 **Use for:** Multi-file features · Auth/API systems · DB changes · External integrations · Major refactors · Multi-session work
 
 **Skip for:** Bug fixes · Single-file changes · Config/doc updates
+
+**Steering Files to Use:**
+- `spec-planning.md` - Detailed templates for requirements, design, tasks
+- `planning.md` - Workflow overview (this file)
+- `analysis.md` - Requirements and design analysis
+- Specialized agent - Domain-specific guidance throughout
+- `context.md` - Multi-session context retention
+- `review.md` - Post-implementation review
 
 ---
 

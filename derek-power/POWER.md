@@ -91,6 +91,13 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 4. Execute tasks incrementally
 5. Transfer learnings to KNOWLEDGE.md
 
+**Steering Files to Use**:
+- `planning.md` or `spec-planning.md` - Folder spec creation
+- `analysis.md` - Requirements analysis
+- Specialized agent - Domain-specific design and implementation
+- `context.md` - Multi-session context retention
+- `review.md` - Post-implementation review
+
 **Example**: `"implement with specs: user authentication system with JWT"`
 
 ### 2. Quick Implementation (Simple Tasks)
@@ -107,6 +114,11 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 2. Direct implementation
 3. Quick review
 4. Update PROGRESS.md
+
+**Steering Files to Use**:
+- `analysis.md` - Quick task analysis
+- Specialized agent (e.g., `specialized.python.md`, `specialized.react.md`) - Domain-specific implementation
+- `review.md` - Post-implementation review
 
 **Example**: `"quick implement: add email validation to signup form"`
 
@@ -127,15 +139,22 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 5. `approve design` - Proceed to tasks
 6. Execute tasks manually
 
+**Steering Files to Use**:
+- `spec-planning.md` - Detailed templates for requirements, design, tasks
+- `planning.md` - Workflow overview
+- Specialized agent - Domain-specific guidance
+- `context.md` - Context retention between phases
+- `review.md` - Final review
+
 ### Decision Matrix
 
-| Task Type | Complexity | Files | Duration | Command |
-|-----------|------------|-------|----------|---------|
-| Bug fix | Low | 1 | < 1 hour | `quick implement` |
-| Simple feature | Low-Medium | 1-2 | < 2 hours | `quick implement` |
-| Feature with specs | Medium | 2-5 | 2-8 hours | `implement with specs` |
-| Complex system | High | 5+ | > 8 hours | `create spec` (manual) |
-| Refactor | Medium-High | 3-10 | 4-16 hours | `implement with specs` |
+| Task Type | Complexity | Files | Duration | Command | Steering Files |
+|-----------|------------|-------|----------|---------|----------------|
+| Bug fix | Low | 1 | < 1 hour | `quick implement` | analysis.md + specialized agent + review.md |
+| Simple feature | Low-Medium | 1-2 | < 2 hours | `quick implement` | analysis.md + specialized agent + review.md |
+| Feature with specs | Medium | 2-5 | 2-8 hours | `implement with specs` | planning.md + analysis.md + specialized agent + context.md + review.md |
+| Complex system | High | 5+ | > 8 hours | `create spec` (manual) | spec-planning.md + specialized agent + context.md + review.md |
+| Refactor | Medium-High | 3-10 | 4-16 hours | `implement with specs` | planning.md + code-archaeologist.md + specialized agent + review.md |
 
 ### Commands
 
@@ -161,6 +180,11 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 - `"search skills [keyword]"` - Search for skills
 - `"update skill [name]"` - Update installed skill
 - `"uninstall skill [name]"` - Remove skill
+
+**Automated Hooks** (Optional)
+- Post-code context capture - Prompts to save decisions/learnings after code changes
+- Auto-summary on context limit - Automatically summarizes when reaching 80% context
+- See `hooks/README.md` for available hooks and setup instructions
 
 ## Steering File Organization
 
