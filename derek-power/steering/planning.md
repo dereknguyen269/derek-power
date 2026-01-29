@@ -10,6 +10,14 @@ Work like Manus: Use persistent markdown files as your "working memory on disk."
 
 **Note**: This file provides a concise overview. For detailed templates and examples, see `spec-planning.md`.
 
+## Debug Mode Detection
+**Debug Commands**: If user mentions "debug mode", "investigate", "trace", or "analyze" with investigation context, load `debug-mode.md` instead of planning mode.
+
+**Investigation Triggers**:
+- "debug mode" / "enter debug mode" / "investigation mode"
+- "investigate [target]" / "debug [component]"
+- "trace [function/flow]" / "analyze [performance/security]"
+
 ## Two Planning Modes
 
 This steering file supports two planning modes:

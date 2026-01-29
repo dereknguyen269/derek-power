@@ -9,6 +9,15 @@ Enforce comprehensive analysis before any planning or implementation. This phase
 
 **CRITICAL**: NO CODE should be generated during this phase. Analysis must be completed and approved before moving to planning.
 
+## Debug Mode Detection
+**Debug Commands**: If user mentions "debug mode", "investigate", "trace", or "analyze" with investigation context, load `debug-mode.md` instead of continuing with standard analysis.
+
+**Investigation Triggers**:
+- "debug mode" / "enter debug mode" / "investigation mode"
+- "investigate [target]" / "debug [component]" 
+- "trace [function/flow]" / "analyze [performance/security]"
+- "exit debug" / "end investigation"
+
 ---
 
 ## Analysis Workflow

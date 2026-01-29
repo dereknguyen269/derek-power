@@ -8,7 +8,7 @@ description: |
   for all tasks before code changes. No vibe coding. Strong focus
   on security issues, maintainability, and task context retention.
   Includes persistent project memory system with web sharing capabilities via derek-memory MCP.
-keywords: ["analysis", "planning", "review", "security", "task context", "code quality", "analyst", "optimizer", "commits reviewer", "init", "initialize", "share memory", "memory sharing", "project memory", "serve memory", "derek", "spec", "specification"]
+keywords: ["analysis", "planning", "review", "security", "task context", "code quality", "analyst", "optimizer", "commits reviewer", "init", "initialize", "share memory", "memory sharing", "project memory", "serve memory", "derek", "spec", "specification", "debug mode", "investigate", "trace", "debug", "investigation"]
 ---
 # D.E.R.E.K
 
@@ -155,6 +155,7 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 | Feature with specs | Medium | 2-5 | 2-8 hours | `implement with specs` | planning.md + analysis.md + specialized agent + context.md + review.md |
 | Complex system | High | 5+ | > 8 hours | `create spec` (manual) | spec-planning.md + specialized agent + context.md + review.md |
 | Refactor | Medium-High | 3-10 | 4-16 hours | `implement with specs` | planning.md + code-archaeologist.md + specialized agent + review.md |
+| **Investigation** | **Any** | **Any** | **Variable** | **`debug mode`** | **debug-mode.md + investigation agents** |
 
 ### Commands
 
@@ -162,6 +163,12 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 - `"init"` / `"reinit"` - Initialize or refresh project memory
 - `"share memory"` - Generate shareable HTML of project memory (requires MCP)
 - `"serve memory"` - Start local server to view shared memory
+
+**Debug & Investigation**
+- `"debug mode"` - Enter investigation mode with specialized workflows
+- `"investigate [target]"` - Start focused investigation of component/issue
+- `"trace [path]"` - Trace execution flows and data paths
+- `"exit debug"` - Complete investigation and save findings
 
 **Spec Planning (Structured Workflow)**
 - `"create spec [name]"` - Create new folder spec with requirements.md
