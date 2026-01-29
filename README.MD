@@ -50,6 +50,16 @@ Persistent markdown files in `.kiro/resources/` that maintain context across ses
 **Memory Sharing via MCP:**
 D.E.R.E.K includes the [derek-memory MCP server](https://github.com/dereknguyen269/derek-memory-mcp) that exposes your project memory as resources and provides tools to generate beautiful HTML documentation. Share specs with your team or view them in a browser with automatic sensitive data sanitization.
 
+### 🔍 Debug & Investigation Mode
+
+Specialized investigation workflows for complex debugging and analysis:
+
+- **Structured Investigation** - Discovery → Analysis → Hypothesis → Validation → Documentation
+- **Investigation Memory** - Persistent tracking with INVESTIGATION.md, EVIDENCE.md, FINDINGS.md
+- **Specialized Agents** - Investigation Discovery, Analysis, and Tracer agents
+- **Evidence Collection** - Systematic gathering and validation of findings
+- **Knowledge Transfer** - Automatic transfer of discoveries to project memory
+
 ### 📋 Two Planning Modes
 
 #### Quick Planning
@@ -126,9 +136,13 @@ This creates `.kiro/specs/authentication/` with:
 │   ├── PROGRESS.md              # Current task tracking
 │   ├── DECISIONS.md             # Decision log
 │   ├── KNOWLEDGE.md             # Finalized learnings
-│   └── SCRATCHPAD.md            # Temporary notes
+│   ├── SCRATCHPAD.md            # Temporary notes
+│   ├── INVESTIGATION.md         # Current investigation (debug mode)
+│   ├── EVIDENCE.md              # Investigation evidence
+│   ├── FINDINGS.md              # Investigation findings
+│   └── HYPOTHESES.md            # Investigation hypotheses
 │
-└── features/                     # Folder Specifications
+└── specs/                        # Folder Specifications
     ├── authentication/           # Example spec
     │   ├── requirements.md      # WHAT to build
     │   ├── design.md            # HOW to build
@@ -166,6 +180,12 @@ This creates `.kiro/specs/authentication/` with:
 - `reinit` - Refresh PROJECT.md only (preserves other files)
 - `share memory` - Generate shareable HTML documentation
 - `serve memory` - Start HTTP server to view HTML in browser (http://localhost:8080)
+
+### Debug & Investigation
+- `debug mode` - Enter investigation mode with specialized workflows
+- `investigate [target]` - Start focused investigation of component/issue
+- `trace [path]` - Trace execution flows and data paths
+- `exit debug` - Complete investigation and save findings
 
 ### Folder Spec Planning
 - `create spec [name]` - Create new folder spec

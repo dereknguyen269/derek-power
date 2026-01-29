@@ -5,6 +5,20 @@ All notable changes to the D.E.R.E.K power will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-01-29
+
+### Added
+- **Debug & Investigation Mode**
+  - New `debug mode` command to enter specialized investigation workflows
+  - Structured investigation phases: Discovery → Analysis → Hypothesis → Validation → Documentation
+  - Investigation memory files: INVESTIGATION.md, EVIDENCE.md, FINDINGS.md, HYPOTHESES.md
+  - Specialized investigation agents:
+    - `investigation-discovery.md` - Map codebase structure and entry points
+    - `investigation-analysis.md` - Deep dive analysis of target components
+    - `investigation-tracer.md` - Trace execution flows and data paths
+  - Commands: `investigate [target]`, `trace [path]`, `exit debug`
+  - Automatic knowledge transfer from investigation findings to project memory
+
 ## [0.1.2] - 2026-01-22
 
 ### Added
