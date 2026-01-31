@@ -538,12 +538,4 @@ D.E.R.E.K activates automatically when you use keywords like:
 
 ## Version
 
-Current version: 0.1.0
-
-## License
-
-[Your license here]
-
-## Contributing
-
-[Your contribution guidelines here]
+Current version: 0.1.3
