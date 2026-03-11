@@ -1,0 +1,13 @@
+{
+  "name": "Drift Detection",
+  "version": "1.0.0",
+  "description": "Recalculates drift score on file edits and notifies the user when memory files are falling behind tracked workspace changes. Only notifies when drift is in Review, Soft_Block, or Hard_Block tier.",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["**/*.rb", "**/*.js", "**/*.ts", "**/*.jsx", "**/*.tsx", "**/*.py", "**/*.go", "**/*.java", "**/*.kt", "**/*.swift", "**/*.rs", "**/*.md", "**/*.yml", "**/*.yaml", "**/*.json", "**/*.toml", "**/*.sh", "**/*.sql"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A tracked workspace file was just edited. Please recalculate the drift score by:\n1. Counting all Tracked_Files (excluding node_modules/, vendor/, .git/, tmp/, log/, dist/, build/, .kiro/resources/, and binary extensions: .jpg .jpeg .png .gif .ico .pdf .zip .tar .gz .exe .bin .woff .woff2 .ttf .eot)\n2. Reading Last_Memory_Timestamp from the most recent mtime among .kiro/resources/ files (PROJECT.md, PROGRESS.md, DECISIONS.md, KNOWLEDGE.md, SCRATCHPAD.md)\n3. Counting files modified after Last_Memory_Timestamp\n4. Calculating Drift_Score = round((changed / total) * 100)\n5. Classifying the tier: Healthy (0-20%), Review (21-50%), Soft_Block (51-75%), Hard_Block (76-100%)\n\nOnly notify the user if the tier is Review (21-50%), Soft_Block (51-75%), or Hard_Block (76-100%).\nIf the tier crossed a boundary since the last check (e.g., Healthy → Review, Review → Soft_Block), explicitly state the tier change.\nIf this hook has fired within the last 60 seconds (check SCRATCHPAD.md for 'Last Drift Hook: <timestamp>'), suppress the notification and only report the final score at the end of the window. Update 'Last Drift Hook: <ISO timestamp>' in SCRATCHPAD.md on every fire.\nIf tier is Healthy, remain silent."
+  }
+}

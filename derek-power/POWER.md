@@ -1,6 +1,6 @@
 ---
 name: "derek"
-version: 0.1.3
+version: 0.1.4
 displayName: "D.E.R.E.K"
 description: |
   Design, Evaluate, Review, Execute, Knowledge.
@@ -8,7 +8,7 @@ description: |
   for all tasks before code changes. No vibe coding. Strong focus
   on security issues, maintainability, and task context retention.
   Includes persistent project memory system with web sharing capabilities via derek-memory MCP.
-keywords: ["analysis", "planning", "review", "security", "task context", "code quality", "analyst", "optimizer", "commits reviewer", "init", "initialize", "share memory", "memory sharing", "project memory", "serve memory", "derek", "spec", "specification", "debug mode", "investigate", "trace", "debug", "investigation"]
+keywords: ["analysis", "planning", "review", "security", "task context", "code quality", "analyst", "optimizer", "commits reviewer", "init", "initialize", "share memory", "memory sharing", "project memory", "serve memory", "derek", "spec", "specification", "debug mode", "investigate", "trace", "debug", "investigation", "drift", "drift detection", "check drift", "drift status", "drift history", "drift score", "memory drift", "stale context", "acknowledge drift"]
 ---
 # D.E.R.E.K
 
@@ -192,6 +192,11 @@ D.E.R.E.K supports three implementation approaches based on task complexity:
 - Post-code context capture - Prompts to save decisions/learnings after code changes
 - Auto-summary on context limit - Automatically summarizes when reaching 80% context
 - See `hooks/README.md` for available hooks and setup instructions
+
+**Drift Detection**
+- `"check drift"` / `"drift status"` — Calculate and display current drift score, tier, and top 5 changed files
+- `"drift history"` — Show last 5 drift entries from PROGRESS.md
+- `"acknowledge drift"` — Clear Soft_Block gate and proceed with current task
 
 ## Steering File Organization
 

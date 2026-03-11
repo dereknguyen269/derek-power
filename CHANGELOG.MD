@@ -5,6 +5,33 @@ All notable changes to the D.E.R.E.K power will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2026-03-11
+
+### Added
+- **Drift Detection**
+  - New `derek-power/steering/drift-detection.md` steering file (`inclusion: manual`)
+  - Drift_Score formula: `round((changed_files / total_tracked_files) × 100)`
+  - Four severity tiers: 🟢 Healthy (0–20%) · 🟡 Review (21–50%) · 🟠 Soft_Block (51–75%) · 🔴 Hard_Block (76–100%)
+  - Automatic drift check on every session start (integrated into `derek-init.md`)
+  - On-demand commands: `check drift`, `drift status`, `drift history`, `acknowledge drift`
+  - PROGRESS.md `## Drift Status` section with rolling 10-entry history
+  - Hard_Block tier gates task execution until `reinit` or `update memory` is run
+  - Soft_Block tier requires `acknowledge drift` before proceeding
+  - Memory update reset: drift recalculates automatically after `reinit` or `update memory`
+  - Hook deduplication: suppresses duplicate notifications within a 60-second window (tracked in SCRATCHPAD.md)
+  - Optional `drift-detection.kiro.hook` template for real-time drift checks on file edits
+    - Install: `cp derek-power/hooks/drift-detection.kiro.hook .kiro/hooks/`
+    - Covers common source extensions: rb, js, ts, jsx, tsx, py, go, java, kt, swift, rs, md, yml, yaml, json, toml, sh, sql
+    - Notifies only on Review, Soft_Block, or Hard_Block tiers (silent on Healthy)
+    - Explicitly states tier-crossing events (e.g., "Healthy → Review")
+
+### Changed
+- **`derek-init.md`** - Added `## Drift Check (Session Start)` section; drift score now appears between memory read confirmation and current task display
+- **`POWER.md`** - Added 9 drift detection keywords to frontmatter; added `Drift Detection` command group
+- **`README.MD`** - Added Drift Detection to Key Features, Commands, comparison table, and activation keywords
+
+---
+
 ## [0.1.3] - 2026-01-29
 
 ### Added
@@ -97,6 +124,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## How to Upgrade
+
+### From 0.1.3 to 0.1.4
+
+1. **No breaking changes** — all existing functionality preserved
+2. **Enable drift hook** (optional):
+   - `cp derek-power/hooks/drift-detection.kiro.hook .kiro/hooks/`
+   - Enables real-time drift recalculation on every file save
+3. **Drift check runs automatically** on session start — no setup required
 
 ### From 0.1.1 to 0.1.2
 

@@ -118,10 +118,24 @@ test -d .kiro/views || mkdir -p .kiro/views
 - Purpose, Current Session, Working Notes, Questions, Temporary Context, Quick TODO, Session Cleanup Checklist
 - Initial: Focus "Project initialization", Status "Active"
 
+## Drift Check (Session Start)
+
+After reading PROGRESS.md on session start, load `drift-detection.md` and run the session-start drift check sequence:
+
+1. Scan Tracked_Files (apply exclusion rules)
+2. Read Last_Memory_Timestamp from `.kiro/resources/` file mtimes
+3. Count changed files since last memory update
+4. Calculate Drift_Score and classify tier
+5. Report drift score using the appropriate tier response template
+6. Write entry to PROGRESS.md `## Drift Status` section
+
+The drift report appears between the memory read confirmation and the current task display. This applies to both the "Already Initialized" and "New Project" paths.
+
 ## Initialization Checklist
 
 - [ ] Check if memory system exists
 - [ ] If exists → Skip init, read files, report "Already initialized"
+- [ ] Run drift check (load drift-detection.md, calculate score, report tier)
 - [ ] If partial → Create missing only, preserve existing
 - [ ] Create directories (only if missing)
 - [ ] Scan project structure
@@ -146,6 +160,7 @@ test -d .kiro/views || mkdir -p .kiro/views
 📁 .kiro/resources/ (last updated: X days ago)
 📊 Loading PROGRESS.md and SCRATCHPAD.md...
 💡 Use "reinit" to refresh PROJECT.md
+🟡 Drift Score: 34% (Review) — 8 files changed. Consider running `reinit`.
 🚀 Current task: [name] ([phase])
 ```
 
@@ -167,7 +182,7 @@ test -d .kiro/views || mkdir -p .kiro/views
 
 ## Workflow
 
-**Daily:** Read PROGRESS/SCRATCHPAD → Work (update files) → Log decisions → End (update PROGRESS, clear SCRATCHPAD)
+**Daily:** Read PROGRESS/SCRATCHPAD → Run drift check → Work (update files) → Log decisions → End (update PROGRESS, clear SCRATCHPAD)
 
 **Task Types:**
 - Quick (bug fixes, config) → PROGRESS.md
