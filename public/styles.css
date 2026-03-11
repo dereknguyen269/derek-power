@@ -14,25 +14,25 @@
 
 /* Custom scrollbar for dark theme */
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #0A0E27;
+    background: #0F172A;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #2563EB;
-    border-radius: 6px;
+    background: #334155;
+    border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #3B82F6;
+    background: #2563EB;
 }
 
-/* Glow effect for dark mode */
+/* Subtle glow on primary text */
 .text-primary {
-    text-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+    text-shadow: 0 0 20px rgba(37, 99, 235, 0.25);
 }
 
 /* Focus visible for accessibility */
@@ -40,6 +40,7 @@ a:focus-visible,
 button:focus-visible {
     outline: 2px solid #2563EB;
     outline-offset: 2px;
+    border-radius: 4px;
 }
 
 /* Smooth transitions */
@@ -50,7 +51,7 @@ button:focus-visible {
 /* Backdrop blur fallback */
 @supports not (backdrop-filter: blur(12px)) {
     nav {
-        background: rgba(18, 18, 18, 0.95) !important;
+        background: rgba(30, 41, 59, 0.98) !important;
     }
 }
 
