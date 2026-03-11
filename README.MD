@@ -561,8 +561,6 @@ Current version: 0.1.4
 
 ## License
 
-[Your license here]
 
 ## Contributing
 
-[Your contribution guidelines here]
