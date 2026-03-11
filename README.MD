@@ -50,6 +50,16 @@ Persistent markdown files in `.kiro/resources/` that maintain context across ses
 **Memory Sharing via MCP:**
 D.E.R.E.K includes the [derek-memory MCP server](https://github.com/dereknguyen269/derek-memory-mcp) that exposes your project memory as resources and provides tools to generate beautiful HTML documentation. Share specs with your team or view them in a browser with automatic sensitive data sanitization.
 
+### 📊 Drift Detection
+
+Automatically tracks how out-of-sync your memory files are from actual code changes:
+
+- **Drift Score** - Percentage of tracked files changed since last memory update
+- **Four Tiers** - 🟢 Healthy (0–20%) · 🟡 Review (21–50%) · 🟠 Soft_Block (51–75%) · 🔴 Hard_Block (76–100%)
+- **Session-Start Check** - Drift is calculated automatically every time a session begins
+- **On-Demand Commands** - Check drift anytime with `check drift` or `drift status`
+- **Optional Hook** - Real-time drift recalculation on every file save (copy `derek-power/hooks/drift-detection.kiro.hook` to `.kiro/hooks/`)
+
 ### 🔍 Debug & Investigation Mode
 
 Specialized investigation workflows for complex debugging and analysis:
@@ -181,6 +191,11 @@ This creates `.kiro/specs/authentication/` with:
 - `share memory` - Generate shareable HTML documentation
 - `serve memory` - Start HTTP server to view HTML in browser (http://localhost:8080)
 
+### Drift Detection
+- `check drift` / `drift status` - Calculate and display current drift score, tier, and top 5 changed files
+- `drift history` - Show last 5 drift entries from PROGRESS.md
+- `acknowledge drift` - Clear Soft_Block gate and proceed with current task
+
 ### Debug & Investigation
 - `debug mode` - Enter investigation mode with specialized workflows
 - `investigate [target]` - Start focused investigation of component/issue
@@ -254,6 +269,7 @@ D.E.R.E.K includes comprehensive steering files organized by category:
 | **Quick Planning Mode** | ❌ No | ✅ Yes (PROGRESS.md) |
 | **Specialized Agent Roles** | ❌ No | ✅ Yes (70+ steering files) |
 | **Memory Sharing** | ❌ No | ✅ Yes (HTML export) |
+| **Drift Detection** | ❌ No | ✅ Yes (memory freshness tracking) |
 
 ### When to Use Each
 
@@ -271,6 +287,7 @@ D.E.R.E.K includes comprehensive steering files organized by category:
 - ✅ You want to track decisions and learnings
 - ✅ You're working on complex, multi-session projects
 - ✅ You need both quick planning and formal specs
+- ✅ You want real-time awareness of memory freshness (drift detection)
 
 ### Can They Work Together?
 
@@ -441,6 +458,7 @@ D.E.R.E.K includes hooks in `derek-power/hooks/` to help manage sessions:
 - `auto-summary-on-context-limit.kiro.hook` - Auto-summarize when approaching limits
 - `summary-session-command.kiro.hook` - Generate session summaries on demand
 - `clear-chat-history.kiro.hook` - Clean slate while preserving memory
+- `drift-detection.kiro.hook` - Real-time drift score on every file save (copy to `.kiro/hooks/` to enable)
 
 These hooks ensure you never lose important context even when starting new sessions.
 
@@ -535,10 +553,11 @@ D.E.R.E.K activates automatically when you use keywords like:
 - "approve requirements", "approve design"
 - "analyze task", "review code"
 - "share memory", "show spec status"
+- "check drift", "drift status", "drift history", "acknowledge drift"
 
 ## Version
 
-Current version: 0.1.0
+Current version: 0.1.4
 
 ## License
 
