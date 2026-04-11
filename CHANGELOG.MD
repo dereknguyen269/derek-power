@@ -5,6 +5,29 @@ All notable changes to the D.E.R.E.K power will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2026-04-11
+
+### Added
+- **Smart Task Sync**
+  - New `derek-power/steering/task-sync.md` steering file (`inclusion: manual`)
+  - Intelligent synchronization of D.E.R.E.K tasks and code logic between git branches
+  - Fuzzy title matching — tasks matched by title, not just ID
+  - Smart merge strategy: completed tasks preserved, in-progress tasks merged, new tasks added, deleted tasks soft-archived
+  - Automatic dependency re-mapping after task reorder
+  - Conflict detection with manual review flagging
+  - Optional code logic sync: file change detection, uncommitted change flagging, diff summarization
+  - Sync report output with task and file status summaries
+  - Commands: `sync tasks from [branch]`, `task sync`, `compare branches`
+  - New `task-sync.kiro.hook` — user-triggered hook for on-demand branch sync
+    - Generates sync preview before applying changes
+    - Supports task-only or task + code file sync
+    - Asks for confirmation before applying
+
+### Changed
+- **`POWER.md`** - Version bumped to 0.1.5
+
+---
+
 ## [0.1.4] - 2026-03-11
 
 ### Added
@@ -124,6 +147,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## How to Upgrade
+
+### From 0.1.4 to 0.1.5
+
+1. **No breaking changes** — all existing functionality preserved
+2. **Enable task sync hook** (optional):
+   - `cp derek-power/hooks/task-sync.kiro.hook .kiro/hooks/`
+   - Adds a manual trigger button for syncing tasks between branches
+3. **New commands available immediately**: `sync tasks from [branch]`, `task sync`, `compare branches`
 
 ### From 0.1.3 to 0.1.4
 

@@ -557,7 +557,7 @@ D.E.R.E.K activates automatically when you use keywords like:
 
 ## Version
 
-Current version: 0.1.4
+Current version: 0.1.5
 
 ## License
 

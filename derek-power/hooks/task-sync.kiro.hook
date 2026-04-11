@@ -1,0 +1,11 @@
+{
+  "name": "Smart Task Sync",
+  "version": "1.0.0",
+  "description": "Intelligently sync D.E.R.E.K tasks and code logic between git branches. Detects conflicts, preserves local changes, and merges task states intelligently.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Implement smart task sync between branches:\n\n**Task Sync Logic**:\n1. Get current branch name via `git branch --show-current`\n2. Get tasks from source branch (user specifies or use main/master)\n3. Compare task structures between branches:\n   - Match tasks by title (fuzzy match allowed)\n   - Detect new tasks, modified tasks, deleted tasks\n   - Preserve local-only tasks (not in source)\n4. Smart merge strategy:\n   - **Completed tasks**: Keep as-is (don't re-open)\n   - **In-progress tasks**: Merge status if source is pending\n   - **Pending tasks**: Update from source if source has more details\n   - **New tasks**: Add to current branch\n   - **Deleted tasks**: Archive instead of hard delete\n5. Handle dependencies intelligently:\n   - Re-map dependency IDs if tasks were reordered\n   - Detect circular dependencies after merge\n\n**Code Logic Sync** (if requested):\n1. Compare file changes between branches using `git diff --name-only <source>..<target>`\n2. For each changed file:\n   - If local has uncommitted changes → flag for manual review\n   - If file doesn't exist locally → suggest adding\n   - If file exists but differs → show diff summary\n3. Generate sync report with:\n   - Tasks added/modified/archived\n   - Files needing attention\n   - Potential conflicts\n\n**Output Format**:\n```\n=== Task Sync Report ===\nSource: [branch-name] → Target: [current-branch]\n\n📋 Tasks:\n  + [ID] [Title] (NEW)\n  ~ [ID] [Title] (MODIFIED - changes noted)\n  ✓ [ID] [Title] (UNCHANGED)\n  ⚠ [ID] [Title] (CONFLICT - manual review needed)\n\n📁 Files:\n  ? [filename] (needs review)\n  + [filename] (new in source)\n\n💡 Recommendations:\n  - [actionable suggestion]\n```\n\nAsk user for:\n1. Source branch name (default: main or master)\n2. Whether to include code file sync\n3. Confirmation to apply changes\n\nIf user says 'sync tasks from [branch]', execute the sync with the specified source branch."
+}

@@ -33,3 +33,4 @@ node_modules/
 .env.example
 .kiro/settings/mcp.json
 .kiro/*
+CLAUDE.md

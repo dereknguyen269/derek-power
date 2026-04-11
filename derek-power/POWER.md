@@ -1,6 +1,6 @@
 ---
 name: "derek"
-version: 0.1.4
+version: 0.1.5
 displayName: "D.E.R.E.K"
 description: |
   Design, Evaluate, Review, Execute, Knowledge.
