@@ -1,376 +1,372 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="D.E.R.E.K Power - A development workflow tool that enforces structured analysis, planning, and reviews. No vibe coding.">
-    <title>D.E.R.E.K Power - Structured Development Workflow</title>
-    
-    <!-- Google Fonts -->
+    <meta name="description" content="D.E.R.E.K Power - A Kiro Power that enforces structured analysis, planning, approvals, and reviews. No vibe coding. Persistent project memory, 70+ specialized agents, and security-first workflows.">
+    <title>D.E.R.E.K Power - Structured Development Workflow for Kiro</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        heading: ['Poppins', 'sans-serif'],
-                        body: ['Open Sans', 'sans-serif']
+                        heading: ['Space Grotesk', 'sans-serif'],
+                        body: ['DM Sans', 'sans-serif'],
+                        mono: ['DM Mono', 'Fira Code', 'monospace']
                     },
                     colors: {
                         primary: '#2563EB',
                         secondary: '#3B82F6',
-                        cta: '#F97316',
-                        dark: {
-                            bg: '#0F172A',
-                            surface: '#1E293B',
-                            card: '#0F172A',
-                            text: '#F1F5F9',
-                            muted: '#94A3B8',
-                            border: '#334155'
-                        }
+                        cta: '#F97316'
                     }
                 }
             }
         }
     </script>
+    <!-- Inline theme init to prevent flash -->
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
     <link rel="stylesheet" href="public/styles.css">
 </head>
-<body class="bg-dark-bg text-dark-text font-body antialiased">
-    
-    <!-- Navigation -->
-    <nav class="fixed top-4 left-4 right-4 z-50 bg-dark-surface/90 backdrop-blur-lg border border-dark-border/60 rounded-2xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+<body class="bg-[var(--bg)] text-[var(--foreground)] font-body antialiased overflow-x-hidden transition-colors duration-300">
+
+    <!-- ═══════════════ Navigation ═══════════════ -->
+    <nav class="fixed top-2 left-2 right-2 sm:top-4 sm:left-4 sm:right-4 z-50 bg-[var(--surface)]/90 backdrop-blur-lg border border-[var(--border)]/60 rounded-2xl">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span class="text-xl font-heading font-semibold">D.E.R.E.K Power</span>
-                </div>
+                <a href="#" class="flex items-center space-x-2">
+                    <svg class="w-7 h-7 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="text-lg font-heading font-semibold tracking-tight">D.E.R.E.K</span>
+                </a>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#features" class="text-dark-muted hover:text-dark-text transition-colors duration-200">Features</a>
-                    <a href="#why-derek" class="text-dark-muted hover:text-dark-text transition-colors duration-200">Why D.E.R.E.K</a>
-                    <a href="#workflow" class="text-dark-muted hover:text-dark-text transition-colors duration-200">Workflow</a>
-                    <a href="https://github.com/dereknguyen269/derek-power" class="px-4 py-2 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 cursor-pointer">
+                    <a href="#features" class="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Features</a>
+                    <a href="#comparison" class="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Why D.E.R.E.K</a>
+                    <a href="#workflow" class="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Workflow</a>
+                    <a href="#quickstart" class="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Quick Start</a>
+                    <!-- Theme toggle -->
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                        <svg class="icon-sun w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                        <svg class="icon-moon w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                    </button>
+                    <a href="https://github.com/dereknguyen269/derek-power" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-secondary text-white text-sm font-medium rounded-lg transition-colors duration-200 cursor-pointer">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                         Get Started
                     </a>
                 </div>
-                <!-- Mobile menu button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 text-dark-muted hover:text-dark-text transition-colors duration-200 cursor-pointer" aria-label="Toggle menu" aria-expanded="false">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
+                <div class="flex items-center gap-2 md:hidden">
+                    <button id="theme-toggle-mobile" class="theme-toggle" aria-label="Toggle theme">
+                        <svg class="icon-sun w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                        <svg class="icon-moon w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200 cursor-pointer" aria-label="Toggle menu" aria-expanded="false">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                </div>
             </div>
         </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-dark-border/40 mt-2 pt-4 pb-2 space-y-1">
-            <a href="#features" class="block px-4 py-2 text-dark-muted hover:text-dark-text transition-colors duration-200 rounded-lg hover:bg-white/5">Features</a>
-            <a href="#why-derek" class="block px-4 py-2 text-dark-muted hover:text-dark-text transition-colors duration-200 rounded-lg hover:bg-white/5">Why D.E.R.E.K</a>
-            <a href="#workflow" class="block px-4 py-2 text-dark-muted hover:text-dark-text transition-colors duration-200 rounded-lg hover:bg-white/5">Workflow</a>
-            <a href="https://github.com/dereknguyen269/derek-power" class="block px-4 py-2 mt-2 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 text-center cursor-pointer">Get Started</a>
+        <div id="mobile-menu" class="hidden md:hidden border-t border-[var(--border)]/40 px-3 pt-3 pb-4 space-y-1">
+            <a href="#features" class="block py-2.5 min-h-[44px] flex items-center text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Features</a>
+            <a href="#comparison" class="block py-2.5 min-h-[44px] flex items-center text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Why D.E.R.E.K</a>
+            <a href="#workflow" class="block py-2.5 min-h-[44px] flex items-center text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Workflow</a>
+            <a href="#quickstart" class="block py-2.5 min-h-[44px] flex items-center text-[var(--muted)] hover:text-[var(--foreground)] transition-colors duration-200">Quick Start</a>
+            <a href="https://github.com/dereknguyen269/derek-power" target="_blank" rel="noopener noreferrer" class="block mt-2 py-3 min-h-[44px] bg-primary hover:bg-secondary text-white rounded-lg text-center text-sm font-medium transition-colors duration-200 cursor-pointer">Get Started</a>
         </div>
-    </div>
-</nav>
-<script>
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
-    btn.addEventListener('click', () => {
-        const open = menu.classList.toggle('hidden');
-        btn.setAttribute('aria-expanded', String(!open));
-    });
-    // Close on nav link click
-    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-        menu.classList.add('hidden');
-        btn.setAttribute('aria-expanded', 'false');
-    }));
-</script>
+    </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-6xl mx-auto text-center">
-            <div class="inline-block mb-6 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
-                <span class="text-primary text-sm font-medium">Design → Evaluate → Review → Execute → Knowledge</span>
-            </div>
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-6 leading-tight">
-                No More <span class="text-primary">Vibe Coding</span>.<br/>
-                Just Structured Excellence.
-            </h1>
-            <p class="text-xl md:text-2xl text-dark-muted mb-8 max-w-3xl mx-auto leading-relaxed">
-                D.E.R.E.K Power enforces structured analysis, planning, approvals, and reviews for every task. 
-                Build secure, maintainable code with persistent context retention.
-            </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="https://github.com/dereknguyen269/derek-power" class="px-8 py-4 bg-cta hover:bg-cta/90 text-white rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer shadow-lg shadow-cta/20">
-                    Install D.E.R.E.K Power
-                </a>
-                <a href="#workflow" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-dark-text rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer">
-                    See How It Works
-                </a>
+    <!-- ═══════════════ Hero Section ═══════════════ -->
+    <section class="relative pt-28 sm:pt-36 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8">
+        <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
+        <div class="hero-glow hero-glow-2" aria-hidden="true"></div>
+
+        <div class="max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <!-- Left: Copy -->
+                <div class="text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 mb-6 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-sm text-primary font-medium">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        Kiro Power &middot; v0.1.5
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6 leading-[1.1] tracking-tight">
+                        No More<br/>
+                        <span class="glow-primary text-primary">Vibe Coding.</span>
+                    </h1>
+                    <p class="text-base sm:text-xl text-[var(--muted)] mb-8 max-w-xl leading-relaxed">
+                        D.E.R.E.K enforces structured analysis, planning, approvals, and reviews for every task. Persistent memory. 70+ specialized agents. Security first.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center lg:items-start gap-3">
+                        <a href="https://github.com/dereknguyen269/derek-power" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-cta hover:bg-cta/90 text-white rounded-lg font-semibold transition-colors duration-200 cursor-pointer shadow-lg shadow-cta/20">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            Install from GitHub
+                        </a>
+                        <a href="#workflow" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 border border-[var(--border)] text-[var(--foreground)] rounded-lg font-semibold transition-colors duration-200 cursor-pointer">
+                            See How It Works
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Terminal demo (always dark) -->
+                <div class="relative">
+                    <div class="terminal-shell border rounded-xl overflow-hidden shadow-2xl dark:shadow-black/40 shadow-black/10">
+                        <div class="terminal-titlebar flex items-center gap-2 px-4 py-3 border-b">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+                            <span class="term-label ml-3 text-xs font-mono hidden sm:inline">kiro — D.E.R.E.K</span>
+                        </div>
+                        <div class="terminal p-4 sm:p-5 space-y-1.5 text-xs sm:text-sm leading-relaxed overflow-x-auto">
+                            <p><span class="comment"># Initialize project memory</span></p>
+                            <p><span class="prompt">❯</span> init</p>
+                            <p><span class="output">✅ Memory system initialized (5 files)</span></p>
+                            <p class="pt-2"><span class="comment"># Create a feature spec</span></p>
+                            <p><span class="prompt">❯</span> create spec <span class="string">authentication</span></p>
+                            <p><span class="output">📋 Created .kiro/specs/authentication/</span></p>
+                            <p><span class="output">   ├── requirements.md</span></p>
+                            <p><span class="output">   ├── design.md</span></p>
+                            <p><span class="output">   └── tasks.md</span></p>
+                            <p class="pt-2"><span class="comment"># Approve &amp; implement</span></p>
+                            <p><span class="prompt">❯</span> approve requirements</p>
+                            <p><span class="output">⛔ Gate passed → Design phase</span></p>
+                            <p><span class="prompt">❯</span> approve design</p>
+                            <p><span class="output">⛔ Gate passed → Implementation</span></p>
+                            <p class="pt-2"><span class="prompt">❯</span> <span class="cursor-blink"></span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Why D.E.R.E.K Section -->
-    <section id="why-derek" class="py-20 px-4 sm:px-6 lg:px-8 bg-dark-surface/20">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-4">Why D.E.R.E.K is Different</h2>
-                <p class="text-xl text-dark-muted max-w-2xl mx-auto">
-                    Most AI assistants let you code on vibes. D.E.R.E.K demands discipline.
-                </p>
+    <!-- ═══════════════ Social Proof Bar ═══════════════ -->
+    <section class="py-8 sm:py-10 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]/40">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
+                <div>
+                    <div class="text-3xl font-heading font-bold">70+</div>
+                    <div class="text-sm text-[var(--muted)] mt-1">Specialized Agents</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-heading font-bold">5</div>
+                    <div class="text-sm text-[var(--muted)] mt-1">Memory Files</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-heading font-bold text-primary">0</div>
+                    <div class="text-sm text-[var(--muted)] mt-1">Vibe Coding</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-heading font-bold">100%</div>
+                    <div class="text-sm text-[var(--muted)] mt-1">Security Focused</div>
+                </div>
             </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Typical AI Tools -->
-                <div class="bg-red-500/5 border border-red-500/20 rounded-2xl p-8 cursor-pointer hover:bg-red-500/10 hover:border-red-500/40 transition-all duration-200">
-                    <div class="flex items-center mb-4">
-                        <svg class="w-6 h-6 text-red-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                        <h3 class="text-2xl font-heading font-semibold text-red-400">Typical AI Tools</h3>
+        </div>
+    </section>
+
+    <!-- ═══════════════ Comparison Section ═══════════════ -->
+    <section id="comparison" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14 fade-up">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold mb-4">Why D.E.R.E.K is Different</h2>
+                <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto">Most AI assistants let you code on vibes. D.E.R.E.K demands discipline.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 sm:gap-6 stagger">
+                <div class="fade-up bg-red-500/5 border border-red-500/20 rounded-2xl p-5 sm:p-7 hover:bg-red-500/10 hover:border-red-500/30 transition-all duration-200 cursor-pointer">
+                    <div class="flex items-center gap-3 mb-5">
+                        <svg class="w-5 h-5 text-red-500 dark:text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                        <h3 class="text-xl font-heading font-semibold text-red-600 dark:text-red-400">Typical AI Tools</h3>
                     </div>
-                    <ul class="space-y-3 text-dark-muted">
-                        <li class="flex items-start">
-                            <span class="text-red-500 mr-2">•</span>
-                            <span>Code first, think later</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-red-500 mr-2">•</span>
-                            <span>No security review process</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-red-500 mr-2">•</span>
-                            <span>Context lost between sessions</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-red-500 mr-2">•</span>
-                            <span>No approval gates or reviews</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-red-500 mr-2">•</span>
-                            <span>Technical debt accumulates</span>
-                        </li>
+                    <ul class="space-y-3 text-[var(--muted)] text-[15px]">
+                        <li class="flex items-start gap-2"><span class="text-red-500 mt-0.5">&#x2022;</span>Code first, think later</li>
+                        <li class="flex items-start gap-2"><span class="text-red-500 mt-0.5">&#x2022;</span>No security review process</li>
+                        <li class="flex items-start gap-2"><span class="text-red-500 mt-0.5">&#x2022;</span>Context lost between sessions</li>
+                        <li class="flex items-start gap-2"><span class="text-red-500 mt-0.5">&#x2022;</span>No approval gates or reviews</li>
+                        <li class="flex items-start gap-2"><span class="text-red-500 mt-0.5">&#x2022;</span>Technical debt accumulates silently</li>
                     </ul>
                 </div>
 
-                <!-- D.E.R.E.K Power -->
-                <div class="bg-primary/5 border border-primary/20 rounded-2xl p-8 cursor-pointer hover:bg-primary/10 hover:border-primary/40 transition-all duration-200">
-                    <div class="flex items-center mb-4">
-                        <svg class="w-6 h-6 text-primary mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <h3 class="text-2xl font-heading font-semibold text-primary">D.E.R.E.K Power</h3>
+                <div class="fade-up bg-primary/5 border border-primary/20 rounded-2xl p-5 sm:p-7 hover:bg-primary/10 hover:border-primary/30 transition-all duration-200 cursor-pointer">
+                    <div class="flex items-center gap-3 mb-5">
+                        <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <h3 class="text-xl font-heading font-semibold text-primary">D.E.R.E.K Power</h3>
                     </div>
-                    <ul class="space-y-3 text-dark-text">
-                        <li class="flex items-start">
-                            <span class="text-primary mr-2">✓</span>
-                            <span>Design & analyze before coding</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-primary mr-2">✓</span>
-                            <span>Security audits built into workflow</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-primary mr-2">✓</span>
-                            <span>Persistent project memory system</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-primary mr-2">✓</span>
-                            <span>Mandatory review & approval gates</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-primary mr-2">✓</span>
-                            <span>Maintainability enforced by design</span>
-                        </li>
+                    <ul class="space-y-3 text-[var(--foreground)] text-[15px]">
+                        <li class="flex items-start gap-2"><svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Design &amp; analyze before coding</li>
+                        <li class="flex items-start gap-2"><svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Security audits built into workflow</li>
+                        <li class="flex items-start gap-2"><svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Persistent project memory system</li>
+                        <li class="flex items-start gap-2"><svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Mandatory review &amp; approval gates</li>
+                        <li class="flex items-start gap-2"><svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>Knowledge accumulates over time</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20 px-4 sm:px-6 lg:px-8">
+    <!-- ═══════════════ Features Section ═══════════════ -->
+    <section id="features" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[var(--surface)]/50 dark:bg-[var(--surface)]/20">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-4">Core Features</h2>
-                <p class="text-xl text-dark-muted max-w-2xl mx-auto">
-                    Every feature designed to prevent technical debt and security vulnerabilities
-                </p>
+            <div class="text-center mb-14 fade-up">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold mb-4">Core Features</h2>
+                <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto">Every feature designed to prevent technical debt and security vulnerabilities.</p>
             </div>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Feature 1 -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/40 transition-all duration-200">
-                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-heading font-semibold mb-2">Structured Analysis</h3>
-                    <p class="text-dark-muted">Every task starts with comprehensive analysis. Understand requirements, risks, and architecture before writing code.</p>
-                </div>
 
-                <!-- Feature 2 -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/40 transition-all duration-200">
-                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger">
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6 hover:border-primary/40 transition-all duration-200 cursor-pointer group">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
-                    <h3 class="text-xl font-heading font-semibold mb-2">Security First</h3>
-                    <p class="text-dark-muted">Built-in security audits, code reviews, and vulnerability scanning. OWASP compliance and secure coding enforced.</p>
+                    <h3 class="text-lg font-heading font-semibold mb-2">Structured Analysis</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Every task starts with comprehensive analysis. Understand requirements, risks, and architecture before writing code.</p>
                 </div>
-
-                <!-- Feature 3 -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/40 transition-all duration-200">
-                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6 hover:border-primary/40 transition-all duration-200 cursor-pointer group">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </div>
-                    <h3 class="text-xl font-heading font-semibold mb-2">Persistent Memory</h3>
-                    <p class="text-dark-muted">Project context retained across sessions. Share memory with team via web interface. Never lose important decisions.</p>
+                    <h3 class="text-lg font-heading font-semibold mb-2">Security First</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Built-in security audits, code reviews, and vulnerability scanning. OWASP compliance and secure coding enforced.</p>
                 </div>
-
-                <!-- Feature 4 -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/40 transition-all duration-200">
-                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                        </svg>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6 hover:border-primary/40 transition-all duration-200 cursor-pointer group">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7C5 4 4 5 4 7z"/><path d="M9 12h6m-3-3v6"/></svg>
                     </div>
-                    <h3 class="text-xl font-heading font-semibold mb-2">Approval Gates</h3>
-                    <p class="text-dark-muted">Mandatory review checkpoints before code changes. Evaluate, approve, then execute. No shortcuts.</p>
+                    <h3 class="text-lg font-heading font-semibold mb-2">Persistent Memory</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">5 markdown files retain project context across sessions. Decisions, progress, and knowledge never lost.</p>
                 </div>
-
-                <!-- Feature 5 -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/40 transition-all duration-200">
-                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-                        </svg>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6 hover:border-primary/40 transition-all duration-200 cursor-pointer group">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
                     </div>
-                    <h3 class="text-xl font-heading font-semibold mb-2">Code Quality</h3>
-                    <p class="text-dark-muted">Automated linting, testing, and quality checks. Maintainability metrics tracked. Technical debt prevented.</p>
+                    <h3 class="text-lg font-heading font-semibold mb-2">Approval Gates</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Requirements and design must be explicitly approved before implementation. No shortcuts allowed.</p>
                 </div>
-
-                <!-- Feature 6 -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/40 transition-all duration-200">
-                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6 hover:border-primary/40 transition-all duration-200 cursor-pointer group">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
-                    <h3 class="text-xl font-heading font-semibold mb-2">Team Workflows</h3>
-                    <p class="text-dark-muted">Specialized agents for different roles: architects, reviewers, security auditors, optimizers. Orchestrated collaboration.</p>
+                    <h3 class="text-lg font-heading font-semibold mb-2">Debug Mode</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Structured investigation workflows: Discovery, Analysis, Hypothesis, Validation, and Documentation.</p>
+                </div>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6 hover:border-primary/40 transition-all duration-200 cursor-pointer group">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-200">
+                        <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <h3 class="text-lg font-heading font-semibold mb-2">Drift Detection</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Tracks how out-of-sync your memory is from code changes. Four severity tiers with automatic gating.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Workflow Section -->
-    <section id="workflow" class="py-20 px-4 sm:px-6 lg:px-8 bg-dark-surface/20">
+    <!-- ═══════════════ Workflow Section ═══════════════ -->
+    <section id="workflow" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-4">The D.E.R.E.K Workflow</h2>
-                <p class="text-xl text-dark-muted max-w-2xl mx-auto">
-                    Five mandatory phases. No shortcuts. Every task follows this proven process.
-                </p>
+            <div class="text-center mb-14 fade-up">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold mb-4">The D.E.R.E.K Workflow</h2>
+                <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto">Five mandatory phases. No shortcuts. Every task follows this proven process.</p>
             </div>
-            
-            <div class="space-y-6">
-                <!-- Phase 1: Design -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-primary/50 transition-all duration-200">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
-                            <span class="text-primary font-heading font-bold text-xl">D</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-heading font-semibold mb-2 text-primary">Design</h3>
-                            <p class="text-dark-muted mb-3">Comprehensive analysis and planning before any code is written. Understand requirements, identify risks, design architecture, and create specifications.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Requirements Analysis</span>
-                                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Risk Assessment</span>
-                                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">Architecture Design</span>
-                            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 stagger">
+                <div class="fade-up relative bg-[var(--surface)] border border-[var(--border)] rounded-xl p-5 text-center hover:border-primary/50 transition-all duration-200 cursor-pointer group">
+                    <div class="w-12 h-12 mx-auto bg-primary/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors duration-200">
+                        <span class="text-primary font-heading font-bold text-xl">D</span>
+                    </div>
+                    <h3 class="font-heading font-semibold text-primary mb-1">Design</h3>
+                    <p class="text-xs text-[var(--muted)] leading-relaxed">Analyze requirements, risks, and architecture</p>
+                    <svg class="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--border)] z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <div class="fade-up relative bg-[var(--surface)] border border-[var(--border)] rounded-xl p-5 text-center hover:border-secondary/50 transition-all duration-200 cursor-pointer group">
+                    <div class="w-12 h-12 mx-auto bg-secondary/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-secondary/20 transition-colors duration-200">
+                        <span class="text-secondary font-heading font-bold text-xl">E</span>
+                    </div>
+                    <h3 class="font-heading font-semibold text-secondary mb-1">Evaluate</h3>
+                    <p class="text-xs text-[var(--muted)] leading-relaxed">Security, performance, and tech debt review</p>
+                    <svg class="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--border)] z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <div class="fade-up relative bg-[var(--surface)] border border-[var(--border)] rounded-xl p-5 text-center hover:border-purple-500/50 transition-all duration-200 cursor-pointer group">
+                    <div class="w-12 h-12 mx-auto bg-purple-500/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-purple-500/20 transition-colors duration-200">
+                        <span class="text-purple-600 dark:text-purple-400 font-heading font-bold text-xl">R</span>
+                    </div>
+                    <h3 class="font-heading font-semibold text-purple-600 dark:text-purple-400 mb-1">Review</h3>
+                    <p class="text-xs text-[var(--muted)] leading-relaxed">Mandatory approval gate before code</p>
+                    <svg class="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--border)] z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <div class="fade-up relative bg-[var(--surface)] border border-[var(--border)] rounded-xl p-5 text-center hover:border-green-500/50 transition-all duration-200 cursor-pointer group">
+                    <div class="w-12 h-12 mx-auto bg-green-500/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-green-500/20 transition-colors duration-200">
+                        <span class="text-green-600 dark:text-green-400 font-heading font-bold text-xl">E</span>
+                    </div>
+                    <h3 class="font-heading font-semibold text-green-600 dark:text-green-400 mb-1">Execute</h3>
+                    <p class="text-xs text-[var(--muted)] leading-relaxed">Implement, test, and deploy with tracking</p>
+                    <svg class="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--border)] z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-5 text-center hover:border-yellow-500/50 transition-all duration-200 cursor-pointer group">
+                    <div class="w-12 h-12 mx-auto bg-yellow-500/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-yellow-500/20 transition-colors duration-200">
+                        <span class="text-yellow-600 dark:text-yellow-400 font-heading font-bold text-xl">K</span>
+                    </div>
+                    <h3 class="font-heading font-semibold text-yellow-600 dark:text-yellow-400 mb-1">Knowledge</h3>
+                    <p class="text-xs text-[var(--muted)] leading-relaxed">Capture decisions, patterns, and context</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ Quick Start Section ═══════════════ -->
+    <section id="quickstart" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[var(--surface)]/50 dark:bg-[var(--surface)]/20">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14 fade-up">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold mb-4">Get Started in 3 Commands</h2>
+                <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto">Install the power, initialize your project, and start building with structure.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-5 stagger">
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-heading font-bold text-sm">1</span>
+                        <h3 class="font-heading font-semibold">Install</h3>
+                    </div>
+                    <div class="terminal-shell rounded-lg overflow-hidden border">
+                        <div class="terminal p-3 sm:p-4 text-xs sm:text-sm">
+                            <p class="comment text-xs mb-2"># Install from Kiro Powers panel</p>
+                            <p>Search <span class="string">"D.E.R.E.K"</span></p>
+                            <p>Click <span class="output">Install</span></p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Phase 2: Evaluate -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-secondary/50 transition-all duration-200">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mr-4">
-                            <span class="text-secondary font-heading font-bold text-xl">E</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-heading font-semibold mb-2 text-secondary">Evaluate</h3>
-                            <p class="text-dark-muted mb-3">Critical assessment of the proposed solution. Security implications, performance impact, maintainability concerns, and technical debt evaluation.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Security Review</span>
-                                <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Performance Analysis</span>
-                                <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full">Tech Debt Check</span>
-                            </div>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-heading font-bold text-sm">2</span>
+                        <h3 class="font-heading font-semibold">Initialize</h3>
+                    </div>
+                    <div class="terminal-shell rounded-lg overflow-hidden border">
+                        <div class="terminal p-3 sm:p-4 text-xs sm:text-sm">
+                            <p class="comment text-xs mb-2"># Say to Kiro:</p>
+                            <p><span class="prompt">❯</span> init</p>
+                            <p class="output mt-1">✅ Memory system ready</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Phase 3: Review -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-purple-500/50 transition-all duration-200">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mr-4">
-                            <span class="text-purple-400 font-heading font-bold text-xl">R</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-heading font-semibold mb-2 text-purple-400">Review</h3>
-                            <p class="text-dark-muted mb-3">Mandatory approval gate. Code review, security audit, compliance check. Nothing proceeds without explicit approval from reviewers.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-sm rounded-full">Code Review</span>
-                                <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-sm rounded-full">Security Audit</span>
-                                <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-sm rounded-full">Approval Gate</span>
-                            </div>
-                        </div>
+                <div class="fade-up bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-heading font-bold text-sm">3</span>
+                        <h3 class="font-heading font-semibold">Build</h3>
                     </div>
-                </div>
-
-                <!-- Phase 4: Execute -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-green-500/50 transition-all duration-200">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mr-4">
-                            <span class="text-green-400 font-heading font-bold text-xl">E</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-heading font-semibold mb-2 text-green-400">Execute</h3>
-                            <p class="text-dark-muted mb-3">Implementation phase with continuous monitoring. Write code, run tests, deploy changes. All actions logged and tracked for accountability.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-green-500/10 text-green-400 text-sm rounded-full">Implementation</span>
-                                <span class="px-3 py-1 bg-green-500/10 text-green-400 text-sm rounded-full">Testing</span>
-                                <span class="px-3 py-1 bg-green-500/10 text-green-400 text-sm rounded-full">Deployment</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 5: Knowledge -->
-                <div class="bg-dark-surface border border-dark-border rounded-2xl p-6 cursor-pointer hover:bg-dark-surface/70 hover:border-yellow-500/50 transition-all duration-200">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-lg flex items-center justify-center mr-4">
-                            <span class="text-yellow-400 font-heading font-bold text-xl">K</span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-heading font-semibold mb-2 text-yellow-400">Knowledge</h3>
-                            <p class="text-dark-muted mb-3">Persistent memory system captures decisions, patterns, and context. Share project knowledge with team. Never lose important information.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-yellow-500/10 text-yellow-400 text-sm rounded-full">Memory Retention</span>
-                                <span class="px-3 py-1 bg-yellow-500/10 text-yellow-400 text-sm rounded-full">Documentation</span>
-                                <span class="px-3 py-1 bg-yellow-500/10 text-yellow-400 text-sm rounded-full">Team Sharing</span>
-                            </div>
+                    <div class="terminal-shell rounded-lg overflow-hidden border">
+                        <div class="terminal p-3 sm:p-4 text-xs sm:text-sm">
+                            <p class="comment text-xs mb-2"># Choose your mode:</p>
+                            <p><span class="prompt">❯</span> <span class="string">quick implement</span> <span class="comment">...</span></p>
+                            <p><span class="prompt">❯</span> <span class="string">create spec</span> <span class="comment">...</span></p>
                         </div>
                     </div>
                 </div>
@@ -378,64 +374,149 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">
-                Ready to Stop Vibe Coding?
-            </h2>
-            <p class="text-xl text-dark-muted mb-8 max-w-2xl mx-auto">
+    <!-- ═══════════════ Memory System Section ═══════════════ -->
+    <section class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-up">
+                    <div class="accent-line mb-6"></div>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold mb-4">Project Memory System</h2>
+                    <p class="text-lg text-[var(--muted)] mb-6 leading-relaxed">
+                        Five persistent markdown files act as your project's long-term memory. Context, decisions, and learnings survive across sessions.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <span class="mt-1 w-2 h-2 rounded-full bg-primary flex-shrink-0"></span>
+                            <p class="text-sm text-[var(--muted)]"><span class="text-[var(--foreground)] font-medium">PROJECT.md</span> — Architecture, tech stack, conventions</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-1 w-2 h-2 rounded-full bg-secondary flex-shrink-0"></span>
+                            <p class="text-sm text-[var(--muted)]"><span class="text-[var(--foreground)] font-medium">PROGRESS.md</span> — Current task tracking and status</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-1 w-2 h-2 rounded-full bg-purple-500 flex-shrink-0"></span>
+                            <p class="text-sm text-[var(--muted)]"><span class="text-[var(--foreground)] font-medium">DECISIONS.md</span> — Key decisions with rationale</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-1 w-2 h-2 rounded-full bg-yellow-500 flex-shrink-0"></span>
+                            <p class="text-sm text-[var(--muted)]"><span class="text-[var(--foreground)] font-medium">KNOWLEDGE.md</span> — Finalized learnings and patterns</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-1 w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></span>
+                            <p class="text-sm text-[var(--muted)]"><span class="text-[var(--foreground)] font-medium">SCRATCHPAD.md</span> — Temporary working notes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-up">
+                    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-xl overflow-hidden">
+                        <div class="flex items-center gap-2 px-4 py-3 border-b border-[var(--border)]/60 bg-[var(--card)]">
+                            <svg class="w-4 h-4 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                            <span class="text-xs text-[var(--muted)] font-mono">.kiro/resources/</span>
+                        </div>
+                        <div class="p-3 sm:p-5 font-mono text-xs sm:text-sm space-y-2 sm:space-y-2.5">
+                            <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/5 border border-primary/10">
+                                <svg class="w-4 h-4 text-primary flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>PROJECT.md</span>
+                                <span class="ml-auto text-xs text-[var(--muted)]">architecture</span>
+                            </div>
+                            <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary/5 border border-secondary/10">
+                                <svg class="w-4 h-4 text-secondary flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>PROGRESS.md</span>
+                                <span class="ml-auto text-xs text-[var(--muted)]">tracking</span>
+                            </div>
+                            <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-purple-500/5 border border-purple-500/10">
+                                <svg class="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>DECISIONS.md</span>
+                                <span class="ml-auto text-xs text-[var(--muted)]">rationale</span>
+                            </div>
+                            <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
+                                <svg class="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>KNOWLEDGE.md</span>
+                                <span class="ml-auto text-xs text-[var(--muted)]">learnings</span>
+                            </div>
+                            <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-green-500/5 border border-green-500/10">
+                                <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>SCRATCHPAD.md</span>
+                                <span class="ml-auto text-xs text-[var(--muted)]">temp notes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ CTA Section ═══════════════ -->
+    <section class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[var(--surface)]/50 dark:bg-[var(--surface)]/20">
+        <div class="max-w-3xl mx-auto text-center fade-up">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold mb-5">Ready to Stop Vibe Coding?</h2>
+            <p class="text-lg text-[var(--muted)] mb-8 max-w-xl mx-auto">
                 Join developers who demand structure, security, and maintainability in every line of code.
             </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="https://github.com/dereknguyen269/derek-power" class="px-8 py-4 bg-cta hover:bg-cta/90 text-white rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer shadow-lg shadow-cta/20">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a href="https://github.com/dereknguyen269/derek-power" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-cta hover:bg-cta/90 text-white rounded-lg font-semibold transition-colors duration-200 cursor-pointer shadow-lg shadow-cta/20">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                     Get Started on GitHub
                 </a>
-                <a href="https://github.com/dereknguyen269/derek-power#readme" class="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-dark-text rounded-lg font-semibold text-lg transition-colors duration-200 cursor-pointer">
+                <a href="https://github.com/dereknguyen269/derek-power#readme" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 border border-[var(--border)] text-[var(--foreground)] rounded-lg font-semibold transition-colors duration-200 cursor-pointer">
                     Read Documentation
                 </a>
             </div>
-            
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-dark-border">
-                <div>
-                    <div class="text-4xl font-heading font-bold text-primary mb-2">100%</div>
-                    <div class="text-dark-muted">Security Focused</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-heading font-bold text-primary mb-2">5</div>
-                    <div class="text-dark-muted">Workflow Phases</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-heading font-bold text-cta mb-2">0</div>
-                    <div class="text-dark-muted">Vibe Coding</div>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-dark-border">
+    <!-- ═══════════════ Footer ═══════════════ -->
+    <footer class="py-10 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)]">
         <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="flex items-center space-x-2 mb-4 md:mb-0">
-                    <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span class="text-xl font-heading font-semibold">D.E.R.E.K Power</span>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="font-heading font-semibold tracking-tight">D.E.R.E.K Power</span>
                 </div>
-                <div class="flex items-center space-x-6 text-dark-muted">
-                    <a href="https://github.com/dereknguyen269/derek-power" class="hover:text-dark-text transition-colors duration-200 cursor-pointer">GitHub</a>
-                    <a href="https://github.com/dereknguyen269/derek-power#readme" class="hover:text-dark-text transition-colors duration-200 cursor-pointer">Documentation</a>
-                    <a href="https://github.com/dereknguyen269/derek-power/issues" class="hover:text-dark-text transition-colors duration-200 cursor-pointer">Issues</a>
+                <div class="flex items-center gap-6 text-sm text-[var(--muted)]">
+                    <a href="https://github.com/dereknguyen269/derek-power" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--foreground)] transition-colors duration-200 cursor-pointer">GitHub</a>
+                    <a href="https://github.com/dereknguyen269/derek-power#readme" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--foreground)] transition-colors duration-200 cursor-pointer">Docs</a>
+                    <a href="https://github.com/dereknguyen269/derek-power/issues" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--foreground)] transition-colors duration-200 cursor-pointer">Issues</a>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-dark-border text-center text-dark-muted text-sm">
-                <p>Design → Evaluate → Review → Execute → Knowledge</p>
-                <p class="mt-2">Built for developers who refuse to compromise on quality.</p>
+            <div class="mt-6 pt-6 border-t border-[var(--border)] text-center text-[var(--muted)] text-xs">
+                <p>Design &middot; Evaluate &middot; Review &middot; Execute &middot; Knowledge</p>
             </div>
         </div>
     </footer>
+
+    <!-- ═══════════════ Scripts ═══════════════ -->
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+        document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
+
+        // Mobile menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            const isHidden = menu.classList.toggle('hidden');
+            btn.setAttribute('aria-expanded', String(!isHidden));
+        });
+        menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+            menu.classList.add('hidden');
+            btn.setAttribute('aria-expanded', 'false');
+        }));
+
+        // Scroll-triggered fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
 
 </body>
 </html>
